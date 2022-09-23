@@ -6,6 +6,9 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,17 +22,18 @@ public class User {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
-    @Column(nullable = false)
+    @NotNull(message = "login cannot be empty")
+    @Size(min = 4, message = "Login should contain at least 4 characters")
     private String login;
-    @Column(nullable = false)
+    @Email(message = "Incorrect email address")
     private String email;
-    @Column(nullable = false)
+    @Size(min = 5, message = "Password should contain at least 5 characters")
+    @NotNull(message = "password cannot be empty")
     private String password;
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "role_id")
+    @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-                                              CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH, CascadeType.DETACH})
     @ToString.Exclude
     private List<Ticket> tickets;
 
@@ -39,4 +43,5 @@ public class User {
         }
         tickets.add(ticket);
     }
+
 }

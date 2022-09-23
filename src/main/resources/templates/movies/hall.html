@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hall</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+          crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <img th:src="${'/posters/' + movieDetails.media.poster}"
+                 class="rounded"
+                 th:alt="${movie.name}"
+                 width="100%">
+        </div>
+        <div class="col-6">
+            <h4 th:text="${movie.name}">Name</h4>
+        </div>
+        <div class="col">
+            <div>
+                <div class="icon">
+                    <svg class="small-screen">
+                        <use xlink:href="#calendar"></use>
+                    </svg>
+                    <svg class="wide-screen">
+                        <use xlink:href="#calendar2"></use>
+                    </svg>
+                </div>
+                <div class="wrap-text">
+                    <span class="text-dscr add-comma mr-4 small-float-left">22.09.2022</span>
+                    <span class="text">Четвер</span>
+                </div>
+            </div>
+            <i class="fa-regular fa-calendar"></i>
+            <p th:text="${movie.startTime}">Time</p>
+        </div>
+    </div>
+</div>
+
+<div class="screen" align="center" style="width:24.584995rem;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 806 21" fill="#061420">
+        <path d="M3.2,20l-2,0.2l-0.3-4l2-0.2C136.2,5.3,269.6,0,403,0s266.8,5.3,400.2,16l2,0.2l-0.3,4l-2-0.2 C669.5,9.3,536.3,4,403,4S136.4,9.3,3.2,20z"></path>
+    </svg>
+    <div class="name">ЕКРАН</div>
+</div>
+
+<script src="https://kit.fontawesome.com/951f32a133.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

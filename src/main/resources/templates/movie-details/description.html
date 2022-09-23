@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${movies[0].name}">Name</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <video th:src="${'/trailers/' + movieDetails.media.trailer}"
+                   th:poster="${'/posters/' + movieDetails.media.poster}"
+                   controls>
+            </video>
+        </div>
+    </div>
+    <div class="row">
+        <div th:each="movie : ${movies}">
+            <div class="col-4">
+                <a class="bg-1 btn btn-primary" th:href="@{/movies/hall/{id}(id = ${movie.id})}">
+                    <h3 th:text="${movie.startTime}">Time of session</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div about="info">
+    <h3>Description: <span th:text="${movieDetails.description}">Description</span></h3>
+    <h3>Duration: <span th:text="${movieDetails.duration}">Duration</span></h3>
+    <h3>Genres:
+        <span th:each="genre : ${movieDetails.genres}">
+            <span th:text="${genre.name + ', '}"></span>
+        </span>
+    </h3>
+    <h3>Year of production: <span th:text="${movieDetails.productionYear}">Year</span></h3>
+    <h3>Country: <span th:text="${movieDetails.country.name}">Country</span></h3>
+
+    <h3>Director: <span th:text="${movieDetails.director}">Director</span></h3>
+    <h3>Actors:
+        <span th:each="actor : ${movieDetails.actors}">
+            <span th:text="${actor.fullName + ', '}"></span>
+        </span>
+    </h3>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

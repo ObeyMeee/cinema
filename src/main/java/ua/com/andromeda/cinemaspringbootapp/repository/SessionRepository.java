@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, String> {
@@ -18,5 +19,6 @@ public interface SessionRepository extends JpaRepository<Session, String> {
             "order by production_year desc", nativeQuery = true)
     List<Session> findUniqueSessionsByName();
 
-    List<Session> findAllByMovieDetailsId(@Param("id") String id);
+    List<Session> findAllByMovieDetailsIdOrderByStartTime(@Param("id") String id);
+    Optional<Session> findSessionById(@Param("id") String id);
 }

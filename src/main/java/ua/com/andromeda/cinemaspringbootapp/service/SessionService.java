@@ -7,6 +7,7 @@ import ua.com.andromeda.cinemaspringbootapp.repository.MediaRepository;
 import ua.com.andromeda.cinemaspringbootapp.repository.SessionRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SessionService {
@@ -22,6 +23,9 @@ public class SessionService {
     }
 
     public List<Session> findAllByMovieDetailsId(String id) {
-        return sessionRepository.findAllByMovieDetailsId(id);
+        return sessionRepository.findAllByMovieDetailsIdOrderByStartTime(id);
+    }
+    public Session findById(String id) {
+        return sessionRepository.findById(id).orElse(null);
     }
 }

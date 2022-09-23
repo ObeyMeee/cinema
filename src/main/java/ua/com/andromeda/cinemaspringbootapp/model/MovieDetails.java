@@ -7,10 +7,7 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -56,14 +53,14 @@ public class MovieDetails {
 
     public void add(Actor actor) {
         if (actors == null) {
-            actors = new HashSet<>();
+            actors = new LinkedHashSet<>();
         }
         actors.add(actor);
     }
 
     public void add(Genre genre) {
         if (genres == null) {
-            genres = new HashSet<>();
+            genres = new LinkedHashSet<>();
         }
         genres.add(genre);
     }
