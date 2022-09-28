@@ -1,6 +1,23 @@
 package ua.com.andromeda.cinemaspringbootapp.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-public enum Role {
-    OWNER, SUPER_ADMIN, ADMIN, CLIENT
+import javax.persistence.*;
+import java.util.Collection;
+
+@Entity
+@Table(name = "roles")
+@Getter
+@Setter
+@ToString
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
+    private Collection<User> users;
 }

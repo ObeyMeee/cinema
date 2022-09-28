@@ -7,13 +7,14 @@
           rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
     <div class="row">
-        <div class="col-12">
-            <video th:src="${'/trailers/' + movieDetails.media.trailer}"
+        <div class="col">
+            <video id="trailer" th:src="${'/trailers/' + movieDetails.media.trailer}"
                    th:poster="${'/posters/' + movieDetails.media.poster}"
                    controls>
             </video>

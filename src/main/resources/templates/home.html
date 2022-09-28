@@ -14,6 +14,12 @@
         <div class="col-4">
             <a class="btn btn-primary" th:href="@{/users/new}">Sign up</a>
         </div>
+        <div class="col-4">
+            <a class="btn btn-primary" th:href="@{/login}">Log in</a>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary" th:href="@{/logout}">Log out</a>
+        </div>
     </div>
 </div>
 <hr>
@@ -22,12 +28,10 @@
         <div class="col-4" th:each="movie : ${movies}">
             <div th:object="${movie}">
                 <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
-                    <img th:src="'posters/' + *{movieDetails.media.poster}"
-                         class="rounded float-start img-responsive" width="350px"/>
-                </a>
-                <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}"
-                   class="btn btn-primary" style="background: blueviolet">
-                    <h4 th:text="*{name}"></h4>
+                    <div class="img-container">
+                        <img th:src="'posters/' + *{movieDetails.media.poster}"
+                             class="rounded float-start img-responsive" width="100%"/>
+                    </div>
                 </a>
             </div>
         </div>

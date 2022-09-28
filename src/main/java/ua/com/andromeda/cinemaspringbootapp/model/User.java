@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -30,10 +31,18 @@ public class User {
     @Size(min = 5, message = "Password should contain at least 5 characters")
     @NotNull(message = "password cannot be empty")
     private String password;
-    @Enumerated(EnumType.STRING)
-    private Role role;
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @ToString.Exclude
+    private Collection<Role> roles;
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+                       CascadeType.REFRESH, CascadeType.DETACH})
     @ToString.Exclude
     private List<Ticket> tickets;
 
@@ -43,5 +52,4 @@ public class User {
         }
         tickets.add(ticket);
     }
-
 }
