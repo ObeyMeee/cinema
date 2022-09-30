@@ -1,6 +1,10 @@
 package ua.com.andromeda.cinemaspringbootapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,15 @@ public class MovieController {
     @Autowired
     public MovieController(SessionService sessionService) {
         this.sessionService = sessionService;
+    }
+
+    @GetMapping
+    public String showAll(Model model,
+                          @PageableDefault(size = 6, sort = {"startTime"}, direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<Session> page = sessionService.findAll(pageable);
+        model.addAttribute("page", page);
+        return "movies/schedule";
     }
 
     @GetMapping("/hall/{id}")
