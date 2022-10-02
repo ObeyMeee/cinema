@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Andromeda cinema</title>
@@ -7,22 +7,48 @@
           rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .btn-outline-dark {
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="row  justify-content-end">
-        <div class="col-3">
-            <a class="btn btn-primary" th:href="@{/users/new}">Sign up</a>
-        </div>
-        <div class="col-3">
-            <a class="btn btn-primary" th:href="@{/login}">Log in</a>
-        </div>
-        <div class="col-3">
-            <a class="btn btn-primary" th:href="@{/logout}">Log out</a>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <div class="row justify-content-start">
+            <div class="col-3 self-aligned-left">
+                <a th:href="@{/home}">
+                    <img src="/logo.png" alt="Andromeda cinema" width="50px"/>
+                </a>
+            </div>
+            <div class="col-4">
+            </div>
+            <div class="col-5 self-aligned-right">
+                <div class="btn-group" role="group" aria-label="Default button group">
+                    <div sec:authorize="isAuthenticated()">
+                        <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                            <a th:href="@{/users}" class="btn btn-outline-dark">users</a>
+                        </div>
+
+                    </div>
+                    <a class="btn btn-outline-dark" th:href="@{/users/new}">Sign up</a>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a class="btn btn-outline-dark" th:href="@{/login}">Log in</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="btn btn-outline-dark" th:href="@{/logout}">Log out</a>
+                        <a th:href="@{/users/{id}(id = ${user.id})}">
+                            <i class="fa-thin fa-user"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<hr>
+</nav>
 <div class="container">
     <div class="row">
         <a class="btn bth-primary" th:href="@{/movies}">
@@ -51,6 +77,7 @@
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
         crossorigin="anonymous">
 </script>
+<script src="https://kit.fontawesome.com/951f32a133.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

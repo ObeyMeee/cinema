@@ -23,16 +23,19 @@ public class User {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
+
     @NotNull(message = "login cannot be empty")
     @Size(min = 4, message = "Login should contain at least 4 characters")
     private String login;
+
     @Email(message = "Incorrect email address")
     private String email;
+
     @Size(min = 5, message = "Password should contain at least 5 characters")
     @NotNull(message = "password cannot be empty")
     private String password;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

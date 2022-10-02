@@ -26,9 +26,9 @@ public class MovieDetailsController {
     @GetMapping("/{id}")
     public String showMovieDetails(@PathVariable String id, Model model) {
         List<Session> sessions = sessionService.findAllByMovieDetailsId(id);
-        MovieDetails movieDetails = movieDetailsService.getMovieDetailsById(id);
+        MovieDetails details = movieDetailsService.getMovieDetailsById(id);
+        model.addAttribute("movieDetails", details);
         model.addAttribute("movies", sessions);
-        model.addAttribute("movieDetails", movieDetails);
         return "movie-details/description";
     }
 }

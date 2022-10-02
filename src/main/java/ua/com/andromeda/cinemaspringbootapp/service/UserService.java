@@ -13,6 +13,7 @@ import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +24,10 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Optional<User> findById(String id) {
+        return userRepository.findById(id);
     }
 
     @Transactional
@@ -69,7 +74,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = findByLogin(login)
-                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with email ==> " + login));
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with login ==> " + login));
 
         return new org.springframework.security.core.userdetails.User
                 (user.getLogin(), user.getPassword(), mapRolesToGrantedAuthorities(user.getRoles()));
@@ -83,5 +88,13 @@ public class UserService implements UserDetailsService {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .toList();
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void delete(String id) {
+        userRepository.deleteById(id);
     }
 }

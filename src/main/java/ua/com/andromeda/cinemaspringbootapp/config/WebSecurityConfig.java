@@ -29,14 +29,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/profile/**").authenticated()
-                .antMatchers("/admin/**").hasAnyRole()
-                    .and()
-                .formLogin()
-                .successForwardUrl("/home")
-                    .and()
-                .logout().permitAll()
-                .logoutSuccessUrl("/home");
+                    .antMatchers("/users/new").permitAll()
+                    .antMatchers("/users").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                    .antMatchers("/users/**").authenticated()
+                .and()
+                    .formLogin()
+                .defaultSuccessUrl("/home")
+                .and()
+                    .logout()
+                    .logoutSuccessUrl("/home")
+                    .permitAll();
 
         return http.build();
     }

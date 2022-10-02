@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>User form</title>
@@ -10,18 +10,15 @@
 </head>
 <body>
 
-<form method="post" th:action="@{/users/new}" th:object="${user}">
-    <input type="hidden"
-           th:field="*{role}"
-           th:value="${T(ua.com.andromeda.cinemaspringbootapp.model.Role).CLIENT}">
 
+<form method="post" th:action="@{/users/new}" th:object="${user}">
     <div class="container">
         <div class="row col-4">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control"
-                           id="email"
-                           placeholder="name@example.com"
-                           th:field="*{email}">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control"
+                   id="email"
+                   placeholder="name@example.com"
+                   th:field="*{email}">
         </div>
         <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">
             Error
@@ -43,6 +40,32 @@
         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red">
             Error
         </p>
+
+
+        <div sec:authorize="isAuthenticated()">
+            <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')">
+                <div class="form-check">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           th:name="roles"
+                           value="ROLE_SUPER_ADMIN"
+                           id="superAdmin">
+                    <label class="form-check-label" for="superAdmin">
+                        Super admin
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           th:name="roles"
+                           value="ROLE_ADMIN"
+                           id="admin" checked>
+                    <label class="form-check-label" for="admin">
+                        Admin
+                    </label>
+                </div>
+            </div>
+        </div>
         <button type="submit" class="btn btn-success">Submit</button>
     </div>
 
