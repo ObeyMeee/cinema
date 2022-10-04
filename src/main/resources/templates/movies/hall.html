@@ -52,9 +52,9 @@
                         <div th:with="duration=${movieDetails.duration}">
                             <div th:with="endTime=${startTime.plusMinutes(duration)}">
                                 <i class="fa-sharp fa-solid fa-clock"></i>
-                                <span th:text="${startTime.hour + ':' + startTime.minute
-                                    + '-' +
-                                     endTime.hour + ':' + endTime.minute}">Duration</span>
+                                <span th:text="|${#numbers.formatInteger(startTime.hour, 2)}:${#numbers.formatInteger(startTime.minute, 2)} -
+                                     ${#numbers.formatInteger(endTime.hour, 2)}:${#numbers.formatInteger(endTime.minute, 2)}|">
+                                    Duration</span>
                             </div>
                         </div>
                     </div>

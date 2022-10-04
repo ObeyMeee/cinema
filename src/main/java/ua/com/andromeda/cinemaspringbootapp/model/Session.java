@@ -29,5 +29,4 @@ public class Session {
 
     @ManyToOne
     private MovieDetails movieDetails;
-
 }

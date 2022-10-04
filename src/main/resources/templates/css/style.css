@@ -1,0 +1,11 @@
+.btn-outline-dark {
+    color: white !important;
+}
+
+.img-centered-fixed-size {
+    margin-left: 500px !important;
+    min-height: 750px !important;
+    max-height: 750px !important;
+    min-width: 850px !important;
+    max-width: 850px !important;
+}

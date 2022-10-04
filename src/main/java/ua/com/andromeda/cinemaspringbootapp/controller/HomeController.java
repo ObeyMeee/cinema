@@ -11,7 +11,6 @@ import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
 import java.security.Principal;
 import java.util.List;
 

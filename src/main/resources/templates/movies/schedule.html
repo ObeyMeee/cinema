@@ -12,42 +12,48 @@
 <body>
 <div th:insert="menu :: header"></div>
 
+<nav>
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+             <span th:if="${page.hasPrevious()}">
+                <a class="page-link" th:href="@{/movies(page=${page.number - 1},size=${page.size})}">Previous</a>
+             </span>
+        </li>
+        <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+            <li class="page-item">
+                <span th:if="${page.number == i}" class="page-link active">
+                    <a class="page-link" th:href="@{/movies(page=${i},size=${page.size})}">[[${i}+1]]</a>
+                </span>
+                <span th:unless="${page.number == i}">
+                    <a class="page-link" th:href="@{/movies(page=${i},size=${page.size})}">[[${i}+1]]</a>
+                </span>
+            </li>
+        </th:block>
+        <li class="page-item">
+            <span th:if="${page.hasNext()}">
+                <a class="page-link" th:href="@{/movies(page=${page.number+1},size=${page.size})}">Next</a>
+            </span>
+        </li>
+    </ul>
+</nav>
+
 <div class="container">
     <div class="row">
         <div class="col-4" th:each="movie : ${page.content}">
             <div th:object="${movie}">
-                <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
+                <a th:href="@{/movies/hall/{id}(id = *{id})}">
                     <img th:src="'posters/' + *{movieDetails.media.poster}"
                          class="rounded float-start img-responsive"
                          style="min-height: 400px;
                                 max-height: 400px;
                                 min-width: 400px;
-                                max-width: 400px;"/>
+                                max-width: 400px;" alt="poster"/>
                 </a>
             </div>
         </div>
     </div>
 </div>
 
-<div class="pagination-div">
-    <span th:if="${page.hasPrevious()}">
-        <a th:href="@{/movies(page=${page.number - 1},size=${page.size})}">Previous</a>
-    </span>
-    <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
-        <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
-        <span th:unless="${page.number == i}">
-             <a th:href="@{/movies(page=${i},size=${page.size})}">[[${i}+1]]</a>
-        </span>
-    </th:block>
-    <span th:if="${page.hasNext()}">
-        <a th:href="@{/movies(page=${page.number+1},size=${page.size})}">Next</a>
-    </span>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-        crossorigin="anonymous">
-</script>
+<div th:insert="menu :: script-dependency"></div>
 </body>
 </html>
