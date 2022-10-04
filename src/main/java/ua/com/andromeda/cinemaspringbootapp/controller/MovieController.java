@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import ua.com.andromeda.cinemaspringbootapp.model.MovieDetails;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
 import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
@@ -25,21 +25,23 @@ public class MovieController {
     }
 
     @GetMapping
-    public String showAll(Model model,
-                          @PageableDefault(size = 6, sort = {"startTime"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ModelAndView showAll(ModelAndView modelAndView,
+                                @PageableDefault(size = 6, sort = {"startTime"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<Session> page = sessionService.findAll(pageable);
-        model.addAttribute("page", page);
-        return "movies/schedule";
+        modelAndView.addObject("page", page);
+        modelAndView.setViewName("movies/schedule");
+        return modelAndView;
     }
 
     @GetMapping("/hall/{id}")
-    public String showSession(@PathVariable String id, Model model) {
+    public ModelAndView showSession(@PathVariable String id, ModelAndView modelAndView) {
         Session session = sessionService.findById(id);
         MovieDetails movieDetails = session.getMovieDetails();
-        model.addAttribute("movie", session);
-        model.addAttribute("movieDetails", movieDetails);
-        return "movies/hall";
+        modelAndView.addObject("movie", session);
+        modelAndView.addObject("movieDetails", movieDetails);
+        modelAndView.setViewName("movies/hall");
+        return modelAndView;
     }
 
 }

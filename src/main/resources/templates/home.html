@@ -1,54 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Andromeda cinema</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="../style.css">
-    <style>
-        .btn-outline-dark {
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-        <div class="row justify-content-start">
-            <div class="col-3 self-aligned-left">
-                <a th:href="@{/home}">
-                    <img src="/logo.png" alt="Andromeda cinema" width="50px"/>
-                </a>
-            </div>
-            <div class="col-4">
-            </div>
-            <div class="col-5 self-aligned-right">
-                <div class="btn-group" role="group" aria-label="Default button group">
-                    <div sec:authorize="isAuthenticated()">
-                        <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                            <a th:href="@{/users}" class="btn btn-outline-dark">users</a>
-                        </div>
 
-                    </div>
-                    <a class="btn btn-outline-dark" th:href="@{/users/new}">Sign up</a>
-                    <div sec:authorize="!isAuthenticated()">
-                        <a class="btn btn-outline-dark" th:href="@{/login}">Log in</a>
-                    </div>
-                    <div sec:authorize="isAuthenticated()">
-                        <a class="btn btn-outline-dark" th:href="@{/logout}">Log out</a>
-                        <a th:href="@{/users/{id}(id = ${user.id})}">
-                            <i class="fa-thin fa-user"></i>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+<div th:insert="menu :: header"></div>
 <div class="container">
     <div class="row">
         <a class="btn bth-primary" th:href="@{/movies}">

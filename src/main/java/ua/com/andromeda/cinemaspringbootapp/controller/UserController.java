@@ -1,19 +1,18 @@
 package ua.com.andromeda.cinemaspringbootapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
 
-import java.security.Principal;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -28,41 +27,40 @@ public class UserController {
     }
 
     @GetMapping
-    public String showList(Model model) {
+    public ModelAndView showList(ModelAndView modelAndView) {
         List<User> users = userService.findAll();
-        model.addAttribute("users", users);
-        return "users/list";
+        modelAndView.addObject("users", users);
+        modelAndView.setViewName("users/list");
+        return modelAndView;
     }
 
     @GetMapping("/new")
-    public String showForm(@ModelAttribute User user, Principal principal, Model model) {
-        if (principal != null) {
-            String login = principal.getName();
-            UserDetails userDetails = userService.loadUserByUsername(login);
-            model.addAttribute("authorities", userDetails.getAuthorities());
-        }
-        return "users/form";
+    public ModelAndView showForm(@ModelAttribute User user, ModelAndView modelAndView) {
+        List<Role> roles = roleService.findAllExceptOwner();
+        modelAndView.addObject("roles", roles);
+        modelAndView.setViewName("users/form");
+        return modelAndView;
     }
 
     @PostMapping("/new")
-    public String save(@Validated User user,
+    public String save(@Valid User user,
                        BindingResult bindingResult,
-                       @RequestParam("roles") List<String> values) {
+                       @RequestParam("role") List<String> values) {
+        values.forEach(System.out::println);
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(System.out::println);
             return "users/form";
         }
-        values.add("ROLE_CUSTOMER");
-        List<Role> roles = roleService.mapStringListToRoles(values);
+        Set<Role> roles = roleService.mapStringListToRoles(values);
         user.setRoles(roles);
         userService.save(user);
         return "redirect:/home";
     }
 
     @GetMapping("/{id}")
-    public String showProfile(@PathVariable String id, Model model) {
+    public ModelAndView showProfile(@PathVariable String id, ModelAndView modelAndView) {
         User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("User is not founded"));
-        return "users/profile";
+        modelAndView.setViewName("users/profile");
+        return modelAndView;
     }
 
     @DeleteMapping("/{id}")

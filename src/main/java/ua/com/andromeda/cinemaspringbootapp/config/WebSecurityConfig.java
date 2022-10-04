@@ -3,6 +3,7 @@ package ua.com.andromeda.cinemaspringbootapp.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,10 +32,12 @@ public class WebSecurityConfig {
         http.authorizeRequests()
                     .antMatchers("/users/new").permitAll()
                     .antMatchers("/users").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
-                    .antMatchers("/users/**").authenticated()
+                    .antMatchers(HttpMethod.GET, "/users/**").authenticated()
+                    .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                    .antMatchers("/**").permitAll()
                 .and()
                     .formLogin()
-                .defaultSuccessUrl("/home")
+                    .defaultSuccessUrl("/home")
                 .and()
                     .logout()
                     .logoutSuccessUrl("/home")

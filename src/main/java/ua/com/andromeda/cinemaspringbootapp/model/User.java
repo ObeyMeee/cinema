@@ -10,8 +10,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -42,10 +42,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @ToString.Exclude
-    private Collection<Role> roles;
+    private Set<Role> roles;
     @OneToMany(mappedBy = "user",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-                       CascadeType.REFRESH, CascadeType.DETACH})
+                    CascadeType.REFRESH, CascadeType.DETACH})
     @ToString.Exclude
     private List<Ticket> tickets;
 
