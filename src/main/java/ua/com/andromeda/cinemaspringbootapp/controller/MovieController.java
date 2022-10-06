@@ -26,7 +26,9 @@ public class MovieController {
 
     @GetMapping
     public ModelAndView showAll(ModelAndView modelAndView,
-                                @PageableDefault(size = 6, sort = {"startTime"}, direction = Sort.Direction.ASC) Pageable pageable) {
+                                @PageableDefault(size = 6,
+                                                sort = {"startTime"},
+                                                direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<Session> page = sessionService.findAll(pageable);
         modelAndView.addObject("page", page);

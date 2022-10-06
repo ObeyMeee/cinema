@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>User form</title>
@@ -20,7 +21,7 @@
                    placeholder="name@example.com"
                    th:field="*{email}">
         </div>
-        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">
+        <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">
             Error
         </p>
 
@@ -28,7 +29,7 @@
             <label for="login" class="form-label">Login:</label>
             <input class="form-control" id="login" th:field="*{login}">
         </div>
-        <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" style="color: red">
+        <p class="error" th:if="${#fields.hasErrors('login')}" th:errors="*{login}" style="color: red">
             Error
         </p>
 
@@ -37,7 +38,7 @@
             <input type="password" class="form-control" id="password" th:field="*{password}">
         </div>
 
-        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red">
+        <p class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >
             Error
         </p>
 

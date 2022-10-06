@@ -7,7 +7,19 @@
           rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
           crossorigin="anonymous">
+<style>
+    .container-img {
+        position: relative;
+        text-align: center;
+        color: white;
+    }
 
+    .top-left {
+        position: absolute;
+        top: 8px;
+        left: 16px;
+    }
+</style>
 </head>
 <body>
 <div th:insert="menu :: header"></div>
@@ -42,12 +54,15 @@
         <div class="col-4" th:each="movie : ${page.content}">
             <div th:object="${movie}">
                 <a th:href="@{/movies/hall/{id}(id = *{id})}">
-                    <img th:src="'posters/' + *{movieDetails.media.poster}"
-                         class="rounded float-start img-responsive"
-                         style="min-height: 400px;
-                                max-height: 400px;
-                                min-width: 400px;
-                                max-width: 400px;" alt="poster"/>
+                    <div class="container-img">
+                        <img th:src="'posters/' + *{movieDetails.media.poster}"
+                             class="rounded float-start img-responsive"
+                             style="min-height: 400px;
+                                    max-height: 400px;
+                                    min-width: 400px;
+                                    max-width: 400px;" alt="poster"/>
+                        <div class="top-left" th:text="*{startTime}">Time</div>
+                    </div>
                 </a>
             </div>
         </div>

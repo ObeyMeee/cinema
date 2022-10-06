@@ -12,6 +12,7 @@ public class WebConfig {
     public SpringSecurityDialect springSecurityDialect() {
         return new SpringSecurityDialect();
     }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

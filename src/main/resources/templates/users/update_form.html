@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+          crossorigin="anonymous">
+
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="menu :: header"></div>
+<form th:method="PUT" th:action="@{/users/update}" th:object="${user}">
+    <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="*{roles}">
+    <div class="container">
+        <div class="row col-4">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" id="email" type="email" th:field="*{email}"/>
+            <p class="error" th:if="${#fields.hasErrors('email')}" th:error="*{email}">Email error</p>
+        </div>
+        <div class="row col-4">
+            <label for="login" class="form-label">Login</label>
+            <input id="login" class="form-control" th:field="*{login}"/>
+            <p class="error" th:if="${#fields.hasErrors('login')}" th:error="*{login}">Login error</p>
+        </div>
+        <div class="row col-4">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="text" class="form-control" th:field="*{password}"/>
+            <p class="error" th:if="${#fields.hasErrors('password')}" th:error="*{password}">Password error</p>
+        </div>
+        <button type="submit" class="btn btn-success">Update</button>
+    </div>
+</form>
+<div th:insert="menu :: script-dependency"></div>
+</body>
+</html>

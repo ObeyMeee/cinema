@@ -4,13 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -19,9 +21,11 @@ import java.util.Set;
 @Setter
 @ToString
 public class User {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(User.class);
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
     @NotNull(message = "login cannot be empty")
@@ -47,12 +51,30 @@ public class User {
             cascade = {CascadeType.MERGE, CascadeType.PERSIST,
                     CascadeType.REFRESH, CascadeType.DETACH})
     @ToString.Exclude
-    private List<Ticket> tickets;
+    private Set<Ticket> tickets;
 
     public void add(Ticket ticket) {
         if (tickets == null) {
-            tickets = new ArrayList<>();
+            tickets = new HashSet<>();
         }
         tickets.add(ticket);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @PrePersist
+    public void logSave() {
+        LOGGER.info("Saved user : {}", this);
+    }
+
 }

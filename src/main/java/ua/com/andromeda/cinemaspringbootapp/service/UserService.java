@@ -1,5 +1,7 @@
 package ua.com.andromeda.cinemaspringbootapp.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +14,10 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -26,8 +29,8 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<User> findById(String id) {
-        return userRepository.findById(id);
+    public User findById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User is not founded"));
     }
 
     @Transactional
@@ -90,11 +93,21 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAllWhereUsersHaveSameOrLessRoles(Principal principal, Pageable pageable) {
+        String login = principal.getName();
+        User currentUser = findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with login ==> " + login));
+        Set<Role> roles = currentUser.getRoles();
+        return userRepository.findAllWhereUsersHaveSameOrLessRoles(roles.size(), pageable);
     }
 
+    @Transactional
     public void delete(String id) {
         userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void update(User user) {
+        userRepository.save(user);
     }
 }

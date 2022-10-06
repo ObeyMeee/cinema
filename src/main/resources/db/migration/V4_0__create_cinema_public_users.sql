@@ -1,0 +1,4 @@
+INSERT INTO public.users (id, email, login, password) VALUES ('bb20312a-f423-4497-92ea-2b8a25a702bd', 'Andrii.Heraskin@cs.khpi.edu.ua', 'Andromeda', '$2a$12$PgPVx8ThNCV3uLwYGvVjOu5jq.LJ9/zgCnxMHA4fjmnyY/CtGjN0G');
+INSERT INTO public.users (id, email, login, password) VALUES ('f6996e9b-5d67-4acd-9aad-ebf345884068', 'super_admin@gmail.com', 'super_admin', '$2a$12$JsYqtYCaLGy9JHs056nuWuYQwXauanpewJ50Ckemsmt6Z6susAqQO');
+INSERT INTO public.users (id, email, login, password) VALUES ('d4574160-7e61-4838-a8ba-2dfcc31d0fce', 'admin@gmail.com', 'admin', '$2a$12$Vx3mdTwCnh8HAidOizBlFOpoQr/mHw.QopEgRYNNeVJqnVSAR268G');
+INSERT INTO public.users (id, email, login, password) VALUES ('ced2a9b8-6e52-4e53-83fa-b13010b61e2f', 'client@gmail.com', 'client', '$2a$12$HcsTScrsRX7kqM/GHgp0deIIDmc.UGKjLJsK54.uCpIwyAxcf.whW');
