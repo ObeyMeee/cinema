@@ -1,29 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Andromeda cinema</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-          crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" th:href="@{../templates/css/style.css}">
-    <link rel="icon" href="../static/imgonline-com-ua-Resize-Z62uj4NKGx.png">
-    <style>
-        .img-centered-fixed-size {
-            margin-left: 500px !important;
-            min-height: 750px !important;
-            max-height: 750px !important;
-            min-width: 850px !important;
-            max-width: 850px !important;
-        }
-
-        #schedule {
-            color: darkmagenta;
-            background: cyan;
-        }
-    </style>
+<head th:include="menu :: head-section">
+    <title id="pageTitle">Andromeda cinema</title>
 </head>
 <body>
 
@@ -50,7 +28,7 @@
                         <div th:object="${movie}">
                             <div class="carousel-item">
                                 <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
-                                    <img th:src="'posters/' + *{movieDetails.media.poster}"
+                                    <img th:src="*{movieDetails.media.poster}"
                                          class="rounded float-start img-responsive img-centered-fixed-size"/>
                                 </a>
                             </div>

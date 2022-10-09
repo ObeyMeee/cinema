@@ -25,7 +25,7 @@ public class Session {
 
     @OneToMany(mappedBy = "session")
     @ToString.Exclude
-    private List<Ticket> ticket;
+    private List<Ticket> tickets;
 
     @ManyToOne
     private MovieDetails movieDetails;

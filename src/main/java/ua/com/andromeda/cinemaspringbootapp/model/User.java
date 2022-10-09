@@ -30,9 +30,11 @@ public class User {
 
     @NotNull(message = "login cannot be empty")
     @Size(min = 4, message = "Login should contain at least 4 characters")
+    @Column(unique = true)
     private String login;
 
     @Email(message = "Incorrect email address")
+    @Column(unique = true)
     private String email;
 
     @Size(min = 5, message = "Password should contain at least 5 characters")

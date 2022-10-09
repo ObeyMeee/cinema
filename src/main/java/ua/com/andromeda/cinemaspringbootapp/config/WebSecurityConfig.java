@@ -31,18 +31,22 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                     .antMatchers("/users/new").permitAll()
-                    .antMatchers("/users").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                    .antMatchers("/tickets/new").authenticated()
                     .antMatchers(HttpMethod.GET, "/users/**").authenticated()
+                    .antMatchers("/users").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
                     .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
-                    .antMatchers("/**").permitAll()
+                    .anyRequest().permitAll()
                 .and()
                     .formLogin()
                     .defaultSuccessUrl("/home")
                 .and()
                     .logout()
                     .logoutSuccessUrl("/home")
-                    .permitAll();
-
+                    .permitAll()
+                .and()
+                    .rememberMe()
+                .and()
+                    .csrf().disable();
         return http.build();
     }
 

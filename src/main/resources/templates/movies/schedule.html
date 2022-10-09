@@ -1,25 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <title>Schedule</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-          crossorigin="anonymous">
-<style>
-    .container-img {
-        position: relative;
-        text-align: center;
-        color: white;
-    }
+<head th:include="menu :: head-section">
+    <title id="pageTitle">Schedule</title>
 
-    .top-left {
-        position: absolute;
-        top: 8px;
-        left: 16px;
-    }
-</style>
 </head>
 <body>
 <div th:insert="menu :: header"></div>
@@ -55,12 +39,9 @@
             <div th:object="${movie}">
                 <a th:href="@{/movies/hall/{id}(id = *{id})}">
                     <div class="container-img">
-                        <img th:src="'posters/' + *{movieDetails.media.poster}"
-                             class="rounded float-start img-responsive"
-                             style="min-height: 400px;
-                                    max-height: 400px;
-                                    min-width: 400px;
-                                    max-width: 400px;" alt="poster"/>
+                        <img th:src="*{movieDetails.media.poster}"
+                             class="rounded float-start img-responsive img-fixed-size-400"
+                             alt="poster"/>
                         <div class="top-left" th:text="*{startTime}">Time</div>
                     </div>
                 </a>

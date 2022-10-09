@@ -1,35 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Hall</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-          crossorigin="anonymous">
-    <style>
-        .border {
-            border: dodgerblue solid 2px;
-        }
-
-        .seat {
-            width: 50px;
-        }
-
-        @media screen and (max-width: 991px) {
-            #uptotop {
-                bottom: 40px
-            }
-        }
-    </style>
+<head th:include="menu :: head-section">
+    <title id="pageTitle">Hall</title>
 </head>
 <body>
 <div th:insert="menu :: header"></div>
 <div class="container">
     <div class="row">
         <div class="col-2">
-            <img th:src="${'/posters/' + movieDetails.media.poster}"
+            <img th:src="${movie.movieDetails.media.poster}"
                  class="rounded"
                  th:alt="${movie.name}"
                  width="70%">
@@ -44,12 +23,10 @@
                 <div class="row border">
                     <div class="col-4">
                         <i class="fa-regular fa-calendar"></i>
-                        <span th:text="${startTime.dayOfMonth + ' ' +
-                                    startTime.month.name + ', ' +
-                                    startTime.dayOfWeek.name}">Day</span>
+                        <span th:text="|${startTime.dayOfMonth} ${startTime.month.name}, ${startTime.dayOfWeek.name}|">Day</span>
                     </div>
                     <div class="col-3">
-                        <div th:with="duration=${movieDetails.duration}">
+                        <div th:with="duration=${movie.movieDetails.duration}">
                             <div th:with="endTime=${startTime.plusMinutes(duration)}">
                                 <i class="fa-sharp fa-solid fa-clock"></i>
                                 <span th:text="|${#numbers.formatInteger(startTime.hour, 2)}:${#numbers.formatInteger(startTime.minute, 2)} -
@@ -73,226 +50,52 @@
                     <path d="M3.2,20l-2,0.2l-0.3-4l2-0.2C136.2,5.3,269.6,0,403,0s266.8,5.3,400.2,16l2,0.2l-0.3,4l-2-0.2 C669.5,9.3,536.3,4,403,4S136.4,9.3,3.2,20z"></path>
                 </svg>
                 <div class="name">ЕКРАН</div>
-
-                <br>
-
-                <table>
-                    <tr >
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                    <tr>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                    <tr>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                    <tr>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                    <tr>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#">
-                                <img class="seat" src="/rectangle.png"/>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://kit.fontawesome.com/951f32a133.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-        crossorigin="anonymous">
-</script>
+<br><br>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <table>
+                <tbody>
+                <tr th:each="row : ${#numbers.sequence(1, 6)}">
+                    <td th:each="seat : ${#numbers.sequence(1, 6)}">
+                        <button class="btn-seat" data-status="active" th:onclick="|selectSeat(this, ${row}, ${seat})|">
+                            <img class="seat" src="/seats/active-seat.png" alt="seat">
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="container" id="ticketsZone">
+<!--        <form th:method="POST"-->
+<!--              th:action="@{/tickets/new}"-->
+<!--              th:with="ticket=${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).createTicket()}">-->
+<!--            <div th:object="${ticket}">-->
+<!--                <input type="hidden" th:value="${movie}" th:field="*{session}">-->
+<!--                <input class="form-control-plaintext" value="1" th:field="*{row}" readonly><div>1 row</div>-->
+<!--                <input class="form-control-plaintext" value="2" th:field="*{seat}" readonly><div>2 seat</div>-->
+<!--                <input class="form-control-plaintext" value="100" th:field="*{price}" readonly><div>100 UAH</div>-->
+<!--                <input class="form-control-plaintext"-->
+<!--                       th:value="${T(ua.com.andromeda.cinemaspringbootapp.model.TicketType).GOOD}"-->
+<!--                       th:field="*{type}" readonly><div>GOOD</div>-->
+<!--            </div>-->
+
+<!--            <input type="submit" class="btn btn-primary" value="Purchase">-->
+<!--        </form>-->
+    </div>
+</div>
+
+<div th:insert="menu :: script-dependency"></div>
 </body>
 </html>
