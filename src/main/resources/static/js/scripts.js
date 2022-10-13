@@ -9,7 +9,6 @@ function selectSeat(button, row, seat) {
         button.setAttribute("data-status", "selected")
         image.setAttribute("src", "/seats/selected-seat.png")
 
-
         let divRow = document.createElement("div")
         divRow.setAttribute("class", "row")
 
@@ -32,8 +31,22 @@ function selectSeat(button, row, seat) {
         button.setAttribute("data-status", "active")
         image.setAttribute("src", "/seats/active-seat.png")
 
+        let childrenRows = ticketsZone.children
+        for (const childRow of childrenRows) {
+            let rowInfo = childRow.children;
+            let rowSpan = rowInfo.item(0);
+            let seatSpan = rowInfo.item(1);
+            if (rowSpan.innerHTML === `${row} row` && seatSpan.innerHTML === `${seat} seat`) {
+                ticketsZone.removeChild(childRow)
+                break
+            }
+        }
     }
+    if (amountSelectedSeats === 0) {
+        ticketsZone.style.display = "none"
 
-    ticketsZone.style.display = amountSelectedSeats === 0 ? "none" : "block"
+    } else {
+        ticketsZone.style.display = "block"
+    }
 
 }
