@@ -1,7 +1,7 @@
 package ua.com.andromeda.cinemaspringbootapp.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,4 +33,13 @@ public class MovieDetailsController {
         modelAndView.setViewName("movie-details/description");
         return modelAndView;
     }
+
+    @GetMapping("/update/{id}")
+    public ModelAndView showUpdateForm(@PathVariable String id, ModelAndView modelAndView) {
+        MovieDetails movieDetails = movieDetailsService.getMovieDetailsById(id);
+        modelAndView.addObject("movieDetails", movieDetails);
+        modelAndView.setViewName("movie-details/update_form");
+        return modelAndView;
+    }
+
 }

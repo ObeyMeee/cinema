@@ -7,7 +7,12 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,19 +25,23 @@ public class MovieDetails {
     private String id;
 
     private String description;
+
+    @Min(1)
     private Integer duration;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "media_id")
     private Media media;
     private String director;
+
+    @Min(1850)
+    @Max(2023)
     private Integer productionYear;
 
     @OneToMany(mappedBy = "movieDetails", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Session> sessions;
-    @ManyToMany
-    @JoinTable
-            (name = "movie_details_actors",
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "movie_details_actors",
             joinColumns = @JoinColumn(name = "movie_details_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
@@ -40,7 +49,7 @@ public class MovieDetails {
     private Set<Actor> actors;
     @ManyToMany
     @JoinTable(
-            name = "movieDetails_genres",
+            name = "movie_details_genres",
             joinColumns = @JoinColumn(name = "movie_details_id"),
             inverseJoinColumns = @JoinColumn(name = "genres_id")
     )

@@ -26,7 +26,7 @@ public class HomeController {
         if (user != null) {
             request.getSession().setAttribute("id", user.getId());
         }
-        List<Session> sessions = sessionService.getUniqueSessions();
+        List<Session> sessions = sessionService.findUniqueSessions();
         modelAndView.addObject("movies", sessions);
         modelAndView.setViewName("home");
         return modelAndView;

@@ -7,7 +7,7 @@ import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import java.util.List;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, String> {
     Role findByName(String name);
 
     List<Role> findAllByNameIsNotLike(String name);

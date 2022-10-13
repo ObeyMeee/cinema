@@ -6,7 +6,6 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,9 +15,13 @@ import java.util.Set;
 @ToString
 public class Genre {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
+
+    @Column(unique = true, nullable = false)
     private String name;
+
     @ManyToMany(mappedBy = "genres")
     @ToString.Exclude
     private Set<MovieDetails> movieDetails;

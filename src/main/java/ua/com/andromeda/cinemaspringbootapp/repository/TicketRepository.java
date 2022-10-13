@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 
 @Repository
-public interface TicketRepository extends JpaRepository<Ticket, Long> {
+public interface TicketRepository extends JpaRepository<Ticket, String> {
 
 }

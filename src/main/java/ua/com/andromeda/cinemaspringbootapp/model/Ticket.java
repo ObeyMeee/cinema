@@ -26,8 +26,7 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "ticket_type_id")
+    @Enumerated(EnumType.STRING)
     private TicketType type;
 
     @ManyToOne

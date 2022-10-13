@@ -5,7 +5,100 @@
 </head>
 <body>
 <div th:insert="menu :: header"></div>
-    <h1>La la land</h1>
+
+<form th:action="@{/movies/new}" th:method="POST">
+
+    <div class="container">
+        <fieldset th:object="${movie}">
+            <legend>Session</legend>
+            <div class="row">
+                <div class="col-4">
+                    <label class="form-label" for="name">Session name</label>
+                    <input id="name" class="form-control" th:field="*{name}" required>
+                </div>
+                <div class="col-4">
+                    <label class="form-label" for="time">Time</label>
+                    <input id="time" type="datetime-local" class="form-control" th:field="*{startTime}" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset th:object="${movie.movieDetails}">
+            <legend>Movie information</legend>
+
+            <div class="row">
+                <div class="col-4">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea id="description" class="form-control" th:field="*{description}" required></textarea>
+                </div>
+                <div class="col-4">
+                    <label class="form-label" for="year">Production year</label>
+                    <input id="year"
+                           type="number"
+                           class="form-control"
+                           th:field="*{productionYear}"
+                           min="1850" max="2023" required>
+                    <div class="error" th:if="${#fields.hasErrors('productionYear')}"
+                         th:errors="*{productionYear}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <label class="form-label" for="actors">Actors</label>
+                    <textarea id="actors" class="form-control" name="actors" required></textarea>
+                </div>
+                <div class="col-4">
+                    <label class="form-label" for="director">Director</label>
+                    <input id="director" class="form-control" th:field="*{director}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <label class="form-label" for="duration">Duration</label>
+                    <input id="duration"
+                           type="number"
+                           class="form-control"
+                           th:field="*{duration}"
+                           min="1" max="300" required>
+                    <div class="error" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></div>
+                </div>
+                <div class="col-4">
+                    <label for="country" class="form-label">Country</label>
+                    <input class="form-control" id="country" th:field="*{country.name}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <select class="form-select" th:field="${movie.movieDetails.genres}" multiple>
+                        <option th:each="genre : ${genres}" th:value="${genre}" th:text="${genre.name}">Genre</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset th:object="${movie.movieDetails.media}">
+            <legend>Media</legend>
+
+            <div class="row">
+                <div class="col-4">
+                    <label class="form-label" for="poster">Link of the poster</label>
+                    <input id="poster" class="form-control" th:field="*{poster}" required>
+                </div>
+                <div class="col-4">
+                    <label class="form-label" for="trailer">Link of the trailer</label>
+                    <input id="trailer" class="form-control" th:field="*{trailer}" required>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row">
+            <div class="col-2">
+                <input type="submit" class="btn btn-success btn-lg" value="Add session">
+            </div>
+        </div>
+    </div>
+</form>
+
 <div th:insert="menu :: script-dependency"></div>
 </body>
 </html>

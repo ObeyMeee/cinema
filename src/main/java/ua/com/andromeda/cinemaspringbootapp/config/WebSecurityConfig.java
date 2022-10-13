@@ -33,7 +33,7 @@ public class WebSecurityConfig {
                     .antMatchers("/users/new").permitAll()
                     .antMatchers("/tickets/new").authenticated()
                     .antMatchers(HttpMethod.GET, "/users/**").authenticated()
-                    .antMatchers("/users").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                    .antMatchers("/users", "/movies/new", "movies/unique").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
                     .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
                     .anyRequest().permitAll()
                 .and()

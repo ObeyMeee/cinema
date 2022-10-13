@@ -23,4 +23,6 @@ public interface SessionRepository extends JpaRepository<Session, String>{
     List<Session> findAllByMovieDetailsIdOrderByStartTime(@Param("id") String id);
 
     Page<Session> findAll(Pageable pageable);
+
+    void deleteAllByName(String name);
 }
