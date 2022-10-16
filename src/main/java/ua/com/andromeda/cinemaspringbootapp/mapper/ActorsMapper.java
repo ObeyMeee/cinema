@@ -1,4 +1,4 @@
-package ua.com.andromeda.cinemaspringbootapp.utils.mapper;
+package ua.com.andromeda.cinemaspringbootapp.mapper;
 
 import ua.com.andromeda.cinemaspringbootapp.model.Actor;
 

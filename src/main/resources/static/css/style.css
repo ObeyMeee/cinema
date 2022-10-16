@@ -60,10 +60,8 @@
 
 #ticketsZone {
     position: absolute;
-    top: 300px;
+    top: 400px;
     left: 750px;
-    right: 270px;
-    background-color: blueviolet;
     display: none;
 }
 

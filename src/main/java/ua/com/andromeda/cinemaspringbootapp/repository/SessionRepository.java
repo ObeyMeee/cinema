@@ -11,7 +11,7 @@ import ua.com.andromeda.cinemaspringbootapp.model.Session;
 import java.util.List;
 
 @Repository
-public interface SessionRepository extends JpaRepository<Session, String>{
+public interface SessionRepository extends JpaRepository<Session, String> {
     @Query(value = "select t1.id, name, start_time, movie_details_id " +
             "from " +
             "   (select distinct on (name) sessions.*, production_year " +

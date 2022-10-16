@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import ua.com.andromeda.cinemaspringbootapp.model.MovieDetails;
 
 @Repository
-public interface MovieDetailsRepository extends JpaRepository<MovieDetails, String> { }
+public interface MovieDetailsRepository extends JpaRepository<MovieDetails, String> {
+}
 

@@ -16,6 +16,7 @@ import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import ua.com.andromeda.cinemaspringbootapp.service.CountryService;
 import ua.com.andromeda.cinemaspringbootapp.service.GenreService;
 import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
+import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 
 import java.util.List;
 
@@ -25,15 +26,18 @@ public class MovieController {
     private final SessionService sessionService;
     private final CountryService countryService;
     private final GenreService genreService;
+    private final TicketService ticketService;
 
     @Autowired
     public MovieController(SessionService sessionService,
                            CountryService countryService,
-                           GenreService genreService) {
+                           GenreService genreService,
+                           TicketService ticketService) {
 
         this.sessionService = sessionService;
         this.countryService = countryService;
         this.genreService = genreService;
+        this.ticketService = ticketService;
     }
 
     @GetMapping
@@ -51,8 +55,10 @@ public class MovieController {
     @GetMapping("/hall/{id}")
     public ModelAndView showSession(@PathVariable String id, ModelAndView modelAndView) {
         Session session = sessionService.findById(id);
+        List<Ticket> tickets = ticketService.findAllBySessionId(id);
+        modelAndView.addObject("tickets", tickets);
         modelAndView.addObject("movie", session);
-        modelAndView.addObject("ticket", new Ticket());
+
         modelAndView.setViewName("movies/hall");
         return modelAndView;
     }

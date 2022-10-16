@@ -34,21 +34,15 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean save(User user) {
-        if (emailExists(user)) {
-            return false;
+    public void save(User user) {
+        if (emailExists(user.getEmail()) || loginExists(user.getLogin())) {
+            return;
         }
-        if (loginExists(user)) {
-            return false;
-        }
-
         encodePassword(user);
         userRepository.save(user);
-        return true;
     }
 
-    private boolean emailExists(User user) {
-        String email = user.getEmail();
+    private boolean emailExists(String email) {
         Optional<User> optionalUserByEmail = userRepository.findByEmail(email);
         if (optionalUserByEmail.isPresent()) {
             System.out.println("There is user with email = " + email);
@@ -57,9 +51,8 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    private boolean loginExists(User user) {
-        String login = user.getLogin();
-        Optional<User> optionalUserByLogin = findByLogin(login);
+    private boolean loginExists(String login) {
+        Optional<User> optionalUserByLogin = userRepository.findByLogin(login);
         if (optionalUserByLogin.isPresent()) {
             System.out.println("There is user with login = " + login);
             return true;
@@ -76,15 +69,14 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = findByLogin(login)
-                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with login ==> " + login));
-
+        User user = findByLogin(login);
         return new org.springframework.security.core.userdetails.User
                 (user.getLogin(), user.getPassword(), mapRolesToGrantedAuthorities(user.getRoles()));
     }
 
-    public Optional<User> findByLogin(String login) {
-        return userRepository.findByLogin(login);
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with login ==> " + login));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToGrantedAuthorities(Collection<Role> roles) {
@@ -95,8 +87,7 @@ public class UserService implements UserDetailsService {
 
     public Page<User> findAllWhereUsersHaveSameOrLessRoles(Principal principal, Pageable pageable) {
         String login = principal.getName();
-        User currentUser = findByLogin(login)
-                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with login ==> " + login));
+        User currentUser = findByLogin(login);
         Set<Role> roles = currentUser.getRoles();
         return userRepository.findAllWhereUsersHaveSameOrLessRoles(roles.size(), pageable);
     }

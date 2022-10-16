@@ -30,23 +30,23 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/users/new").permitAll()
-                    .antMatchers("/tickets/new").authenticated()
-                    .antMatchers(HttpMethod.GET, "/users/**").authenticated()
-                    .antMatchers("/users", "/movies/new", "movies/unique").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
-                    .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
-                    .anyRequest().permitAll()
+                .antMatchers("/users/new").permitAll()
+                .antMatchers("/tickets/new").authenticated()
+                .antMatchers(HttpMethod.GET, "/users/**").authenticated()
+                .antMatchers("/users", "/movies/new", "movies/unique").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                .anyRequest().permitAll()
                 .and()
-                    .formLogin()
-                    .defaultSuccessUrl("/home")
+                .formLogin()
+                .defaultSuccessUrl("/home")
                 .and()
-                    .logout()
-                    .logoutSuccessUrl("/home")
-                    .permitAll()
+                .logout()
+                .logoutSuccessUrl("/home")
+                .permitAll()
                 .and()
-                    .rememberMe()
+                .rememberMe()
                 .and()
-                    .csrf().disable();
+                .csrf().disable();
         return http.build();
     }
 
