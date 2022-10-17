@@ -3,9 +3,11 @@ package ua.com.andromeda.cinemaspringbootapp.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tickets")
@@ -21,6 +23,8 @@ public class Ticket {
     private Integer price;
     private Integer row;
     private Integer seat;
+    @CreationTimestamp
+    private LocalDateTime boughtAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -37,8 +37,8 @@ public class TicketController {
 
     @PostMapping("/new")
     public String purchaseTickets(HttpServletRequest request,
-                                 @RequestParam("sessionId") String sessionId,
-                                 Principal principal) {
+                                  @RequestParam("sessionId") String sessionId,
+                                  Principal principal) {
 
         Session session = sessionService.findById(sessionId);
         User user = userService.findByLogin(principal.getName());

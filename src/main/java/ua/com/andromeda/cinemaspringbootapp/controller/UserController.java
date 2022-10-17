@@ -10,9 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
+import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
 
 import javax.validation.Valid;
@@ -26,11 +28,13 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final RoleService roleService;
+    private final TicketService ticketService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService, RoleService roleService, TicketService ticketService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.ticketService = ticketService;
     }
 
     @GetMapping
@@ -65,6 +69,9 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView showProfile(@PathVariable String id, ModelAndView modelAndView) {
         User user = userService.findById(id);
+        List<TicketDTO> tickets = ticketService.findAllByUserId(id);
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("tickets", tickets);
         modelAndView.setViewName("users/profile");
         return modelAndView;
     }

@@ -151,7 +151,8 @@ create table tickets
             references sessions,
     user_id    varchar(255)
         constraint fk4eqsebpimnjen0q46ja6fl2hl
-            references users
+            references users,
+    bought_at  timestamp
 );
 
 alter table tickets
@@ -170,4 +171,3 @@ create table users_roles
 
 alter table users_roles
     owner to postgres;
-

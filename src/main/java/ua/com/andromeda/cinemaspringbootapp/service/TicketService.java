@@ -2,9 +2,12 @@ package ua.com.andromeda.cinemaspringbootapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
+import ua.com.andromeda.cinemaspringbootapp.mapper.TupleMapper;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import ua.com.andromeda.cinemaspringbootapp.repository.TicketRepository;
 
+import javax.persistence.Tuple;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
@@ -12,10 +15,12 @@ import java.util.List;
 @Service
 public class TicketService {
     private final TicketRepository ticketRepository;
+    private final TupleMapper tupleMapper;
 
     @Autowired
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(TicketRepository ticketRepository, TupleMapper tupleMapper) {
         this.ticketRepository = ticketRepository;
+        this.tupleMapper = tupleMapper;
     }
 
     public static boolean isPlaceFree(List<?> tickets, int row, int seat) {
@@ -25,9 +30,6 @@ public class TicketService {
                 return false;
             }
         }
-        System.out.println("tickets1 = " + tickets1);
-        System.out.println("row = " + row);
-        System.out.println("seat = " + seat);
         return true;
     }
 
@@ -38,5 +40,11 @@ public class TicketService {
 
     public List<Ticket> findAllBySessionId(String id) {
         return ticketRepository.findAllBySessionId(id);
+    }
+
+    public List<TicketDTO> findAllByUserId(String id) {
+
+        List<Tuple> ticketsTuple = ticketRepository.findAllTicketsGroupedBySessionAndUser(id);
+        return ticketsTuple.stream().map(tupleMapper::mapTupleToTicketDTO).toList();
     }
 }

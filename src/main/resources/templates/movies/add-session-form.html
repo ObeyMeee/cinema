@@ -14,11 +14,11 @@
             <div class="row">
                 <div class="col-4">
                     <label class="form-label" for="name">Session name</label>
-                    <input id="name" class="form-control" th:field="*{name}" required>
+                    <input class="form-control" id="name" required th:field="*{name}">
                 </div>
                 <div class="col-4">
                     <label class="form-label" for="time">Time</label>
-                    <input id="time" type="datetime-local" class="form-control" th:field="*{startTime}" required>
+                    <input class="form-control" id="time" required th:field="*{startTime}" type="datetime-local">
                 </div>
             </div>
         </fieldset>
@@ -29,49 +29,49 @@
             <div class="row">
                 <div class="col-4">
                     <label class="form-label" for="description">Description</label>
-                    <textarea id="description" class="form-control" th:field="*{description}" required></textarea>
+                    <textarea class="form-control" id="description" required th:field="*{description}"></textarea>
                 </div>
                 <div class="col-4">
                     <label class="form-label" for="year">Production year</label>
-                    <input id="year"
-                           type="number"
-                           class="form-control"
-                           th:field="*{productionYear}"
-                           min="1850" max="2023" required>
-                    <div class="error" th:if="${#fields.hasErrors('productionYear')}"
-                         th:errors="*{productionYear}"></div>
+                    <input class="form-control"
+                           id="year"
+                           max="2023"
+                           min="1850"
+                           required th:field="*{productionYear}" type="number">
+                    <div class="error" th:errors="*{productionYear}"
+                         th:if="${#fields.hasErrors('productionYear')}"></div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
                     <label class="form-label" for="actors">Actors</label>
-                    <textarea id="actors" class="form-control" name="actors" required></textarea>
+                    <textarea class="form-control" id="actors" name="actors" required></textarea>
                 </div>
                 <div class="col-4">
                     <label class="form-label" for="director">Director</label>
-                    <input id="director" class="form-control" th:field="*{director}" required>
+                    <input class="form-control" id="director" required th:field="*{director}">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-4">
                     <label class="form-label" for="duration">Duration</label>
-                    <input id="duration"
-                           type="number"
-                           class="form-control"
-                           th:field="*{duration}"
-                           min="1" max="300" required>
-                    <div class="error" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></div>
+                    <input class="form-control"
+                           id="duration"
+                           max="300"
+                           min="1"
+                           required th:field="*{duration}" type="number">
+                    <div class="error" th:errors="*{duration}" th:if="${#fields.hasErrors('duration')}"></div>
                 </div>
                 <div class="col-4">
-                    <label for="country" class="form-label">Country</label>
-                    <input class="form-control" id="country" th:field="*{country.name}" required>
+                    <label class="form-label" for="country">Country</label>
+                    <input class="form-control" id="country" required th:field="*{country.name}">
                 </div>
             </div>
             <div class="row">
                 <div class="col-4">
-                    <select class="form-select" th:field="${movie.movieDetails.genres}" multiple>
-                        <option th:each="genre : ${genres}" th:value="${genre}" th:text="${genre.name}">Genre</option>
+                    <select class="form-select" multiple th:field="${movie.movieDetails.genres}">
+                        <option th:each="genre : ${genres}" th:text="${genre.name}" th:value="${genre}">Genre</option>
                     </select>
                 </div>
             </div>
@@ -83,17 +83,17 @@
             <div class="row">
                 <div class="col-4">
                     <label class="form-label" for="poster">Link of the poster</label>
-                    <input id="poster" class="form-control" th:field="*{poster}" required>
+                    <input class="form-control" id="poster" required th:field="*{poster}">
                 </div>
                 <div class="col-4">
                     <label class="form-label" for="trailer">Link of the trailer</label>
-                    <input id="trailer" class="form-control" th:field="*{trailer}" required>
+                    <input class="form-control" id="trailer" required th:field="*{trailer}">
                 </div>
             </div>
         </fieldset>
         <div class="row">
             <div class="col-2">
-                <input type="submit" class="btn btn-success btn-lg" value="Add session">
+                <input class="btn btn-success btn-lg" type="submit" value="Add session">
             </div>
         </div>
     </div>

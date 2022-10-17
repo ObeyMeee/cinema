@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
 <head th:include="menu :: head-section">
     <title id="pageTitle">User form</title>
 </head>
@@ -10,60 +10,60 @@
 <form method="post" th:action="@{/users/new}" th:object="${user}">
     <div class="container">
         <div class="row col-4">
-            <label for="email" class="form-label">Email:</label>
-            <input type="email" class="form-control"
-                   id="email"
+            <label class="form-label" for="email">Email:</label>
+            <input class="form-control" id="email"
                    placeholder="name@example.com"
-                   th:field="*{email}">
+                   th:field="*{email}"
+                   type="email">
         </div>
-        <p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">
+        <p class="error" style="color: red" th:errors="*{email}" th:if="${#fields.hasErrors('email')}">
             Error
         </p>
 
         <div class="row col-4">
-            <label for="login" class="form-label">Login:</label>
+            <label class="form-label" for="login">Login:</label>
             <input class="form-control" id="login" th:field="*{login}">
         </div>
-        <p class="error" th:if="${#fields.hasErrors('login')}" th:errors="*{login}" style="color: red">
+        <p class="error" style="color: red" th:errors="*{login}" th:if="${#fields.hasErrors('login')}">
             Error
         </p>
 
         <div class="row col-4">
-            <label for="password" class="form-label">Password:</label>
-            <input type="password" class="form-control" id="password" th:field="*{password}">
+            <label class="form-label" for="password">Password:</label>
+            <input class="form-control" id="password" th:field="*{password}" type="password">
         </div>
 
-        <p class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >
+        <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}">
             Error
         </p>
 
         <div sec:authorize="isAuthenticated()">
             <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')">
-                <input type="checkbox"
-                       class="form-check-input"
-                       value="ROLE_SUPER_ADMIN"
+                <input class="form-check-input"
+                       id="superAdmin"
                        name="role"
-                       id="superAdmin">
+                       type="checkbox"
+                       value="ROLE_SUPER_ADMIN">
                 <label class="form-check-label" for="superAdmin">
                     Super admin
                 </label>
                 <br>
-                <input type="checkbox"
+                <input checked
                        class="form-check-input"
-                       value="ROLE_ADMIN"
+                       id="admin"
                        name="role"
-                       id="admin" checked>
+                       type="checkbox" value="ROLE_ADMIN">
                 <label class="form-check-label" for="admin">
                     Admin
                 </label>
             </div>
         </div>
-        <input type="checkbox"
+        <input checked
                class="d-none"
-               value="ROLE_CUSTOMER"
                name="role"
-               checked>
-        <button type="submit" class="btn btn-success">Submit</button>
+               type="checkbox"
+               value="ROLE_CUSTOMER">
+        <button class="btn btn-success" type="submit">Submit</button>
     </div>
 </form>
 

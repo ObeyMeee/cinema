@@ -8,9 +8,9 @@
 <div class="container">
     <div class="row">
         <div class="col-2">
-            <img th:src="${movie.movieDetails.media.poster}"
-                 class="rounded"
+            <img class="rounded"
                  th:alt="${movie.name}"
+                 th:src="${movie.movieDetails.media.poster}"
                  width="70%">
 
         </div>
@@ -45,8 +45,8 @@
 <div class="container">
     <div class="row">
         <div class="col-4">
-            <div class="screen" align="center" style="width:24.584995rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 806 21" fill="dodgerblue">
+            <div align="center" class="screen" style="width:24.584995rem;">
+                <svg fill="dodgerblue" viewBox="0 0 806 21" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3.2,20l-2,0.2l-0.3-4l2-0.2C136.2,5.3,269.6,0,403,0s266.8,5.3,400.2,16l2,0.2l-0.3,4l-2-0.2 C669.5,9.3,536.3,4,403,4S136.4,9.3,3.2,20z"></path>
                 </svg>
                 <div class="name">ЕКРАН</div>
@@ -65,20 +65,21 @@
                 <tbody>
                 <tr th:each="row, rowStatus : ${#numbers.sequence(1, 6)}">
                     <td th:each="seat : ${#numbers.sequence(1, 6)}">
-                        <th:block th:with="isFree = ${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).isPlaceFree(tickets, row, seat)}">
+                        <th:block
+                                th:with="isFree = ${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).isPlaceFree(tickets, row, seat)}">
                             <div th:if="${rowStatus.last}">
                                 <th:block th:if="${isFree}">
                                     <button class="btn-seat"
                                             data-status="active"
                                             data-type="LUX" th:onclick="|selectSeat(this, ${row}, ${seat}, 200)|">
-                                        <img class="seat" src="/seats/active-lux-seat.png" alt="seat">
+                                        <img alt="seat" class="seat" src="/seats/active-lux-seat.png">
                                     </button>
 
                                 </th:block>
                                 <th:block th:unless="${isFree}">
                                     <button class="btn-seat disabled"
                                             data-status="taken" data-type="LUX">
-                                        <img class="seat" src="/seats/taken-seat.png" alt="seat">
+                                        <img alt="seat" class="seat" src="/seats/taken-seat.png">
                                     </button>
                                 </th:block>
                             </div>
@@ -87,13 +88,12 @@
                                     <button class="btn-seat"
                                             data-status="active"
                                             data-type="GOOD" th:onclick="|selectSeat(this, ${row}, ${seat}, 100)|">
-                                        <img class="seat" src="/seats/active-good-seat.png" alt="seat">
+                                        <img alt="seat" class="seat" src="/seats/active-good-seat.png">
                                     </button>
                                 </th:block>
                                 <th:block th:unless="${isFree}">
-                                    </button>
                                     <button class="btn-seat disabled" data-status="taken" data-type="GOOD">
-                                        <img class="seat" src="/seats/taken-seat.png" alt="seat">
+                                        <img alt="seat" class="seat" src="/seats/taken-seat.png">
                                     </button>
                                 </th:block>
                             </div>
@@ -109,10 +109,10 @@
 
 <div>
     <div class="container">
-        <form id="ticketsZone" th:method="POST" th:action="@{/tickets/new}">
-            <input type="hidden" name="sessionId" th:value="${movie.id}">
+        <form id="ticketsZone" th:action="@{/tickets/new}" th:method="POST">
+            <input name="sessionId" th:value="${movie.id}" type="hidden">
             <div class="col-auto">
-                <input type="submit" id="purchaseButton" class="btn btn-primary" value="Purchase">
+                <input class="btn btn-primary" id="purchaseButton" type="submit" value="Purchase">
             </div>
         </form>
     </div>

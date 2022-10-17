@@ -4,8 +4,26 @@
     <title id="pageTitle">User profile</title>
 </head>
 <body>
-<h1>Heeey</h1>
 <div th:insert="menu :: header"></div>
+
+<table class="table table-stripped table-hover">
+    <thead>
+    <tr>
+        <th>Date of session</th>
+        <th>Movie</th>
+        <th>Tickets</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ticket : ${tickets}" th:object="${ticket}">
+        <td th:text="*{sessionDate}">Date of session</td>
+        <td th:text="*{sessionName}">Name of movie</td>
+        <td th:text="*{quantity}">Quantity</td>
+        <td th:text="*{totalPrice}">Total price</td>
+    </tr>
+    </tbody>
+</table>
 
 <div th:insert="menu :: script-dependency"></div>
 </body>
