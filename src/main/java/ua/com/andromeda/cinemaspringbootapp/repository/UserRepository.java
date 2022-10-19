@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, String> {
             "join roles r on r.id = ur.role_id " +
             "group by u.id, u.email, u.login, u.password) as t1 ";
 
-    String COMPARE_ROLES_COUNT = " where t1.roles_count <= :roleSize ";
+    String COMPARE_ROLES_COUNT = " where t1.roles_count < :roleSize ";
     String AND_EMAIL_OR_LOGIN_LIKE = " and login LIKE :searchValue or email LIKE :searchValue";
 
     String SEARCH_USERS_DATA = "select t1.id, t1.email, t1.login, t1.password " + SEARCH_FROM;

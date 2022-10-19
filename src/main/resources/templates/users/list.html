@@ -13,7 +13,8 @@
                     <span class="input-group-text" id="addon-wrapping">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
-                <input aria-describedby="addon-wrapping" class="form-control" id="search-input" placeholder="Type here to search..."
+                <input aria-describedby="addon-wrapping" class="form-control" id="search-input"
+                       placeholder="Type here to search..."
                        type="search">
             </div>
         </div>
@@ -21,17 +22,19 @@
             <a class="btn btn-primary" id="search-ref" th:href="@{/users?page=0&size=10}" th:onclick="|addParam()|">Search</a>
         </div>
 
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" id="inlineCheckbox1" type="checkbox" value="option1">
-            <label class="form-check-label" for="inlineCheckbox1">1</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" id="inlineCheckbox2" type="checkbox" value="option2">
-            <label class="form-check-label" for="inlineCheckbox2">2</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" disabled id="inlineCheckbox3" type="checkbox" value="option3">
-            <label class="form-check-label" for="inlineCheckbox3">3 (disabled)</label>
+        <div class="col-auto">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="inlineCheckbox1" type="checkbox" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">1</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="inlineCheckbox2" type="checkbox" value="option2">
+                <label class="form-check-label" for="inlineCheckbox2">2</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="inlineCheckbox3" type="checkbox" value="option3">
+                <label class="form-check-label" for="inlineCheckbox3">3</label>
+            </div>
         </div>
     </div>
 </div>
@@ -55,7 +58,12 @@
         <tbody>
         <tr th:each="user : ${page.content}">
             <td th:text="${user.email}">Email</td>
-            <td th:text="${user.login}">Login</td>
+            <td>
+                <span th:text="${user.login}">Login</span>
+                <span th:each="number : ${#numbers.sequence(1, user.roles.size)}">
+                    <i class="fa-regular fa-star"></i>
+                </span>
+            </td>
             <td>
                 <a class="btn btn-outline-dark" th:href="@{/users/{id}(id = ${user.id})}">User profile</a>
             </td>
@@ -66,7 +74,7 @@
                 <button class="btn btn-danger"
                         data-bs-target="#confirm"
                         data-bs-toggle="modal"
-                        th:attr="onclick=|setAction('@{/users/{id}(id = ${user.id})}')|"
+                        th:attr="onclick=|setAction('deleteUser', '@{/users/{id}(id = ${user.id})}')|"
                         th:data-bs-whatever="${user.login}"
                         type="button">Delete
                 </button>
@@ -96,6 +104,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    function setAction(formName, action) {
+        let form = document.getElementsByName(formName).item(0)
+        form.action = action
+    }
+
+    const exampleModal = document.getElementById('confirm')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget
+        const userLogin = button.getAttribute('data-bs-whatever')
+        let text = document.getElementById('confirmationText');
+        text.textContent = `Are you sure you want to delete ${userLogin} ?`
+    })
+</script>
 
 <div th:insert="fragments :: script-dependency"></div>
 <script th:src="@{/js/users-list.js}"></script>
