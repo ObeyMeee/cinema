@@ -26,21 +26,21 @@
             </div>
             <div class="col-5 self-aligned-right">
                 <div aria-label="Default button group" class="btn-group" role="group">
-                    <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                        <a class="btn btn-outline-dark color-white" th:href="@{/movies/new}">Add session</a>
-                    </div>
-                    <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                        <a class="btn btn-outline-dark color-white" th:href="@{/movies/unique}">Movies list</a>
-                    </div>
+                    <a class="btn btn-outline-dark color-white"
+                       sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                       th:href="@{/movies/new}">Add session</a>
+                    <a class="btn btn-outline-dark color-white"
+                       sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                       th:href="@{/movies/unique}">Movies list</a>
                     <div sec:authorize="isAuthenticated()">
                         <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                            <a class="btn btn-outline-dark color-white" th:href="@{/users}">users</a>
+                            <a class="btn btn-outline-dark color-white" th:href="@{/users?page=0&size=10}">users</a>
                         </div>
                     </div>
                     <a class="btn btn-outline-dark color-white" th:href="@{/users/new}">Sign up</a>
-                    <div sec:authorize="!isAuthenticated()">
-                        <a class="btn btn-outline-dark color-white" th:href="@{/login}">Log in</a>
-                    </div>
+                    <a class="btn btn-outline-dark color-white"
+                       sec:authorize="!isAuthenticated()"
+                       th:href="@{/login}">Log in</a>
                     <div sec:authorize="isAuthenticated()">
                         <a class="btn btn-outline-dark color-white" th:href="@{/logout}">Log out</a>
                         <a th:href="@{/users/{id}(id = ${#session.getAttribute('id')})}">
@@ -52,6 +52,42 @@
         </div>
     </nav>
 </div>
+
+<div th:fragment="alert-error">
+    <div th:if="${#fields.hasErrors('global')}">
+        <div class="alert alert-danger" role="alert">
+            <p th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+        </div>
+    </div>
+</div>
+
+<nav th:fragment="pagination(endpoint)">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+             <span th:if="${page.hasPrevious()}">
+                <a class="page-link" th:href="@{${endpoint}(page=${page.number - 1},size=${page.size})}">Previous</a>
+             </span>
+        </li>
+        <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+            <li class="page-item">
+                <span class="page-link active" th:if="${page.number == i}">
+                    <a class="page-link" th:href="@{${endpoint}(page=${i},size=${page.size})}"
+                       th:text="${i + 1}">Page number</a>
+                </span>
+                <span th:unless="${page.number == i}">
+                    <a class="page-link" th:href="@{${endpoint}(page=${i},size=${page.size})}"
+                       th:text="${i + 1}">Page number</a>
+                </span>
+            </li>
+        </th:block>
+        <li class="page-item">
+            <span th:if="${page.hasNext()}">
+                <a class="page-link" th:href="@{${endpoint}(page=${page.number+1},size=${page.size})}">Next</a>
+            </span>
+        </li>
+    </ul>
+</nav>
+
 <div th:fragment="script-dependency">
     <script th:src="@{/js/scripts.js}"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/951f32a133.js"></script>

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
@@ -16,6 +17,7 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
+import ua.com.andromeda.cinemaspringbootapp.validator.UserValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -29,17 +31,31 @@ public class UserController {
     private final UserService userService;
     private final RoleService roleService;
     private final TicketService ticketService;
+    private final UserValidator userValidator;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService, TicketService ticketService) {
+    public UserController(UserService userService,
+                          RoleService roleService,
+                          TicketService ticketService,
+                          UserValidator userValidator) {
         this.userService = userService;
         this.roleService = roleService;
         this.ticketService = ticketService;
+        this.userValidator = userValidator;
     }
 
     @GetMapping
-    public ModelAndView showList(ModelAndView modelAndView, Principal principal, @PageableDefault Pageable pageable) {
-        Page<User> users = userService.findAllWhereUsersHaveSameOrLessRoles(principal, pageable);
+    public ModelAndView showList(@RequestParam(value = "value", required = false) String searchValue,
+                                 ModelAndView modelAndView,
+                                 Principal principal,
+                                 @PageableDefault Pageable pageable) {
+        Page<User> users;
+        String login = principal.getName();
+        if (searchValue == null) {
+            users = userService.findAllWhereUsersHaveSameOrLessRoles(login, pageable);
+        } else {
+            users = userService.findAllWhereUsersHaveSameOrLessRolesAndEmailLikeOrLoginLike(login, searchValue, pageable);
+        }
         modelAndView.addObject("page", users);
         modelAndView.setViewName("users/list");
         return modelAndView;
@@ -57,6 +73,12 @@ public class UserController {
     public String save(@Valid User user,
                        BindingResult bindingResult,
                        @RequestParam("role") List<String> values) {
+
+        String errorMessage = userValidator.validateRegisteringUser(user);
+        if (!errorMessage.isEmpty()) {
+            bindingResult.addError(new ObjectError("globalError", errorMessage));
+        }
+
         if (bindingResult.hasErrors()) {
             return "users/register_form";
         }
@@ -86,11 +108,15 @@ public class UserController {
 
     @PutMapping("/update")
     public String update(@Valid User user, BindingResult bindingResult, Principal principal) {
+        String errorMessage = userValidator.validateUpdatedUser(user);
+        if (!errorMessage.isEmpty()) {
+            bindingResult.addError(new ObjectError("globalError", errorMessage));
+        }
         if (bindingResult.hasErrors()) {
             return "users/update_form";
         }
+        userService.save(user);
         LOGGER.info("{} updated user: {}", principal.getName(), user);
-        userService.update(user);
         return "redirect:/users";
     }
 

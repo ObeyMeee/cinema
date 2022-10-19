@@ -14,14 +14,13 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
@@ -35,35 +34,13 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void save(User user) {
-        if (emailExists(user.getEmail()) || loginExists(user.getLogin())) {
-            return;
-        }
-        encodePassword(user);
+        String encodedPassword = getEncodedPassword(user.getPassword());
+        user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
-    private boolean emailExists(String email) {
-        Optional<User> optionalUserByEmail = userRepository.findByEmail(email);
-        if (optionalUserByEmail.isPresent()) {
-            System.out.println("There is user with email = " + email);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean loginExists(String login) {
-        Optional<User> optionalUserByLogin = userRepository.findByLogin(login);
-        if (optionalUserByLogin.isPresent()) {
-            System.out.println("There is user with login = " + login);
-            return true;
-        }
-        return false;
-    }
-
-    private void encodePassword(User user) {
-        String password = user.getPassword();
-        String encodedPassword = passwordEncoder.encode(password);
-        user.setPassword(encodedPassword);
+    private String getEncodedPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     @Override
@@ -85,20 +62,29 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
-    public Page<User> findAllWhereUsersHaveSameOrLessRoles(Principal principal, Pageable pageable) {
-        String login = principal.getName();
+    public Page<User> findAllWhereUsersHaveSameOrLessRoles(String login, Pageable pageable) {
+        int size = getAmountUserRolesByLogin(login);
+        return userRepository.findAllWhereUsersHaveSameOrLessRolesCount(size, pageable);
+    }
+
+    private int getAmountUserRolesByLogin(String login) {
         User currentUser = findByLogin(login);
         Set<Role> roles = currentUser.getRoles();
-        return userRepository.findAllWhereUsersHaveSameOrLessRoles(roles.size(), pageable);
+        return roles.size();
     }
+
+    public Page<User> findAllWhereUsersHaveSameOrLessRolesAndEmailLikeOrLoginLike(String login,
+                                                                                  String searchValue,
+                                                                                  Pageable pageable) {
+
+        int size = getAmountUserRolesByLogin(login);
+        searchValue = '%' + searchValue + '%';
+        return userRepository.findAllWhereUsersHaveSameOrLessRolesCountAndEmailLikeOrLoginLike(size, searchValue, pageable);
+    }
+
 
     @Transactional
     public void delete(String id) {
         userRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void update(User user) {
-        userRepository.save(user);
     }
 }

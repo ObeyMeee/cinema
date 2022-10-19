@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="menu :: head-section">
+<head th:include="fragments :: head-section">
     <title id="pageTitle">Hall</title>
 </head>
 <body>
-<div th:insert="menu :: header"></div>
+<div th:insert="fragments :: header"></div>
 <div class="container">
     <div class="row">
         <div class="col-2">
@@ -31,7 +31,8 @@
                                 <i class="fa-sharp fa-solid fa-clock"></i>
                                 <span th:text="|${#numbers.formatInteger(startTime.hour, 2)}:${#numbers.formatInteger(startTime.minute, 2)} -
                                      ${#numbers.formatInteger(endTime.hour, 2)}:${#numbers.formatInteger(endTime.minute, 2)}|">
-                                    Duration</span>
+                                    Duration
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -118,6 +119,6 @@
     </div>
 </div>
 
-<div th:insert="menu :: script-dependency"></div>
+<div th:insert="fragments :: script-dependency"></div>
 </body>
 </html>

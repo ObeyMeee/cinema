@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="menu :: head-section">
+<head th:include="fragments :: head-section">
     <title id="pageTitle">Add session</title>
 </head>
 <body>
-<div th:insert="menu :: header"></div>
+<div th:insert="fragments :: header"></div>
 
 <form th:action="@{/movies/new}" th:method="POST">
 
@@ -99,6 +99,6 @@
     </div>
 </form>
 
-<div th:insert="menu :: script-dependency"></div>
+<div th:insert="fragments :: script-dependency"></div>
 </body>
 </html>

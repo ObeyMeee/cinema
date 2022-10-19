@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="menu :: head-section">
+<head th:include="fragments :: head-section">
     <title id="pageTitle">Update</title>
 </head>
 <body>
-<div th:insert="menu :: header"></div>
+<div th:insert="fragments :: header"></div>
+
+
 <form th:action="@{/users/update}" th:method="PUT" th:object="${user}">
+    <div th:insert="fragments :: alert-error"></div>
+
     <input th:field="*{id}" type="hidden">
     <input th:field="*{roles}" type="hidden">
     <div class="container">
@@ -21,12 +25,13 @@
         </div>
         <div class="row col-4">
             <label class="form-label" for="password">Password</label>
-            <input class="form-control" id="password" th:field="*{password}" type="text"/>
+            <input class="form-control" id="password" th:field="*{password}" type="password"/>
             <p class="error" th:error="*{password}" th:if="${#fields.hasErrors('password')}">Password error</p>
         </div>
         <button class="btn btn-success" type="submit">Update</button>
     </div>
 </form>
-<div th:insert="menu :: script-dependency"></div>
+
+<div th:insert="fragments :: script-dependency"></div>
 </body>
 </html>

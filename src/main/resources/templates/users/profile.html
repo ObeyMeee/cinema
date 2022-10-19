@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="menu :: head-section">
+<head th:include="fragments :: head-section">
     <title id="pageTitle">User profile</title>
 </head>
 <body>
-<div th:insert="menu :: header"></div>
+<div th:insert="fragments :: header"></div>
 
-<table class="table table-stripped table-hover">
-    <thead>
-    <tr>
-        <th>Date of session</th>
-        <th>Movie</th>
-        <th>Tickets</th>
-        <th>Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="ticket : ${tickets}" th:object="${ticket}">
-        <td th:text="*{sessionDate}">Date of session</td>
-        <td th:text="*{sessionName}">Name of movie</td>
-        <td th:text="*{quantity}">Quantity</td>
-        <td th:text="*{totalPrice}">Total price</td>
-    </tr>
-    </tbody>
-</table>
+<div th:if="${tickets.isEmpty}">
+    <div class="alert alert-info" role="alert">
+        You have not bought any tickets yet. We are waiting for you in our hall :)
+    </div>
+</div>
+<div th:unless="${tickets.isEmpty}">
+    <table class="table table-stripped table-hover">
+        <thead>
+        <tr>
+            <th>Date of session</th>
+            <th>Movie</th>
+            <th>Tickets</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket : ${tickets}" th:object="${ticket}">
+            <td th:text="*{sessionDate}">Date of session</td>
+            <td th:text="*{sessionName}">Name of movie</td>
+            <td th:text="*{quantity}">Quantity</td>
+            <td th:text="*{totalPrice}">Total price</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
-<div th:insert="menu :: script-dependency"></div>
+<div th:insert="fragments :: script-dependency"></div>
 </body>
 </html>

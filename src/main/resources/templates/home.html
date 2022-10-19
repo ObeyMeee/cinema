@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="menu :: head-section">
+<head th:include="fragments :: head-section">
     <title id="pageTitle">Andromeda cinema</title>
 </head>
 <body>
 
-<div th:insert="menu :: header"></div>
+<div th:insert="fragments :: header"></div>
 
-
-<div class="container">
-    <div class="row">
-        <a class="btn bth-primary" th:href="@{/movies}">
-            <h1 id="schedule">Schedule for the week</h1>
-        </a>
-    </div>
+<div class="align-center">
+    <a class="btn bth-primary" th:href="@{/movies}">
+        <h1 id="schedule">Schedule for the week</h1>
+    </a>
 </div>
 
 <div class="container-fluid">
@@ -28,8 +25,8 @@
                         <div th:object="${movie}">
                             <div class="carousel-item">
                                 <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
-                                    <img class="rounded float-start img-responsive img-centered-fixed-size"
-                                         th:src="*{movieDetails.media.poster}"/>
+                                    <img alt="poster"
+                                         class="rounded float-start img-responsive img-centered-fixed-size" src="" th:src="*{movieDetails.media.poster}"/>
                                 </a>
                             </div>
                         </div>
@@ -51,6 +48,6 @@
     </div>
 </div>
 
-<div th:insert="menu :: script-dependency"></div>
+<div th:insert="fragments :: script-dependency"></div>
 </body>
 </html>

@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:th="http://www.thymeleaf.org">
-<head th:include="menu :: head-section">
+<head th:include="fragments :: head-section">
     <title id="pageTitle">User form</title>
 </head>
 <body>
-<div th:insert="menu :: header"></div>
+<div th:insert="fragments :: header"></div>
+
 
 <form method="post" th:action="@{/users/new}" th:object="${user}">
+    <div th:insert="fragments :: alert-error"></div>
     <div class="container">
         <div class="row col-4">
             <label class="form-label" for="email">Email:</label>
@@ -24,7 +26,7 @@
             <label class="form-label" for="login">Login:</label>
             <input class="form-control" id="login" th:field="*{login}">
         </div>
-        <p class="error" style="color: red" th:errors="*{login}" th:if="${#fields.hasErrors('login')}">
+        <p class="error" th:errors="*{login}" th:if="${#fields.hasErrors('login')}">
             Error
         </p>
 
@@ -67,6 +69,6 @@
     </div>
 </form>
 
-<div th:insert="menu :: script-dependency"></div>
+<div th:insert="fragments :: script-dependency"></div>
 </body>
 </html>
