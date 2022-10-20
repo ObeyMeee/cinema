@@ -23,14 +23,9 @@ public class TicketService {
         this.tupleMapper = tupleMapper;
     }
 
-    public static boolean isPlaceFree(List<?> tickets, int row, int seat) {
-        List<Ticket> tickets1 = tickets.stream().map(Ticket.class::cast).toList();
-        for (Ticket ticket : tickets1) {
-            if (ticket.getRow() == row && ticket.getSeat() == seat) {
-                return false;
-            }
-        }
-        return true;
+    public static boolean isPlaceTaken(List<Ticket> tickets, int row, int seat) {
+        return tickets.stream()
+                .anyMatch(t -> t.getRow() == row && t.getSeat() == seat);
     }
 
     @Transactional

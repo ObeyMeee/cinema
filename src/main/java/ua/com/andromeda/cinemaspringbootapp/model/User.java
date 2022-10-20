@@ -4,14 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,10 +16,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString
 public class User {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(User.class);
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -55,13 +49,6 @@ public class User {
     @ToString.Exclude
     private Set<Ticket> tickets;
 
-    public void add(Ticket ticket) {
-        if (tickets == null) {
-            tickets = new HashSet<>();
-        }
-        tickets.add(ticket);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,9 +61,13 @@ public class User {
         return Objects.hash(id);
     }
 
-    @PrePersist
-    public void logSave() {
-        LOGGER.info("Saved user : {}", this);
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                '}';
     }
-
 }

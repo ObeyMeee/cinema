@@ -1,5 +1,7 @@
 package ua.com.andromeda.cinemaspringbootapp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/tickets")
 public class TicketController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TicketController.class.getName());
     private final TicketService ticketService;
     private final UserService userService;
     private final SessionService sessionService;
@@ -40,8 +43,9 @@ public class TicketController {
                                   @RequestParam("sessionId") String sessionId,
                                   Principal principal) {
 
+        String login = principal.getName();
+        User user = userService.findByLogin(login);
         Session session = sessionService.findById(sessionId);
-        User user = userService.findByLogin(principal.getName());
         String[] rows = request.getParameterValues("row");
         String[] seats = request.getParameterValues("seat");
         String[] prices = request.getParameterValues("price");
@@ -58,6 +62,7 @@ public class TicketController {
             tickets.add(ticket);
         }
         ticketService.saveAll(tickets);
+        LOGGER.info("{} bought {}", login, tickets);
         return "redirect:/home";
     }
 }

@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface MediaRepository extends JpaRepository<Media, String> {
-    Optional<Media> findByTrailerOrPoster(String trailer, String poster);
+    Optional<Media> findByTrailerAndPoster(String trailer, String poster);
 }

@@ -6,15 +6,11 @@
 <body>
 <div th:insert="fragments :: header"></div>
 
+    <video class="video-size" th:src="${movieDetails.media.trailer}"
+           th:poster="${movieDetails.media.poster}" src="" controls>
+    </video>
+
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <video controls id="trailer"
-                   th:poster="${movieDetails.media.poster}"
-                   th:src="${movieDetails.media.trailer}">
-            </video>
-        </div>
-    </div>
     <div class="row">
         <div th:each="movie : ${movies}">
             <div class="col-4">

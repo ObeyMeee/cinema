@@ -26,62 +26,35 @@
                 <h4 th:text="*{name}"></h4>
             </a>
         </td>
-        <td class="column-centered">
-            <a class="btn btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
-                <!--                <span th:text="*{startTime}"></span>-->
-                <span th:text="${#calendars.format(T(java.sql.Timestamp).valueOf(movie.startTime), 'dd MMMM hh:mm')}"></span>
-            </a>
-        </td>
-        <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-            <a class="btn btn-dark" th:href="@{/movie-details/update/{id}(id = *{movieDetails.id})}">Update</a>
-        </td>
-        <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-            <button class="btn btn-danger"
-                    data-bs-target="#confirm"
-                    data-bs-toggle="modal"
-                    th:attr="onclick=|setAction('@{/movies/{id}(id = *{id})}')|"
-                    th:data-session-name="*{name}"
-                    th:data-session-time="*{startTime}"
-                    type="button">Delete
-            </button>
-        </td>
+        <th:block
+                th:with="startTimeFormatted=${#calendars.format(T(java.sql.Timestamp).valueOf(movie.startTime), 'dd MMMM hh:mm')}">
+            <td class="column-centered">
+                <a class="btn btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
+                    <span th:text="${startTimeFormatted}"></span>
+                </a>
+            </td>
+            <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <a class="btn btn-dark" th:href="@{/movies/update/{id}(id = *{id})}">Update</a>
+            </td>
+            <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <button class="btn btn-danger"
+                        type="button"
+                        data-bs-target="#confirm"
+                        data-bs-toggle="modal"
+                        th:data-action="|@{/movies/{id}(id = *{id})}|"
+                        th:data-session-name="*{name}"
+                        th:data-session-time="${startTimeFormatted}"
+                        th:onclick="|callModalView(this.getAttribute('data-action'), this.getAttribute('data-session-name') ,
+                                            this.getAttribute('data-session-time'))|">
+                    Delete
+                </button>
+            </td>
+        </th:block>
+
     </tr>
 </table>
 
-<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="confirm" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm action</h1>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-            </div>
-            <div class="modal-body">
-                <h4 id="confirmationText">Are you sure you want to delete?</h4>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-                <form name="deleteSession" th:action="@{movies/{id}}" th:method="DELETE">
-                    <input class="btn btn-danger" type="submit" value="Delete">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function setAction(action) {
-        document.deleteSession.action = action
-    }
-
-    const exampleModal = document.getElementById('confirm')
-    exampleModal.addEventListener('show.bs.modal', event => {
-        const button = event.relatedTarget
-        const sessionName = button.getAttribute('data-session-name')
-        const sessionTime = button.getAttribute('data-session-time')
-        let text = document.getElementById('confirmationText');
-        text.textContent = `Are you sure you want to delete ${sessionName} at ${sessionTime} ?`
-    })
-</script>
+<div th:insert="fragments :: modal-window"></div>
 
 <div th:insert="fragments :: script-dependency"></div>
 </body>

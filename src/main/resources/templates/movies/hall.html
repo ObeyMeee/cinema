@@ -67,34 +67,33 @@
                 <tr th:each="row, rowStatus : ${#numbers.sequence(1, 6)}">
                     <td th:each="seat : ${#numbers.sequence(1, 6)}">
                         <th:block
-                                th:with="isFree = ${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).isPlaceFree(tickets, row, seat)}">
+                                th:with="isTaken = ${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).isPlaceTaken(tickets, row, seat)}">
                             <div th:if="${rowStatus.last}">
-                                <th:block th:if="${isFree}">
-                                    <button class="btn-seat"
-                                            data-status="active"
-                                            data-type="LUX" th:onclick="|selectSeat(this, ${row}, ${seat}, 200)|">
-                                        <img alt="seat" class="seat" src="/seats/active-lux-seat.png">
-                                    </button>
-
-                                </th:block>
-                                <th:block th:unless="${isFree}">
+                                <th:block th:if="${isTaken}">
                                     <button class="btn-seat disabled"
                                             data-status="taken" data-type="LUX">
                                         <img alt="seat" class="seat" src="/seats/taken-seat.png">
                                     </button>
                                 </th:block>
+                                <th:block th:unless="${isTaken}">
+                                    <button class="btn-seat"
+                                            data-status="active"
+                                            data-type="LUX" th:onclick="|selectSeat(this, ${row}, ${seat}, 200)|">
+                                        <img alt="seat" class="seat" src="/seats/active-lux-seat.png">
+                                    </button>
+                                </th:block>
                             </div>
                             <div th:unless="${rowStatus.last}">
-                                <th:block th:if="${isFree}">
+                                <th:block th:if="${isTaken}">
+                                    <button class="btn-seat disabled" data-status="taken" data-type="GOOD">
+                                        <img alt="seat" class="seat" src="/seats/taken-seat.png">
+                                    </button>
+                                </th:block>
+                                <th:block th:unless="${isTaken}">
                                     <button class="btn-seat"
                                             data-status="active"
                                             data-type="GOOD" th:onclick="|selectSeat(this, ${row}, ${seat}, 100)|">
                                         <img alt="seat" class="seat" src="/seats/active-good-seat.png">
-                                    </button>
-                                </th:block>
-                                <th:block th:unless="${isFree}">
-                                    <button class="btn-seat disabled" data-status="taken" data-type="GOOD">
-                                        <img alt="seat" class="seat" src="/seats/taken-seat.png">
                                     </button>
                                 </th:block>
                             </div>

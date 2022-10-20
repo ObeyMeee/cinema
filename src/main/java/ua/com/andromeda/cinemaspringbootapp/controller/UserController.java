@@ -72,6 +72,7 @@ public class UserController {
     @PostMapping("/new")
     public String save(@Valid User user,
                        BindingResult bindingResult,
+                       Principal principal,
                        @RequestParam("role") List<String> values) {
 
         String errorMessage = userValidator.validateRegisteringUser(user);
@@ -85,6 +86,11 @@ public class UserController {
         Set<Role> roles = roleService.mapStringListToRoles(values);
         user.setRoles(roles);
         userService.save(user);
+        if (principal == null) {
+            LOGGER.info("{} has been registered", user);
+        }else {
+            LOGGER.info("{} registered {}", principal.getName(), user.getLogin());
+        }
         return "redirect:/home";
     }
 
@@ -116,13 +122,16 @@ public class UserController {
             return "users/update_form";
         }
         userService.save(user);
-        LOGGER.info("{} updated user: {}", principal.getName(), user);
+        LOGGER.info("{} updated user: {}", principal.getName(), user.getLogin());
         return "redirect:/users";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable String id) {
+    public String delete(@PathVariable String id, Principal principal) {
+        User user = userService.findById(id);
+        String login = user.getLogin();
         userService.delete(id);
+        LOGGER.info("{} deleted user: {}", principal.getName(), login);
         return "redirect:/users";
     }
 }

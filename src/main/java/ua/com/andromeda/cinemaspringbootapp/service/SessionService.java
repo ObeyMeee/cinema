@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ua.com.andromeda.cinemaspringbootapp.mapper.ActorMapper;
 import ua.com.andromeda.cinemaspringbootapp.model.*;
 import ua.com.andromeda.cinemaspringbootapp.repository.ActorRepository;
 import ua.com.andromeda.cinemaspringbootapp.repository.CountryRepository;
@@ -21,18 +22,18 @@ import java.util.stream.Collectors;
 public class SessionService {
     private final SessionRepository sessionRepository;
     private final CountryRepository countryRepository;
-    private final ActorRepository actorRepository;
+
+    private final ActorMapper actorMapper;
     private final MediaRepository mediaRepository;
 
     @Autowired
-    public SessionService(SessionRepository sessionRepository,
-                          CountryRepository countryRepository,
-                          ActorRepository actorRepository, MediaRepository mediaRepository) {
+    public SessionService(SessionRepository sessionRepository, ActorMapper actorMapper,
+                          CountryRepository countryRepository, MediaRepository mediaRepository) {
 
         this.sessionRepository = sessionRepository;
         this.countryRepository = countryRepository;
-        this.actorRepository = actorRepository;
         this.mediaRepository = mediaRepository;
+        this.actorMapper = actorMapper;
     }
 
     public List<Session> findUniqueSessions() {
@@ -53,27 +54,22 @@ public class SessionService {
 
     @Transactional
     public void save(Session session, String actorsFullNames) {
-        List<String> fullNames = Arrays.stream(actorsFullNames.split(",")).map(String::trim).toList();
-        Set<Actor> foundedActors = fullNames.stream()
-                .map(actorRepository::findByFullName)
-                .collect(Collectors.toSet());
-
-        Set<Actor> notFoundedActors = fullNames.stream()
-                .filter(fullName -> actorRepository.findByFullName(fullName) == null)
-                .map(Actor::new)
-                .collect(Collectors.toSet());
-        foundedActors.addAll(notFoundedActors);
-        session.getMovieDetails().setActors(foundedActors);
+        Set<Actor> actors = actorMapper.mapFullNamesToActors(actorsFullNames);
+        session.getMovieDetails().setActors(actors);
         MovieDetails movieDetails = session.getMovieDetails();
         Country country = movieDetails.getCountry();
         Optional<Country> optionalCountry = countryRepository.findByName(country.getName());
         optionalCountry.ifPresent(movieDetails::setCountry);
         Media media = movieDetails.getMedia();
-        Optional<Media> optionalMedia = mediaRepository.findByTrailerOrPoster(media.getTrailer(), media.getPoster());
+        Optional<Media> optionalMedia = mediaRepository.findByTrailerAndPoster(media.getTrailer(), media.getPoster());
         optionalMedia.ifPresent(movieDetails::setMedia);
         sessionRepository.save(session);
     }
 
+    @Transactional
+    public void save(Session session) {
+        sessionRepository.save(session);
+    }
     @Transactional
     public void deleteById(String id) {
         sessionRepository.deleteById(id);
