@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments :: head-section">
+    <title id="pageTitle">Update session</title>
+</head>
+<body>
+<div th:insert="fragments :: header"></div>
+
+<form th:method="PATCH" th:action="@{/movies/update}" th:object="${movie}">
+    <input type="hidden" th:value="*{id}" th:field="*{id}">
+    <input type="hidden" th:value="*{movieDetails}" th:field="*{movieDetails}">
+    <input type="hidden" th:value="*{tickets}" th:field="*{tickets}">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-auto">
+                <label class="form-label" for="movieName">Name</label>
+                <input class="form-control" id="movieName" th:field="*{name}" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <label class="form-label" for="time">Date</label>
+                <input class="form-control" type="datetime-local" id="time" th:field="*{startTime}" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <input type="submit" class="btn btn-success btn-lg" value="Update">
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<div th:insert="fragments :: script-dependency"></div>
+</body>
+</html>
