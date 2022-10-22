@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="fragments :: head-section">
+    <title id="pageTitle">403 page</title>
+</head>
+<body>
+    <div th:insert="fragments :: header"></div>
+    <h1>Something went wrong!</h1>
+    <a th:href="@{/home}">Home page</a>
+    <div th:insert="fragments :: script-dependency"></div>
+</body>
+</html>

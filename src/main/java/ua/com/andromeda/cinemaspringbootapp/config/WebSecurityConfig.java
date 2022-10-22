@@ -30,11 +30,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/users/new").permitAll()
+                .antMatchers("/users", "users/update/*").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                .antMatchers("/movies/new", "/movies/unique", "/movies/update/*", "movies/name/*").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                .antMatchers("movie-details/update/*").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
+                .antMatchers(HttpMethod.DELETE, "/users/*", "/movies/*").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
                 .antMatchers("/tickets/new").authenticated()
-                .antMatchers(HttpMethod.GET, "/users/**").authenticated()
-                .antMatchers("/users", "/movies/new", "movies/unique").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
-                .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN", "OWNER")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

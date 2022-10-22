@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="fragments :: head-section">
+    <title id="pageTitle">500 page</title>
+</head>
+<body>
+    <div th:insert="fragments :: header"></div>
+    <h1>Something went wrong but Andromeda is on the way!</h1>
+    <img class="img-centered-fixed-size" th:src="@{/errors/500.gif}">
+    <div th:insert="fragments :: script-dependency"></div>
+</body>
+</html>
