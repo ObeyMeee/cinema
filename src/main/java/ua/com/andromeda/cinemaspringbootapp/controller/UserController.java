@@ -3,9 +3,7 @@ package ua.com.andromeda.cinemaspringbootapp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -45,18 +43,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ModelAndView showList(@RequestParam(value = "value", required = false) String searchValue,
-                                 ModelAndView modelAndView,
-                                 Principal principal,
-                                 @PageableDefault Pageable pageable) {
-        Page<User> users;
-        String login = principal.getName();
-        if (searchValue == null) {
-            users = userService.findAllWhereUsersHaveSameOrLessRoles(login, pageable);
-        } else {
-            users = userService.findAllWhereUsersHaveSameOrLessRolesAndEmailLikeOrLoginLike(login, searchValue, pageable);
-        }
-        modelAndView.addObject("page", users);
+    public ModelAndView showList(ModelAndView modelAndView, Principal principal) {
+        List<User> users = userService.findAllWhereUsersHaveSameOrLessRoles(principal.getName());
+        modelAndView.addObject("users", users);
         modelAndView.setViewName("users/list");
         return modelAndView;
     }
@@ -88,16 +77,17 @@ public class UserController {
         userService.save(user);
         if (principal == null) {
             LOGGER.info("{} has been registered", user);
-        }else {
+        } else {
             LOGGER.info("{} registered {}", principal.getName(), user.getLogin());
         }
         return "redirect:/home";
     }
 
-    @GetMapping("/{id}")
-    public ModelAndView showProfile(@PathVariable String id, ModelAndView modelAndView) {
-        User user = userService.findById(id);
-        List<TicketDTO> tickets = ticketService.findAllByUserId(id);
+    @GetMapping("/{userLogin}")
+    @PreAuthorize("@userService.hasAccess(#userLogin, authentication)")
+    public ModelAndView showProfile(@PathVariable String userLogin, ModelAndView modelAndView) {
+        User user = userService.findByLogin(userLogin);
+        List<TicketDTO> tickets = ticketService.findAllByUserId(user.getId());
         modelAndView.addObject("user", user);
         modelAndView.addObject("tickets", tickets);
         modelAndView.setViewName("users/profile");

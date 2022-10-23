@@ -6,48 +6,8 @@
 <body>
 <div th:insert="fragments :: header"></div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-4">
-            <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </span>
-                <input aria-describedby="addon-wrapping" class="form-control" id="search-input"
-                       placeholder="Type here to search..."
-                       type="search">
-            </div>
-        </div>
-        <div class="col-auto">
-            <a class="btn btn-primary"
-               id="search-ref"
-               th:href="@{/users?page=0&size=10}" th:onclick="|addParam()|">Search</a>
-        </div>
-
-        <div class="col-auto">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" id="inlineCheckbox1" type="checkbox" value="option1">
-                <label class="form-check-label" for="inlineCheckbox1">1</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" id="inlineCheckbox2" type="checkbox" value="option2">
-                <label class="form-check-label" for="inlineCheckbox2">2</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" id="inlineCheckbox3" type="checkbox" value="option3">
-                <label class="form-check-label" for="inlineCheckbox3">3</label>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div th:if="${page.isEmpty}">
-    <div class="alert alert-info" role="alert">
-        No users were found
-    </div>
-</div>
-<div th:unless="${page.isEmpty}">
-    <table class="table table-dark table-hover">
+<div th:if="${users.isEmpty}">
+    <table>
         <thead>
         <tr>
             <th>Email</th>
@@ -58,7 +18,29 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${page.content}" th:object="${user}">
+        <tr>
+            <td>
+                <div class="alert alert-info" role="alert">
+                    No users were found
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:unless="${users.isEmpty}">
+    <table id="users-list" class="table table-dark table-hover">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Login</th>
+            <th>Link</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}" th:object="${user}">
             <td th:text="*{email}">Email</td>
             <td>
                 <span th:text="*{login}">Login</span>
@@ -87,12 +69,10 @@
         </tr>
         </tbody>
     </table>
-    <div th:replace="fragments ::pagination(endpoint='/users')"></div>
 </div>
 
 <div th:insert="fragments :: modal-window"></div>
 
 <div th:insert="fragments :: script-dependency"></div>
-<script th:src="@{/js/users-list.js}"></script>
 </body>
 </html>

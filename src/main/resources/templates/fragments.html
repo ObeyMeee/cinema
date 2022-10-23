@@ -8,6 +8,8 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
           rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" th:href="@{/logo.ico}">
 </head>
@@ -16,75 +18,40 @@
 <div th:fragment="header">
     <nav class="navbar navbar-dark bg-dark">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group me-5" role="group" aria-label="First group">
+            <div class="btn-group" role="group" aria-label="First group">
                 <a th:href="@{/home}">
                     <img class="w-25" src="/logo.png" alt="Andromeda cinema"/>
                 </a>
                 <a class="btn btn-outline-dark color-white" th:href="@{/movies}">
-                    Schedule for the week
+                    Schedule for the current week
                 </a>
             </div>
-            <div class="btn-group" role="group" aria-label="Second group">
-                <a class="btn btn-outline-dark color-white me-5"
-                   sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
-                   th:href="@{/movies/new}">Add session</a>
-                <a class="btn btn-outline-dark color-white me-5"
-                   sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
-                   th:href="@{/movies/unique}">Movies list</a>
-                <a sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
-                   class="btn btn-outline-dark color-white me-5" th:href="@{/users?page=0&size=10}">users</a>
+            <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                 class="btn-group" role="group" aria-label="Second group">
+
+                <a class="btn btn-outline-dark color-white ma-400" th:href="@{/movies/new}">Add session</a>
+                <a class="btn btn-outline-dark color-white" th:href="@{/movies/unique}">Movies list</a>
+                <a class="btn btn-outline-dark color-white" th:href="@{/users?page=0&size=10}">users</a>
             </div>
-            <div class="btn-group me-5" role="group" aria-label="Third group">
-                <a class="btn btn-outline-dark color-white me-5" th:href="@{/users/new}">Sign up</a>
-                <a class="btn btn-outline-dark color-white me-5"
+            <div class="btn-group" role="group" aria-label="Third group">
+                <a sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                   class="btn btn-outline-dark color-white  ma-550" th:href="@{/users/new}">Sign up</a>
+                <a sec:authorize="!hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                        class="btn btn-outline-dark color-white  ma-1200" th:href="@{/users/new}">Sign up</a>
+
+                <a class="btn btn-outline-dark color-white"
                    sec:authorize="!isAuthenticated()"
                    th:href="@{/login}">Log in</a>
                 <div sec:authorize="isAuthenticated()">
-                    <a class="btn btn-outline-dark color-white me-5" th:href="@{/logout}">Log out</a>
-                    <a th:href="@{/users/{id}(id = ${#session.getAttribute('id')})}">
-                        <i class="fa-regular fa-user"></i>
+                    <a class="btn btn-outline-dark color-white" th:href="@{/logout}">Log out</a>
+                    <a th:href="@{/users/{login}(login = ${#authentication.name})}">
+                        <i class="fa-solid fa-user"></i>
                     </a>
                 </div>
             </div>
         </div>
     </nav>
 </div>
-
-<!--<div th:fragment="header">-->
-<!--    <nav class="navbar navbar-dark bg-dark">-->
-<!--        <div class="container-fluid text-center">-->
-<!--            <div class="row">-->
-<!--                <a th:href="@{/home}">-->
-<!--                    <img alt="Andromeda cinema" src="/logo.png" width="60px"/>-->
-<!--                </a>-->
-<!--                <div aria-label="Default button group" class="btn-group" role="group">-->
-<!--                    <a class="btn btn-outline-dark color-white" th:href="@{/movies}">-->
-<!--                        Schedule for the week-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <a class="btn btn-outline-dark color-white"-->
-<!--                   sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"-->
-<!--                   th:href="@{/movies/new}">Add session</a>-->
-<!--                <a class="btn btn-outline-dark color-white"-->
-<!--                   sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"-->
-<!--                   th:href="@{/movies/unique}">Movies list</a>-->
-<!--                <a sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"-->
-<!--                   class="btn btn-outline-dark color-white" th:href="@{/users?page=0&size=10}">users</a>-->
-<!--            </div>-->
-<!--            <a class="btn btn-outline-dark color-white" th:href="@{/users/new}">Sign up</a>-->
-<!--            <a class="btn btn-outline-dark color-white"-->
-<!--               sec:authorize="!isAuthenticated()"-->
-<!--               th:href="@{/login}">Log in</a>-->
-<!--            <div sec:authorize="isAuthenticated()">-->
-<!--                <a class="btn btn-outline-dark color-white" th:href="@{/logout}">Log out</a>-->
-<!--                <a th:href="@{/users/{id}(id = ${#session.getAttribute('id')})}">-->
-<!--                    <i class="fa-regular fa-user"></i>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </nav>-->
-<!--</div>-->
-
 
 <div th:fragment="alert-error">
     <div th:if="${#fields.hasErrors('global')}">
@@ -114,18 +81,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="pagination-div">
-
-    <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
-        <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
-        <span th:unless="${page.number == i}">
-             <a th:href="@{/userview(page=${i},size=${page.size})}">[[${i}+1]]</a>
-        </span>
-    </th:block>
-    <span th:if="${page.hasNext()}">
-        <a th:href="@{/userview(page=${page.number+1},size=${page.size})}">Next</a>
-    </span>
 </div>
 
 <nav th:fragment="pagination(endpoint)">
@@ -159,13 +114,17 @@
 
 
 <div th:fragment="script-dependency">
-    <script th:src="@{/js/scripts.js}"></script>
-    <script th:src="@{/js/modal-window.js}"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/951f32a133.js"></script>
     <script crossorigin="anonymous"
             integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script th:src="@{/js/users-list.js}"></script>
+    <script th:src="@{/js/modal-window.js}"></script>
 </div>
 </body>
 </html>

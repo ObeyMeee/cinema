@@ -22,10 +22,23 @@
 
 .img-centered-fixed-size {
     margin-left: 500px;
+    margin-top: 30px;
     min-height: 750px;
     max-height: 750px;
     min-width: 850px;
     max-width: 850px;
+}
+
+.ma-400 {
+    margin-left: 400px;
+}
+
+.ma-550 {
+    margin-left: 550px;
+}
+
+.ma-1200 {
+    margin-left: 1200px;
 }
 
 .btn-lg {

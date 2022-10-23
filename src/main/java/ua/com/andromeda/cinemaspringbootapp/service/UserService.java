@@ -1,7 +1,6 @@
 package ua.com.andromeda.cinemaspringbootapp.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,9 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -26,6 +27,16 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public boolean hasAccess(String passedLogin, Authentication authentication) {
+        boolean isSameUser = passedLogin.equals(authentication.getName());
+        if (isSameUser) {
+            return true;
+        }
+
+        int size = findByLogin(passedLogin).getRoles().size();
+        return authentication.getAuthorities().size() > size;
     }
 
     public User findById(String id) {
@@ -62,9 +73,9 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
-    public Page<User> findAllWhereUsersHaveSameOrLessRoles(String login, Pageable pageable) {
+    public List<User> findAllWhereUsersHaveSameOrLessRoles(String login) {
         int size = getAmountUserRolesByLogin(login);
-        return userRepository.findAllWhereUsersHaveSameOrLessRolesCount(size, pageable);
+        return userRepository.findAllWhereUsersHaveSameOrLessRolesCount(size);
     }
 
     private int getAmountUserRolesByLogin(String login) {
@@ -72,16 +83,6 @@ public class UserService implements UserDetailsService {
         Set<Role> roles = currentUser.getRoles();
         return roles.size();
     }
-
-    public Page<User> findAllWhereUsersHaveSameOrLessRolesAndEmailLikeOrLoginLike(String login,
-                                                                                  String searchValue,
-                                                                                  Pageable pageable) {
-
-        int size = getAmountUserRolesByLogin(login);
-        searchValue = '%' + searchValue + '%';
-        return userRepository.findAllWhereUsersHaveSameOrLessRolesCountAndEmailLikeOrLoginLike(size, searchValue, pageable);
-    }
-
 
     @Transactional
     public void delete(String id) {
