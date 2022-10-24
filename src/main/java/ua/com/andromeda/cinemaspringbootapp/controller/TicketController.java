@@ -66,7 +66,7 @@ public class TicketController {
             tickets.add(ticket);
         }
         ticketService.saveAll(tickets);
-        emailSenderService.sendEmailTicket(tickets, EmailAction.PURCHASE_TICKETS);
+        emailSenderService.sendTickets(tickets);
         LOGGER.info("{} bought {}", login, tickets);
         return "redirect:/home";
     }

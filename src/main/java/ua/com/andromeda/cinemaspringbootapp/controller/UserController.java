@@ -85,7 +85,7 @@ public class UserController {
         } else {
             LOGGER.info("{} registered {}", principal.getName(), user.getLogin());
         }
-        emailSenderService.sendEmail(user, EmailAction.VERIFY_EMAIL);
+        emailSenderService.sendVerificationEmail(user);
         return "redirect:/home";
     }
 
