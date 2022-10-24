@@ -14,6 +14,8 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
+import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailAction;
+import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailSenderService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -27,15 +29,17 @@ public class TicketController {
     private final TicketService ticketService;
     private final UserService userService;
     private final SessionService sessionService;
+    private final EmailSenderService emailSenderService;
 
     @Autowired
     public TicketController(TicketService ticketService,
                             UserService userService,
-                            SessionService sessionService) {
+                            SessionService sessionService, EmailSenderService emailSenderService) {
 
         this.ticketService = ticketService;
         this.userService = userService;
         this.sessionService = sessionService;
+        this.emailSenderService = emailSenderService;
     }
 
     @PostMapping("/new")
@@ -62,6 +66,7 @@ public class TicketController {
             tickets.add(ticket);
         }
         ticketService.saveAll(tickets);
+        emailSenderService.sendEmailTicket(tickets, EmailAction.PURCHASE_TICKETS);
         LOGGER.info("{} bought {}", login, tickets);
         return "redirect:/home";
     }

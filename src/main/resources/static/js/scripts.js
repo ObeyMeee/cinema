@@ -97,3 +97,10 @@ function createSpan(innerText) {
     span.innerText = innerText
     return span
 }
+
+let purchaseButton = document.getElementById("purchaseButton");
+purchaseButton.addEventListener("click", function () {
+    purchaseButton.disabled = true
+    let form = document.getElementById("ticketsZone");
+    form.submit()
+})

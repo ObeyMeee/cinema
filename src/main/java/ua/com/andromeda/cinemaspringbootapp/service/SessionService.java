@@ -6,17 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ua.com.andromeda.cinemaspringbootapp.mapper.ActorMapper;
 import ua.com.andromeda.cinemaspringbootapp.model.*;
-import ua.com.andromeda.cinemaspringbootapp.repository.ActorRepository;
 import ua.com.andromeda.cinemaspringbootapp.repository.CountryRepository;
 import ua.com.andromeda.cinemaspringbootapp.repository.MediaRepository;
 import ua.com.andromeda.cinemaspringbootapp.repository.SessionRepository;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SessionService {
@@ -70,6 +67,7 @@ public class SessionService {
     public void save(Session session) {
         sessionRepository.save(session);
     }
+
     @Transactional
     public void deleteById(String id) {
         sessionRepository.deleteById(id);

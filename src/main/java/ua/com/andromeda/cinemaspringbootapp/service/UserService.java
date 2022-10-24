@@ -13,7 +13,6 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;

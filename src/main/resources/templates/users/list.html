@@ -29,7 +29,7 @@
     </table>
 </div>
 <div th:unless="${users.isEmpty}">
-    <table id="users-list" class="table table-dark table-hover">
+    <table class="table table-dark table-hover" id="users-list">
         <thead>
         <tr>
             <th>Email</th>
@@ -56,13 +56,13 @@
             </td>
             <td>
                 <button class="btn btn-danger"
-                        type="button"
                         data-bs-target="#confirm"
                         data-bs-toggle="modal"
                         th:data-action="|@{/users/{id}(id = *{id})}|"
                         th:data-user-login="*{login}"
                         th:onclick="|callModalView(this.getAttribute('data-action'),
-                                                this.getAttribute('data-user-login'), null)|">
+                                                this.getAttribute('data-user-login'), null)|"
+                        type="button">
                     Delete
                 </button>
             </td>

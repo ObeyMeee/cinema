@@ -15,6 +15,8 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
+import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailAction;
+import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailSenderService;
 import ua.com.andromeda.cinemaspringbootapp.validator.UserValidator;
 
 import javax.validation.Valid;
@@ -31,15 +33,18 @@ public class UserController {
     private final TicketService ticketService;
     private final UserValidator userValidator;
 
+    private final EmailSenderService emailSenderService;
+
     @Autowired
     public UserController(UserService userService,
                           RoleService roleService,
                           TicketService ticketService,
-                          UserValidator userValidator) {
+                          UserValidator userValidator, EmailSenderService emailSenderService) {
         this.userService = userService;
         this.roleService = roleService;
         this.ticketService = ticketService;
         this.userValidator = userValidator;
+        this.emailSenderService = emailSenderService;
     }
 
     @GetMapping
@@ -80,6 +85,7 @@ public class UserController {
         } else {
             LOGGER.info("{} registered {}", principal.getName(), user.getLogin());
         }
+        emailSenderService.sendEmail(user, EmailAction.VERIFY_EMAIL);
         return "redirect:/home";
     }
 

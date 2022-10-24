@@ -19,13 +19,13 @@
         </td>
         <td class="column-centered">
             <button class="btn btn-danger"
-                    type="button"
                     data-bs-target="#confirm"
                     data-bs-toggle="modal"
                     th:data-action="|@{/movies/name/{name}(name = *{name})}|"
                     th:data-session-name="*{name}"
                     th:onclick="|callModalView(this.getAttribute('data-action'),
-                                                this.getAttribute('data-session-name'), null)|">
+                                                this.getAttribute('data-session-name'), null)|"
+                    type="button">
 
                 Delete
             </button>

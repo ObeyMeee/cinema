@@ -66,8 +66,8 @@
                 <tbody>
                 <tr th:each="row, rowStatus : ${#numbers.sequence(1, 6)}">
                     <td th:each="seat : ${#numbers.sequence(1, 6)}">
-                        <th:block
-                                th:with="isTaken = ${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).isPlaceTaken(tickets, row, seat)}">
+                        <th:block th:with="isTaken =
+                         ${T(ua.com.andromeda.cinemaspringbootapp.service.TicketService).isPlaceTaken(tickets, row, seat)}">
                             <div th:if="${rowStatus.last}">
                                 <th:block th:if="${isTaken}">
                                     <button class="btn-seat disabled"

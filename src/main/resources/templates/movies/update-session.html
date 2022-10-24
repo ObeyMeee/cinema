@@ -6,27 +6,27 @@
 <body>
 <div th:insert="fragments :: header"></div>
 
-<form th:method="PATCH" th:action="@{/movies/update}" th:object="${movie}">
-    <input type="hidden" th:value="*{id}" th:field="*{id}">
-    <input type="hidden" th:value="*{movieDetails}" th:field="*{movieDetails}">
-    <input type="hidden" th:value="*{tickets}" th:field="*{tickets}">
+<form th:action="@{/movies/update}" th:method="PATCH" th:object="${movie}">
+    <input th:field="*{id}" th:value="*{id}" type="hidden">
+    <input th:field="*{movieDetails}" th:value="*{movieDetails}" type="hidden">
+    <input th:field="*{tickets}" th:value="*{tickets}" type="hidden">
 
     <div class="container">
         <div class="row">
             <div class="col-auto">
                 <label class="form-label" for="movieName">Name</label>
-                <input class="form-control" id="movieName" th:field="*{name}" required>
+                <input class="form-control" id="movieName" required th:field="*{name}">
             </div>
         </div>
         <div class="row">
             <div class="col-auto">
                 <label class="form-label" for="time">Date</label>
-                <input class="form-control" type="datetime-local" id="time" th:field="*{startTime}" required>
+                <input class="form-control" id="time" required th:field="*{startTime}" type="datetime-local">
             </div>
         </div>
         <div class="row">
             <div class="col-3">
-                <input type="submit" class="btn btn-success btn-lg" value="Update">
+                <input class="btn btn-success btn-lg" type="submit" value="Update">
             </div>
         </div>
     </div>

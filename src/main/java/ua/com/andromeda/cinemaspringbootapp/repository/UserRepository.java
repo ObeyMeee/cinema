@@ -17,14 +17,14 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query(value =
             "select t1.id, t1.email, t1.login, t1.password " +
-            "from " +
-                "(select u.id, u.email, u.login, u.password, count(*) as roles_count " +
-                "from users u " +
-                "join users_roles ur on u.id = ur.user_id " +
-                "join roles r on r.id = ur.role_id " +
-                "group by u.id, u.email, u.login, u.password) as t1 " +
-            "where t1.roles_count < :roleSize " +
-            "order by login",
+                    "from " +
+                    "(select u.id, u.email, u.login, u.password, count(*) as roles_count " +
+                    "from users u " +
+                    "join users_roles ur on u.id = ur.user_id " +
+                    "join roles r on r.id = ur.role_id " +
+                    "group by u.id, u.email, u.login, u.password) as t1 " +
+                    "where t1.roles_count < :roleSize " +
+                    "order by login",
             nativeQuery = true)
     List<User> findAllWhereUsersHaveSameOrLessRolesCount(@Param("roleSize") int roleSize);
 }

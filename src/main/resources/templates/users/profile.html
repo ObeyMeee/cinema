@@ -23,7 +23,9 @@
         </thead>
         <tbody>
         <tr th:each="ticket : ${tickets}" th:object="${ticket}">
-            <td th:text="${#calendars.format(T(java.sql.Timestamp).valueOf(ticket.sessionDate), 'dd MMMM hh:mm')}">Date of session</td>
+            <td th:text="${#calendars.format(T(java.sql.Timestamp).valueOf(ticket.sessionDate), 'dd MMMM hh:mm')}">Date
+                of session
+            </td>
             <td th:text="*{sessionName}">Name of movie</td>
             <td th:text="*{quantity}">Quantity</td>
             <td th:text="*{totalPrice}">Total price</td>

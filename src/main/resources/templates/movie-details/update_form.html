@@ -8,7 +8,7 @@
 
 <form th:action="@{/movie-details/update}" th:method="PUT">
     <div class="container" th:object="${movieDetails}">
-        <input type="hidden" th:value="*{id}" th:field="*{id}">
+        <input th:field="*{id}" th:value="*{id}" type="hidden">
         <fieldset>
             <legend>Movie information</legend>
             <div class="row">
@@ -19,8 +19,8 @@
                 <div class="col-4">
                     <label class="form-label" for="year">Production year</label>
                     <input class="form-control"
-                           id="year" required
-                           max="2023" min="1850"
+                           id="year" max="2023"
+                           min="1850" required
                            th:field="*{productionYear}" type="number">
                     <div class="error" th:errors="*{productionYear}"
                          th:if="${#fields.hasErrors('productionYear')}"></div>
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-4">
                     <label class="form-label" for="actors">Actors</label>
-                    <textarea class="form-control" id="actors" th:text="${actors}" name="actors" required></textarea>
+                    <textarea class="form-control" id="actors" name="actors" required th:text="${actors}"></textarea>
                 </div>
                 <div class="col-4">
                     <label class="form-label" for="director">Director</label>

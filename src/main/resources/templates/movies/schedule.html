@@ -38,14 +38,14 @@
             </td>
             <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                 <button class="btn btn-danger"
-                        type="button"
                         data-bs-target="#confirm"
                         data-bs-toggle="modal"
                         th:data-action="|@{/movies/{id}(id = *{id})}|"
                         th:data-session-name="*{name}"
                         th:data-session-time="${startTimeFormatted}"
                         th:onclick="|callModalView(this.getAttribute('data-action'), this.getAttribute('data-session-name') ,
-                                            this.getAttribute('data-session-time'))|">
+                                            this.getAttribute('data-session-time'))|"
+                        type="button">
                     Delete
                 </button>
             </td>
