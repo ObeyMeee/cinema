@@ -4,16 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
+import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class TicketDTO {
-    private String sessionName;
-    private LocalDateTime sessionDate;
-    private int totalPrice;
-    private int quantity;
+    private int row;
+    private int seat;
+
+    public TicketDTO(Ticket ticket) {
+        this.row = ticket.getRow();
+        this.seat = ticket.getSeat();
+    }
 }

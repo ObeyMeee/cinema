@@ -38,8 +38,8 @@ create table media
 (
     id      varchar(255) not null
         primary key,
-    poster  varchar(255),
-    trailer varchar(255)
+    poster  text,
+    trailer text
 );
 
 alter table media
@@ -142,6 +142,7 @@ create table tickets
 (
     id         varchar(255) not null
         primary key,
+    bought_at  timestamp,
     price      integer,
     row        integer,
     seat       integer,
@@ -151,8 +152,7 @@ create table tickets
             references sessions,
     user_id    varchar(255)
         constraint fk4eqsebpimnjen0q46ja6fl2hl
-            references users,
-    bought_at  timestamp
+            references users
 );
 
 alter table tickets

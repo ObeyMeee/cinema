@@ -2,6 +2,7 @@ package ua.com.andromeda.cinemaspringbootapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.andromeda.cinemaspringbootapp.dto.Purchase;
 import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
 import ua.com.andromeda.cinemaspringbootapp.mapper.TupleMapper;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
@@ -23,8 +24,10 @@ public class TicketService {
         this.tupleMapper = tupleMapper;
     }
 
-    public static boolean isPlaceTaken(List<Ticket> tickets, int row, int seat) {
+    public static boolean isPlaceTaken(List<?> tickets, int row, int seat) {
         return tickets.stream()
+                .filter(TicketDTO.class::isInstance)
+                .map(TicketDTO.class::cast)
                 .anyMatch(t -> t.getRow() == row && t.getSeat() == seat);
     }
 
@@ -33,11 +36,12 @@ public class TicketService {
         ticketRepository.saveAll(tickets);
     }
 
-    public List<Ticket> findAllBySessionId(String id) {
-        return ticketRepository.findAllBySessionId(id);
+    public List<TicketDTO> findAllBySessionId(String id) {
+        List<Ticket> tickets = ticketRepository.findAllBySessionId(id);
+        return tickets.stream().map(TicketDTO::new).toList();
     }
 
-    public List<TicketDTO> findAllByUserId(String id) {
+    public List<Purchase> findAllByUserId(String id) {
 
         List<Tuple> ticketsTuple = ticketRepository.findAllTicketsGroupedBySessionAndUser(id);
         return ticketsTuple.stream().map(tupleMapper::mapTupleToTicketDTO).toList();

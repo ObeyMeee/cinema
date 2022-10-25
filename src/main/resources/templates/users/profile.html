@@ -6,12 +6,12 @@
 <body>
 <div th:insert="fragments :: header"></div>
 
-<div th:if="${tickets.isEmpty}">
+<div th:if="${purchases.isEmpty}">
     <div class="alert alert-info" role="alert">
         You have not bought any tickets yet. We are waiting for you in our hall :)
     </div>
 </div>
-<div th:unless="${tickets.isEmpty}">
+<div th:unless="${purchases.isEmpty}">
     <table class="table table-stripped table-hover">
         <thead>
         <tr>
@@ -22,8 +22,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="ticket : ${tickets}" th:object="${ticket}">
-            <td th:text="${#calendars.format(T(java.sql.Timestamp).valueOf(ticket.sessionDate), 'dd MMMM hh:mm')}">Date
+        <tr th:each="purchase : ${purchases}" th:object="${purchase}">
+            <td th:text="${#temporals.format(purchase.sessionDate, 'dd MMMM HH:mm')}">Date
                 of session
             </td>
             <td th:text="*{sessionName}">Name of movie</td>

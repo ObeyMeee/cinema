@@ -1,7 +1,3 @@
-.color-white:hover {
-    background: darkred;
-}
-
 .btn-outline-dark {
     color: white;
 }
@@ -58,11 +54,6 @@
     color: black;
 }
 
-#schedule:hover {
-    background: darkred;
-    color: cyan;
-}
-
 .column {
     float: left;
     width: 33.33%;
@@ -74,15 +65,9 @@
     display: table;
 }
 
-#trailer {
-    width: 100%;
-    height: 50%;
-}
-
 .error {
     color: red;
 }
-
 
 #ticketsZone {
     position: absolute;
@@ -110,12 +95,6 @@
     border-style: none;
 }
 
-@media screen and (max-width: 991px) {
-    #uptotop {
-        bottom: 40px
-    }
-}
-
 .container-img {
     position: relative;
     text-align: center;
@@ -128,12 +107,21 @@
     left: 16px;
 }
 
-.video-size {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.ticket-info {
+    margin-top: 10px;
+    background: #ffa184;
+    border-radius: 25px;
+    color: #481633;
+    font-size: 20px;
+    font-family: FontAwesome sans-serif;
+    font-weight: bold;
+}
+
+#purchaseButton {
+    margin-top: 15px;
+    border-radius: 20px;
+}
+
+.img-hall {
+    width: 90%;
 }

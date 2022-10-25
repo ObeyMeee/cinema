@@ -19,8 +19,8 @@ public class ActorMapper {
         this.actorRepository = actorRepository;
     }
 
-    public Set<Actor> mapFullNamesToActors(String actorsfullNamesDelimetedByComa) {
-        List<String> fullNames = Arrays.stream(actorsfullNamesDelimetedByComa.split(",")).map(String::trim).toList();
+    public Set<Actor> mapFullNamesToActors(String actorsFullNamesDelimitedByComa) {
+        List<String> fullNames = Arrays.stream(actorsFullNamesDelimitedByComa.split(",")).map(String::trim).toList();
         Set<Actor> foundedActors = fullNames.stream()
                 .map(actorRepository::findByFullName)
                 .collect(Collectors.toSet());

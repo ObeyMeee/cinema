@@ -15,7 +15,10 @@ public class Media {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
+    @Column(columnDefinition = "TEXT")
     private String poster;
+
+    @Column(columnDefinition = "TEXT")
     private String trailer;
 
     @OneToOne(mappedBy = "media", cascade = CascadeType.ALL)

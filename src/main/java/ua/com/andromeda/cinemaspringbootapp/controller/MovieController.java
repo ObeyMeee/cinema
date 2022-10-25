@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
 import ua.com.andromeda.cinemaspringbootapp.model.Country;
 import ua.com.andromeda.cinemaspringbootapp.model.Genre;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
-import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import ua.com.andromeda.cinemaspringbootapp.service.CountryService;
 import ua.com.andromeda.cinemaspringbootapp.service.GenreService;
 import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
@@ -59,7 +59,7 @@ public class MovieController {
     @GetMapping("/hall/{id}")
     public ModelAndView showSession(@PathVariable String id, ModelAndView modelAndView) {
         Session session = sessionService.findById(id);
-        List<Ticket> tickets = ticketService.findAllBySessionId(id);
+        List<TicketDTO> tickets = ticketService.findAllBySessionId(id);
         modelAndView.addObject("tickets", tickets);
         modelAndView.addObject("movie", session);
 

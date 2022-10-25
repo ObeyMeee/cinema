@@ -6,18 +6,16 @@
 <body>
 <div th:insert="fragments :: header"></div>
 
-<video class="video-size" controls
-       src="" th:poster="${movieDetails.media.poster}" th:src="${movieDetails.media.trailer}">
+<video class="video-size" controls th:poster="${movieDetails.media.poster}"
+       th:src="${movieDetails.media.trailer}" src="">
 </video>
 
 <div class="container">
     <div class="row">
         <div th:each="movie : ${movies}">
-            <div class="col-4">
+            <div class="col-auto">
                 <a class="bg-1 btn btn-primary" th:href="@{/movies/hall/{id}(id = ${movie.id})}">
-                    <h3 th:text="${#calendars.format(T(java.sql.Timestamp).valueOf(movie.startTime), 'dd MMMM hh:mm')}">
-                        Time of session
-                    </h3>
+                    <h3 th:text="${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">Time of session</h3>
                 </a>
             </div>
         </div>

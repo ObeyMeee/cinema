@@ -79,7 +79,7 @@ function selectSeat(button, row, seat, price) {
 
 function createInput(attributeName, value) {
     let inputElement = document.createElement("input");
-    inputElement.setAttribute("class", "form-control-plaintext")
+    inputElement.setAttribute("class", "form-control-plaintext ticket-info")
     inputElement.setAttribute("name", `${attributeName}`)
     inputElement.setAttribute("value", value)
     inputElement.readOnly = true
@@ -94,6 +94,7 @@ function createDiv(className) {
 
 function createSpan(innerText) {
     let span = document.createElement("span")
+    span.setAttribute("class", "ticket-info")
     span.innerText = innerText
     return span
 }

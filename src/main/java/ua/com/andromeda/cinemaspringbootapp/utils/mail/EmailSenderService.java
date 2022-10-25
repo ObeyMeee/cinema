@@ -39,7 +39,7 @@ public class EmailSenderService {
                 .replace("dateValue", date)
                 .replace("filmValue", session.getName());
         pdfService.createFile(tickets);
-        MimeMessage message = getMimeMessageTicket(user, content);
+        MimeMessage message = getMimeMessageWithAttachment(user, content);
         javaMailSender.send(message);
     }
 
@@ -60,7 +60,7 @@ public class EmailSenderService {
         return new BufferedReader(new InputStreamReader(resource));
     }
 
-    private MimeMessage getMimeMessageTicket(User user, String content) throws MessagingException {
+    private MimeMessage getMimeMessageWithAttachment(User user, String content) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
         helper.setText(content, true);
@@ -89,6 +89,6 @@ public class EmailSenderService {
     private void setMessageHeader(MimeMessageHelper helper, String toEmail, String subject) throws MessagingException {
         helper.setTo(toEmail);
         helper.setSubject(subject);
-        helper.setFrom("andromedacinema@kh.ua");
+        helper.setFrom("noreply@kh.ua");
     }
 }

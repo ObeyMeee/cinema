@@ -9,13 +9,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
+import ua.com.andromeda.cinemaspringbootapp.dto.Purchase;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
-import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailAction;
 import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailSenderService;
 import ua.com.andromeda.cinemaspringbootapp.validator.UserValidator;
 
@@ -93,9 +92,9 @@ public class UserController {
     @PreAuthorize("@userService.hasAccess(#userLogin, authentication)")
     public ModelAndView showProfile(@PathVariable String userLogin, ModelAndView modelAndView) {
         User user = userService.findByLogin(userLogin);
-        List<TicketDTO> tickets = ticketService.findAllByUserId(user.getId());
+        List<Purchase> purchases = ticketService.findAllByUserId(user.getId());
         modelAndView.addObject("user", user);
-        modelAndView.addObject("tickets", tickets);
+        modelAndView.addObject("purchases", purchases);
         modelAndView.setViewName("users/profile");
         return modelAndView;
     }

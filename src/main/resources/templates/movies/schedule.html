@@ -27,7 +27,7 @@
             </a>
         </td>
         <th:block
-                th:with="startTimeFormatted=${#calendars.format(T(java.sql.Timestamp).valueOf(movie.startTime), 'dd MMMM hh:mm')}">
+                th:with="startTimeFormatted=${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">
             <td class="column-centered">
                 <a class="btn btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
                     <span th:text="${startTimeFormatted}"></span>
