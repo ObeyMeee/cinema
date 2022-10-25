@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
+import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.model.VerificationToken;
 import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
@@ -103,7 +104,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void delete(String id) {
-        userRepository.deleteById(id);
+    public void delete(User user) {
+        Set<Ticket> tickets = user.getTickets();
+        tickets.forEach(ticket -> ticket.setUser(null));
+        userRepository.deleteById(user.getId());
     }
 }

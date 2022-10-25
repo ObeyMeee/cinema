@@ -171,9 +171,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable String id, Principal principal) {
         User user = userService.findById(id);
-        String login = user.getLogin();
-        userService.delete(id);
-        LOGGER.info("{} deleted user: {}", principal.getName(), login);
+        userService.delete(user);
+        LOGGER.info("{} deleted user: {}", principal.getName(), user.getLogin());
         return "redirect:/users";
     }
 }
