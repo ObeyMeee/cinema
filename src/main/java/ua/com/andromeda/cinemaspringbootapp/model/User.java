@@ -35,6 +35,8 @@ public class User {
     @NotNull(message = "password cannot be empty")
     private String password;
 
+    private boolean enabled;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "users_roles",
@@ -68,6 +70,7 @@ public class User {
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 ", roles=" + roles +
+                ", enabled=" + enabled +
                 '}';
     }
 }

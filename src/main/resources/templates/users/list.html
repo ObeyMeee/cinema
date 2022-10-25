@@ -34,9 +34,10 @@
         <tr>
             <th>Email</th>
             <th>Login</th>
-            <th>Link</th>
-            <th>Update</th>
-            <th>Delete</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +54,18 @@
             </td>
             <td>
                 <a class="btn btn-outline-dark" th:href="@{/users/update/{id}(id = *{id})}">Update</a>
+            </td>
+            <td>
+                <form th:if="*{enabled}" th:method="PATCH" th:action="@{/users/enabled}">
+                    <input class="d-none" name="id" th:value="*{id}">
+                    <input class="d-none" name="enabled" th:value="${false}">
+                    <input type="submit" class="btn btn-danger" value="Block">
+                </form>
+                <form th:unless="*{enabled}" th:method="PATCH" th:action="@{/users/enabled}">
+                    <input class="d-none" name="id" th:value="*{id}">
+                    <input class="d-none" name="enabled" th:value="${false}">
+                    <input type="submit" class="btn btn-success" value="Unlock">
+                </form>
             </td>
             <td>
                 <button class="btn btn-danger"

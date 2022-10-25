@@ -1,3 +1,7 @@
+create sequence hibernate_sequence;
+
+alter sequence hibernate_sequence owner to postgres;
+
 create table actors
 (
     id        varchar(255) not null
@@ -129,6 +133,7 @@ create table users
     email    varchar(255)
         constraint uk_6dotkott2kjsp8vw4d0m25fb7
             unique,
+    enabled  boolean      not null,
     login    varchar(255) not null
         constraint uk_ow0gan20590jrb00upg3va2fn
             unique,
@@ -170,4 +175,18 @@ create table users_roles
 );
 
 alter table users_roles
+    owner to postgres;
+
+create table verification_token
+(
+    id          bigint       not null
+        primary key,
+    expiry_date timestamp,
+    token       varchar(255),
+    user_id     varchar(255) not null
+        constraint fk3asw9wnv76uxu3kr1ekq4i1ld
+            references users
+);
+
+alter table verification_token
     owner to postgres;

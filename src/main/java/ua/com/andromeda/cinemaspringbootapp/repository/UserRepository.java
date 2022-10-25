@@ -16,9 +16,9 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByLogin(String login);
 
     @Query(value =
-            "select t1.id, t1.email, t1.login, t1.password " +
+            "select t1.id, t1.email, t1.login, t1.password, t1.enabled " +
                     "from " +
-                    "(select u.id, u.email, u.login, u.password, count(*) as roles_count " +
+                    "(select u.id, u.email, u.login, u.password, u.enabled, count(*) as roles_count " +
                     "from users u " +
                     "join users_roles ur on u.id = ur.user_id " +
                     "join roles r on r.id = ur.role_id " +

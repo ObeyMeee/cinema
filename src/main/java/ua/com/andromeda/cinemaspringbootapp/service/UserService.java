@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
+import ua.com.andromeda.cinemaspringbootapp.model.VerificationToken;
 import ua.com.andromeda.cinemaspringbootapp.repository.UserRepository;
+import ua.com.andromeda.cinemaspringbootapp.repository.VerificationTokenRepository;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -20,11 +22,12 @@ import java.util.Set;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-
+    private final VerificationTokenRepository tokenRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, VerificationTokenRepository tokenRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -38,6 +41,15 @@ public class UserService implements UserDetailsService {
         return authentication.getAuthorities().size() > size;
     }
 
+    public VerificationToken getVerificationToken(String verificationToken) {
+        return tokenRepository.findByToken(verificationToken);
+    }
+
+    public void createVerificationToken(User user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
+    }
+
     public User findById(String id) {
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User is not founded"));
     }
@@ -49,6 +61,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
     private String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
@@ -57,8 +74,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = findByLogin(login);
-        return new org.springframework.security.core.userdetails.User
-                (user.getLogin(), user.getPassword(), mapRolesToGrantedAuthorities(user.getRoles()));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getLogin(), user.getPassword(), user.isEnabled(), true,
+                true, true, mapRolesToGrantedAuthorities(user.getRoles()));
     }
 
     public User findByLogin(String login) {

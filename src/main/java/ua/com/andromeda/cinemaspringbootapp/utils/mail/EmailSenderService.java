@@ -70,9 +70,9 @@ public class EmailSenderService {
     }
 
     @SneakyThrows
-    public void sendVerificationEmail(User user) {
+    public void sendVerificationEmail(User user, String confirmationUrl) {
         String content = getContent("emails/verify_email.html");
-        content = content.replace("Sir", user.getLogin());
+        content = content.replace("Sir", user.getLogin()).replace("confirmationUrlValue", confirmationUrl);
         MimeMessage message = getMimeMessage(user.getEmail(), content);
         javaMailSender.send(message);
     }
