@@ -29,7 +29,7 @@
     </table>
 </div>
 <div th:unless="${users.isEmpty}">
-    <table class="table table-dark table-hover" id="users-list">
+    <table class="table table-hover table-custom" id="users-list">
         <thead>
         <tr>
             <th>Email</th>
@@ -42,7 +42,7 @@
         </thead>
         <tbody>
         <tr th:each="user : ${users}" th:object="${user}">
-            <td th:text="*{email}">Email</td>
+            <td><span th:text="*{email}">Email</span></td>
             <td>
                 <span th:text="*{login}">Login</span>
                 <span th:each="number : ${#numbers.sequence(1, user.roles.size)}">
@@ -73,8 +73,8 @@
                         data-bs-toggle="modal"
                         th:data-action="|@{/users/{id}(id = *{id})}|"
                         th:data-user-login="*{login}"
-                        th:onclick="|callModalView(this.getAttribute('data-action'),
-                                                this.getAttribute('data-user-login'), null)|"
+                        th:onclick="|callModalViewToDelete(this.getAttribute('data-action'),
+                                                   this.getAttribute('data-user-login'))|"
                         type="button">
                     Delete
                 </button>

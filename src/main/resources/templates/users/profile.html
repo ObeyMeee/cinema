@@ -12,7 +12,7 @@
     </div>
 </div>
 <div th:unless="${purchases.isEmpty}">
-    <table class="table table-stripped table-hover">
+    <table class="table table-custom table-hover">
         <thead>
         <tr>
             <th>Date of session</th>
@@ -23,12 +23,10 @@
         </thead>
         <tbody>
         <tr th:each="purchase : ${purchases}" th:object="${purchase}">
-            <td th:text="${#temporals.format(purchase.sessionDate, 'dd MMMM HH:mm')}">Date
-                of session
-            </td>
-            <td th:text="*{sessionName}">Name of movie</td>
-            <td th:text="*{quantity}">Quantity</td>
-            <td th:text="*{totalPrice}">Total price</td>
+            <td><span th:text="${#temporals.format(purchase.sessionDate, 'dd MMMM HH:mm')}">Date of session</span></td>
+            <td><span th:text="*{sessionName}">Name of session</span></td>
+            <td><span th:text="*{quantity}">Name of session</span></td>
+            <td><span th:text="*{totalPrice}">Name of session</span></td>
         </tr>
         </tbody>
     </table>

@@ -6,7 +6,7 @@
 <body>
 <div th:insert="fragments :: header"></div>
 
-<table class="table table-hover table-movies">
+<table class="table table-hover table-custom">
     <tr th:each="movie : ${movies}" th:object="${movie}">
         <td class="column-centered">
             <img alt="poster" class="img-fixed-size-200" th:src="*{movieDetails.media.poster}"/>
@@ -23,8 +23,8 @@
                     data-bs-toggle="modal"
                     th:data-action="|@{/movies/name/{name}(name = *{name})}|"
                     th:data-session-name="*{name}"
-                    th:onclick="|callModalView(this.getAttribute('data-action'),
-                                                this.getAttribute('data-session-name'), null)|"
+                    th:onclick="|callModalViewToDelete(this.getAttribute('data-action'),
+                                                this.getAttribute('data-session-name'))|"
                     type="button">
 
                 Delete

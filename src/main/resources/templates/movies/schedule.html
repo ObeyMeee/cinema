@@ -11,7 +11,7 @@
 
 <div th:replace="fragments :: pagination (endpoint='/movies')"></div>
 
-<table class="table table-hover table-movies">
+<table class="table table-hover table-custom">
     <tr th:each="movie : ${page.content}" th:object="${movie}">
         <td class="column-centered">
             <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
@@ -43,8 +43,9 @@
                         th:data-action="|@{/movies/{id}(id = *{id})}|"
                         th:data-session-name="*{name}"
                         th:data-session-time="${startTimeFormatted}"
-                        th:onclick="|callModalView(this.getAttribute('data-action'), this.getAttribute('data-session-name') ,
-                                            this.getAttribute('data-session-time'))|"
+                        th:onclick="|callModalViewToDeleteSession(this.getAttribute('data-action'),
+                                                                  this.getAttribute('data-session-name') ,
+                                                                  this.getAttribute('data-session-time'))|"
                         type="button">
                     Delete
                 </button>

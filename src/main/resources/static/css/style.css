@@ -1,14 +1,14 @@
-.table-movies tr:hover {
+.table-custom tr:hover {
     background: #48001b;
 }
-.table-movies a, h4 {
+.table-custom a, span, h4 {
     color: white;
 }
-.table-movies a:hover {
+.table-custom a:hover {
     color: aqua;
 }
 
-.btn-outline-dark, .table-movies{
+.btn-outline-dark, .table-custom{
     color: white;
 }
 
@@ -99,8 +99,7 @@
 
 .ticket-info {
     margin-top: 10px;
-    /*background: #ffa184;*/
-    background: #198d96;
+    background: #ffa184;
     border-radius: 25px;
     color: #481633;
     font-size: 20px;
@@ -115,4 +114,12 @@
 
 .img-hall {
     width: 90%;
+}
+
+.fa-user {
+    margin-left: 20px;
+}
+
+#confirmationText, #exampleModalLabel {
+    color: black;
 }
