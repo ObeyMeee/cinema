@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -32,7 +33,7 @@ public class User {
     private String email;
 
     @Size(min = 5, message = "Password should contain at least 5 characters")
-    @NotNull(message = "password cannot be empty")
+    @NotBlank(message = "password cannot be empty")
     private String password;
 
     private boolean enabled;

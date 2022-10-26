@@ -18,53 +18,36 @@
                    th:field="*{email}"
                    type="email">
         </div>
-        <p class="error" style="color: red" th:errors="*{email}" th:if="${#fields.hasErrors('email')}">
-            Error
-        </p>
+        <p class="error" th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Error</p>
 
         <div class="row col-4">
             <label class="form-label" for="login">Login:</label>
             <input class="form-control" id="login" th:field="*{login}">
         </div>
-        <p class="error" th:errors="*{login}" th:if="${#fields.hasErrors('login')}">
-            Error
-        </p>
+        <p class="error" th:errors="*{login}" th:if="${#fields.hasErrors('login')}">Error</p>
 
         <div class="row col-4">
             <label class="form-label" for="password">Password:</label>
             <input class="form-control" id="password" th:field="*{password}" type="password">
         </div>
-
-        <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}">
-            Error
-        </p>
+        <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}">Error</p>
 
         <div sec:authorize="isAuthenticated()">
-            <div sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')">
-                <input class="form-check-input"
-                       id="superAdmin"
-                       name="role"
-                       type="checkbox"
-                       value="ROLE_SUPER_ADMIN">
-                <label class="form-check-label" for="superAdmin">
-                    Super admin
-                </label>
-                <br>
-                <input checked
-                       class="form-check-input"
-                       id="admin"
-                       name="role"
-                       type="checkbox" value="ROLE_ADMIN">
-                <label class="form-check-label" for="admin">
-                    Admin
-                </label>
-            </div>
+            <input sec:authorize="hasRole('ROLE_OWNER')"
+                   class="form-check-input"
+                   id="superAdmin"
+                   name="role"
+                   type="checkbox"
+                   value="ROLE_SUPER_ADMIN">
+            <label class="form-check-label" for="superAdmin">Super admin</label>
+            <br>
+            <input sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')"
+                   class="form-check-input" id="admin" name="role"
+                   type="checkbox" value="ROLE_ADMIN" checked>
+            <label class="form-check-label" for="admin">Admin</label>
         </div>
-        <input checked
-               class="d-none"
-               name="role"
-               type="checkbox"
-               value="ROLE_CUSTOMER">
+        <input class="d-none" name="role"
+               type="checkbox" value="ROLE_CUSTOMER" checked>
         <button class="btn btn-success" type="submit">Submit</button>
     </div>
 </form>

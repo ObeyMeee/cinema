@@ -12,7 +12,9 @@
             <img alt="poster" class="img-fixed-size-200" th:src="*{movieDetails.media.poster}"/>
         </td>
         <td class="column-centered">
-            <h4 th:text="*{name}">Name</h4>
+            <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
+                <h4 th:text="*{name}">Name</h4>
+            </a>
         </td>
         <td class="column-centered">
             <a class="btn btn-lg btn-dark" th:href="@{/movie-details/update/{id}(id = *{movieDetails.id})}">Update</a>
