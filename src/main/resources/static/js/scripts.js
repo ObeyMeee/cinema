@@ -105,3 +105,10 @@ purchaseButton.addEventListener("click", function () {
     let form = document.getElementById("ticketsZone");
     form.submit()
 })
+
+let registrationButton = document.getElementById("registration-button");
+registrationButton.addEventListener("click", function () {
+    registrationButton.disabled = true
+    let form = document.getElementById("registration-form");
+    form.submit()
+})

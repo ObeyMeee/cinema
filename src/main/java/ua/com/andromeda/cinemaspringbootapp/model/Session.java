@@ -23,6 +23,8 @@ public class Session {
 
     private String name;
 
+    private boolean enabled;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startTime;
 

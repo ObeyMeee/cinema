@@ -92,6 +92,7 @@ create table sessions
         primary key,
     name             varchar(255),
     start_time       timestamp,
+    enabled  boolean      not null,
     movie_details_id varchar(255)
         constraint fkm9nl4yfdexdjq1fy6jmmpvi8k
             references movie_details

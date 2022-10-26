@@ -3,6 +3,7 @@ package ua.com.andromeda.cinemaspringbootapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ua.com.andromeda.cinemaspringbootapp.mapper.ActorMapper;
 import ua.com.andromeda.cinemaspringbootapp.model.*;
@@ -33,6 +34,21 @@ public class SessionService {
         this.actorMapper = actorMapper;
     }
 
+    public Page<Session> findAll(Authentication authentication, Pageable pageable) {
+        if (authentication == null || authentication.getAuthorities().size() == 1) {
+            return findAllEnabled( true, pageable);
+        }
+        return findAll(pageable);
+    }
+
+    private Page<Session> findAll(Pageable pageable) {
+        return sessionRepository.findAll(pageable);
+    }
+
+    private Page<Session> findAllEnabled(boolean enabled, Pageable pageable) {
+        return sessionRepository.findAllByEnabled(enabled, pageable);
+    }
+
     public List<Session> findUniqueSessions() {
         return sessionRepository.findUniqueSessionsByName();
     }
@@ -45,9 +61,6 @@ public class SessionService {
         return sessionRepository.findById(id).orElse(null);
     }
 
-    public Page<Session> findAll(Pageable pageable) {
-        return sessionRepository.findAll(pageable);
-    }
 
     @Transactional
     public void save(Session session, String actorsFullNames) {
@@ -69,12 +82,31 @@ public class SessionService {
     }
 
     @Transactional
-    public void deleteById(String id) {
-        sessionRepository.deleteById(id);
+    public void deleteById(Session session) {
+        List<Ticket> tickets = session.getTickets();
+        tickets.forEach(ticket -> ticket.setSession(null));
+        sessionRepository.delete(session);
+    }
+
+    public Session findDistinctByMovieDetailsId(String movieDetailsId) {
+        return sessionRepository.findDistinctByMovieDetailsId(movieDetailsId);
     }
 
     @Transactional
-    public void deleteSessionsByName(String name) {
-        sessionRepository.deleteAllByName(name);
+    public void deleteAllByMovieDetailsId(String movieDetailsId) {
+        List<Session> sessions = sessionRepository.findAllByMovieDetailsId(movieDetailsId);
+        sessions.stream().flatMap(session -> session.getTickets().stream()).forEach(ticket -> ticket.setSession(null));
+        sessionRepository.deleteAllByMovieDetailsId(movieDetailsId);
     }
+
+    public void saveAll(List<Session> sessions, boolean enabled) {
+        sessions.forEach(session -> session.setEnabled(enabled));
+        sessionRepository.saveAll(sessions);
+    }
+
+    public boolean hasAccess(Authentication authentication, String sessionId) {
+        Session session = findById(sessionId);
+        return session.isEnabled() || authentication == null || authentication.getAuthorities().size() > 1;
+    }
+
 }

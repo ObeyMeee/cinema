@@ -8,7 +8,7 @@
 <div th:insert="fragments :: header"></div>
 
 
-<form method="post" th:action="@{/users/new}" th:object="${user}">
+<form id="registration-form" method="post" th:action="@{/users/new}" th:object="${user}">
     <div th:insert="fragments :: alert-error"></div>
     <div class="container">
         <div class="row col-4">
@@ -33,22 +33,20 @@
         <p class="error" th:errors="*{password}" th:if="${#fields.hasErrors('password')}">Error</p>
 
         <div sec:authorize="isAuthenticated()">
-            <input sec:authorize="hasRole('ROLE_OWNER')"
-                   class="form-check-input"
-                   id="superAdmin"
-                   name="role"
-                   type="checkbox"
-                   value="ROLE_SUPER_ADMIN">
-            <label class="form-check-label" for="superAdmin">Super admin</label>
-            <br>
-            <input sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')"
-                   class="form-check-input" id="admin" name="role"
-                   type="checkbox" value="ROLE_ADMIN" checked>
-            <label class="form-check-label" for="admin">Admin</label>
+            <th:block sec:authorize="hasRole('ROLE_OWNER')">
+                <input class="form-check-input" id="superAdmin"
+                       name="role" type="checkbox" value="ROLE_SUPER_ADMIN">
+                <label class="form-check-label" for="superAdmin">Super admin</label>
+                <br>
+            </th:block>
+            <th:block sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')">
+                <input class="form-check-input" id="admin" name="role" type="checkbox" value="ROLE_ADMIN" checked>
+                <label class="form-check-label" for="admin">Admin</label>
+            </th:block>
         </div>
         <input class="d-none" name="role"
                type="checkbox" value="ROLE_CUSTOMER" checked>
-        <button class="btn btn-success" type="submit">Submit</button>
+        <button id="registration-button" class="btn btn-success" type="submit">Submit</button>
     </div>
 </form>
 

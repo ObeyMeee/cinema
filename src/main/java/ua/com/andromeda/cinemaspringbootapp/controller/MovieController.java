@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -46,16 +49,17 @@ public class MovieController {
 
     @GetMapping
     public ModelAndView showAll(ModelAndView modelAndView,
-                                @PageableDefault(size = 6,
-                                        sort = {"startTime"},
+                                Authentication authentication,
+                                @PageableDefault(size = 6, sort = {"startTime"},
                                         direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<Session> page = sessionService.findAll(pageable);
+        Page<Session> page = sessionService.findAll(authentication, pageable);
         modelAndView.addObject("page", page);
         modelAndView.setViewName("movies/schedule");
         return modelAndView;
     }
 
+    @PreAuthorize("@sessionService.hasAccess(authentication, #id)")
     @GetMapping("/hall/{id}")
     public ModelAndView showSession(@PathVariable String id, ModelAndView modelAndView) {
         Session session = sessionService.findById(id);
@@ -91,8 +95,12 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable String id) {
-        sessionService.deleteById(id);
+    public String delete(@PathVariable String id, Principal principal) {
+        Session sessionToBeDeleted = sessionService.findById(id);
+        sessionService.deleteById(sessionToBeDeleted);
+        String sessionName = sessionToBeDeleted.getName();
+        LocalDateTime startTime = sessionToBeDeleted.getStartTime();
+        LOGGER.info("{} deleted session {} at {}", principal.getName(), sessionName, startTime);
         return "redirect:/movies";
     }
 
@@ -112,9 +120,11 @@ public class MovieController {
         return modelAndView;
     }
 
-    @DeleteMapping("/name/{name}")
-    public String deleteAll(@PathVariable String name) {
-        sessionService.deleteSessionsByName(name);
+    @DeleteMapping("/movieDetailsId/{movieDetailsId}")
+    public String deleteAll(@PathVariable String movieDetailsId, Principal principal) {
+        Session session = sessionService.findDistinctByMovieDetailsId(movieDetailsId);
+        sessionService.deleteAllByMovieDetailsId(movieDetailsId);
+        LOGGER.info("{} deleted all sessions {} ", principal.getName(), session.getName());
         return "redirect:/movies/unique";
     }
 
@@ -123,6 +133,21 @@ public class MovieController {
         sessionService.save(session);
         LOGGER.info("{} changed session {} at {}", principal.getName(), session.getName(), session.getStartTime());
         return "redirect:/movies";
+    }
+
+    @PatchMapping("/enabled-one")
+    public String enabled(@RequestParam String id, @RequestParam boolean enabled) {
+        Session session = sessionService.findById(id);
+        session.setEnabled(enabled);
+        sessionService.save(session);
+        return "redirect:/movies";
+    }
+
+    @PatchMapping
+    public String enabledAll(@RequestParam String movieDetailsId, @RequestParam boolean enabled) {
+        List<Session> sessions = sessionService.findAllByMovieDetailsId(movieDetailsId);
+        sessionService.saveAll(sessions, enabled);
+        return "redirect:/movies/unique";
     }
 
 }

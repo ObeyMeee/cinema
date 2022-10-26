@@ -12,45 +12,62 @@
 <div th:replace="fragments :: pagination (endpoint='/movies')"></div>
 
 <table class="table table-hover table-custom">
+
     <tr th:each="movie : ${page.content}" th:object="${movie}">
-        <td class="column-centered">
-            <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
-                <div class="container-img">
-                    <img alt="poster" class="img-fluid rounded-start img-fixed-size-200"
-                         src="" th:src="*{movieDetails.media.poster}">
-                </div>
-            </a>
-        </td>
-        <td class="column-centered">
-            <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
-                <h4 th:text="*{name}"></h4>
-            </a>
-        </td>
-        <th:block
-                th:with="startTimeFormatted=${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">
             <td class="column-centered">
-                <a class="btn btn-lg btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
-                    <span th:text="${startTimeFormatted}"></span>
+                <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
+                    <div class="container-img">
+                        <img alt="poster" class="img-fluid rounded-start img-fixed-size-200"
+                             src="" th:src="*{movieDetails.media.poster}">
+                    </div>
                 </a>
             </td>
-            <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                <a class="btn btn-lg btn-dark" th:href="@{/movies/update/{id}(id = *{id})}">Update</a>
+            <td class="column-centered">
+                <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
+                    <h4 th:text="*{name}"></h4>
+                </a>
             </td>
-            <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                <button class="btn btn-lg btn-danger"
-                        data-bs-target="#confirm"
-                        data-bs-toggle="modal"
-                        th:data-action="|@{/movies/{id}(id = *{id})}|"
-                        th:data-session-name="*{name}"
-                        th:data-session-time="${startTimeFormatted}"
-                        th:onclick="|callModalViewToDeleteSession(this.getAttribute('data-action'),
+            <th:block
+                    th:with="startTimeFormatted=${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">
+                <td class="column-centered">
+                    <a class="btn btn-lg btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
+                        <span th:text="${startTimeFormatted}"></span>
+                    </a>
+                </td>
+                <th:block sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                    <td class="column-centered">
+                        <a class="btn btn-lg btn-dark" th:href="@{/movies/update/{id}(id = *{id})}">Update</a>
+                    </td>
+                    <td class="column-centered">
+                        <form th:if="*{enabled}" th:method="PATCH" th:action="@{/movies/enabled-one}">
+                            <input class="d-none" name="id" th:value="*{id}">
+                            <input class="d-none" name="enabled" th:value="${false}">
+                            <input type="submit" class="btn btn-lg btn-danger" value="Hide">
+                        </form>
+                        <form th:unless="*{enabled}" th:method="PATCH" th:action="@{/movies/enabled-one}">
+                            <input class="d-none" name="id" th:value="*{id}">
+                            <input class="d-none" name="enabled" th:value="${true}">
+                            <input type="submit" class="btn btn-success btn-lg" value="Open">
+                        </form>
+                    </td>
+                    <td class="column-centered">
+                        <button class="btn btn-lg btn-danger"
+                                data-bs-target="#confirm"
+                                data-bs-toggle="modal"
+                                th:data-action="|@{/movies/{id}(id = *{id})}|"
+                                th:data-session-name="*{name}"
+                                th:data-session-time="${startTimeFormatted}"
+                                th:onclick="|callModalViewToDeleteSession(this.getAttribute('data-action'),
                                                                   this.getAttribute('data-session-name') ,
                                                                   this.getAttribute('data-session-time'))|"
-                        type="button">
-                    Delete
-                </button>
-            </td>
+                                type="button">
+                            Delete
+                        </button>
+                    </td>
+                </th:block>
+            </th:block>
         </th:block>
+
     </tr>
 </table>
 

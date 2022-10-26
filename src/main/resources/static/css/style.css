@@ -75,6 +75,10 @@
     vertical-align: middle;
 }
 
+#registration-button {
+    margin-top: 17px;
+}
+
 .seat {
     width: 45px;
 }

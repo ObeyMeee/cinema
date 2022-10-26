@@ -7,9 +7,10 @@
 <div th:insert="fragments :: header"></div>
 
 <form th:action="@{/movies/update}" th:method="PATCH" th:object="${movie}">
-    <input th:field="*{id}" th:value="*{id}" type="hidden">
-    <input th:field="*{movieDetails}" th:value="*{movieDetails}" type="hidden">
-    <input th:field="*{tickets}" th:value="*{tickets}" type="hidden">
+    <input class="d-none" th:field="*{id}" th:value="*{id}">
+    <input class="d-none" th:field="*{movieDetails}" th:value="*{movieDetails}">
+    <input class="d-none" th:field="*{tickets}" th:value="*{tickets}">
+    <input class="d-none" th:field="*{enabled}" th:value="*{enabled}">
 
     <div class="container">
         <div class="row">

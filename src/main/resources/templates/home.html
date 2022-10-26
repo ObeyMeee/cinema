@@ -17,13 +17,15 @@
                     </div>
                     <div th:each="movie : ${movies}">
                         <div th:object="${movie}">
-                            <div class="carousel-item">
-                                <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
-                                    <img alt="poster"
-                                         class="rounded float-start img-responsive img-centered-fixed-size" src=""
-                                         th:src="*{movieDetails.media.poster}"/>
-                                </a>
-                            </div>
+                            <th:block th:if="${movie.enabled || #authentication.getAuthorities().size() > 1}">
+                                <div class="carousel-item">
+                                    <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
+                                        <img alt="poster"
+                                             class="rounded float-start img-responsive img-centered-fixed-size" src=""
+                                             th:src="*{movieDetails.media.poster}"/>
+                                    </a>
+                                </div>
+                            </th:block>
                         </div>
                     </div>
                 </div>

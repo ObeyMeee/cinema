@@ -8,7 +8,7 @@
 
 <form th:action="@{/movie-details/update}" th:method="PUT">
     <div class="container" th:object="${movieDetails}">
-        <input th:field="*{id}" th:value="*{id}" type="hidden">
+        <input class="d-none" th:field="*{id}" th:value="*{id}">
         <fieldset>
             <legend>Movie information</legend>
             <div class="row">

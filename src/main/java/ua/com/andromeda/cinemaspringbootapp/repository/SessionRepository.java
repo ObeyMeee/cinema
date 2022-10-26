@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, String> {
-    @Query(value = "select t1.id, name, start_time, movie_details_id " +
+    @Query(value = "select t1.id, name, start_time, enabled, movie_details_id " +
             "from " +
             "   (select distinct on (name) sessions.*, production_year " +
             "   from sessions " +
@@ -20,9 +20,14 @@ public interface SessionRepository extends JpaRepository<Session, String> {
             "order by production_year desc", nativeQuery = true)
     List<Session> findUniqueSessionsByName();
 
-    List<Session> findAllByMovieDetailsIdOrderByStartTime(@Param("id") String id);
+    List<Session> findAllByMovieDetailsIdOrderByStartTime(String movieDetailsId);
 
-    Page<Session> findAll(Pageable pageable);
+    Page<Session> findAllByEnabled(boolean enabled, Pageable pageable);
+    void deleteAllByMovieDetailsId(String movieDetailsId);
 
-    void deleteAllByName(String name);
+    @Query(value = "select distinct on (name) sessions.* from sessions where movie_details_id = :movieDetailsId",
+            nativeQuery = true)
+    Session findDistinctByMovieDetailsId(@Param("movieDetailsId") String movieDetailsId);
+
+    List<Session> findAllByMovieDetailsId(String movieDetailsId);
 }

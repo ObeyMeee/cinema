@@ -13,9 +13,11 @@
 <section class="container column-2">
     <div class="row start-time">
         <div th:each="movie : ${movies}">
-            <a class="bg-1 btn btn-primary" th:href="@{/movies/hall/{id}(id = ${movie.id})}">
-                <h3 th:text="${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">Time of session</h3>
-            </a>
+            <th:block th:if="${movie.enabled || #authentication.getAuthorities().size() > 1}">
+                <a class="bg-1 btn btn-primary" th:href="@{/movies/hall/{id}(id = ${movie.id})}">
+                    <h3 th:text="${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">Time of session</h3>
+                </a>
+            </th:block>
         </div>
     </div>
 </section>

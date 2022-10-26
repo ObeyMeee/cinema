@@ -107,6 +107,6 @@ public class UserService implements UserDetailsService {
     public void delete(User user) {
         Set<Ticket> tickets = user.getTickets();
         tickets.forEach(ticket -> ticket.setUser(null));
-        userRepository.deleteById(user.getId());
+        userRepository.delete(user);
     }
 }
