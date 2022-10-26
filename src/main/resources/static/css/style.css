@@ -1,4 +1,14 @@
-.btn-outline-dark {
+.table-movies tr:hover {
+    background: #48001b;
+}
+.table-movies a, h4 {
+    color: white;
+}
+.table-movies a:hover {
+    color: aqua;
+}
+
+.btn-outline-dark, .table-movies{
     color: white;
 }
 
@@ -23,22 +33,6 @@
     max-height: 750px;
     min-width: 850px;
     max-width: 850px;
-}
-
-.ma-400 {
-    margin-left: 400px;
-}
-
-.ma-550 {
-    margin-left: 550px;
-}
-
-.ma-1200 {
-    margin-left: 1200px;
-}
-
-.btn-lg {
-    margin-top: 30px;
 }
 
 .align-center {
@@ -81,17 +75,13 @@
     vertical-align: middle;
 }
 
-.border {
-    border: dodgerblue solid 2px;
-}
-
 .seat {
     width: 45px;
 }
 
 .btn-seat {
     width: 50px;
-    background: white;
+    background: black;
     border-style: none;
 }
 
@@ -109,7 +99,8 @@
 
 .ticket-info {
     margin-top: 10px;
-    background: #ffa184;
+    /*background: #ffa184;*/
+    background: #198d96;
     border-radius: 25px;
     color: #481633;
     font-size: 20px;

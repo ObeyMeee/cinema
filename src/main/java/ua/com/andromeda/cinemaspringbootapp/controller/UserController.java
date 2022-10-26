@@ -7,21 +7,19 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.andromeda.cinemaspringbootapp.dto.Purchase;
-import ua.com.andromeda.cinemaspringbootapp.verification.OnRegistrationCompleteEvent;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.model.VerificationToken;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
-import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailSenderService;
+import ua.com.andromeda.cinemaspringbootapp.utils.verification.OnRegistrationCompleteEvent;
 import ua.com.andromeda.cinemaspringbootapp.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,20 +38,17 @@ public class UserController {
     private final RoleService roleService;
     private final TicketService ticketService;
     private final UserValidator userValidator;
-    private final EmailSenderService emailSenderService;
     private final ApplicationEventPublisher eventPublisher;
     private final MessageSource messages;
 
     @Autowired
     public UserController(UserService userService, RoleService roleService,
                           TicketService ticketService, UserValidator userValidator,
-                          EmailSenderService emailSenderService, ApplicationEventPublisher eventPublisher,
-                          MessageSource messages) {
+                          ApplicationEventPublisher eventPublisher, MessageSource messages) {
         this.userService = userService;
         this.roleService = roleService;
         this.ticketService = ticketService;
         this.userValidator = userValidator;
-        this.emailSenderService = emailSenderService;
         this.eventPublisher = eventPublisher;
         this.messages = messages;
     }
@@ -102,29 +97,33 @@ public class UserController {
     }
 
     @GetMapping("/registrationConfirm")
-    public String confirmRegistration
-            (WebRequest request, Model model, @RequestParam("token") String token) {
+    public ModelAndView confirmRegistration(WebRequest request,
+                                            ModelAndView modelAndView,
+                                            @RequestParam("token") String token) {
 
         Locale locale = request.getLocale();
 
         VerificationToken verificationToken = userService.getVerificationToken(token);
         if (verificationToken == null) {
             String message = messages.getMessage("auth.message.invalidToken", null, locale);
-            model.addAttribute("message", message);
-            return "redirect:/badUser.html?lang=" + locale.getLanguage();
+            modelAndView.addObject("message", message);
+            modelAndView.setViewName("badUser");
+            return modelAndView;
         }
 
         User user = verificationToken.getUser();
         Calendar calendar = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            String messageValue = messages.getMessage("auth.message.expired", null, locale);
-            model.addAttribute("message", messageValue);
-            return "redirect:/badUser.html?lang=" + locale.getLanguage();
+            String message = messages.getMessage("auth.message.expired", null, locale);
+            modelAndView.addObject("message", message);
+            modelAndView.setViewName("badUser");
+            return modelAndView;
         }
 
         user.setEnabled(true);
         userService.update(user);
-        return "redirect:/login?lang=" + request.getLocale().getLanguage();
+        modelAndView.setViewName("redirect:/login");
+        return modelAndView;
     }
 
     @GetMapping("/{userLogin}")

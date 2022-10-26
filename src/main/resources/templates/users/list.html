@@ -50,7 +50,7 @@
                 </span>
             </td>
             <td>
-                <a class="btn btn-outline-dark" th:href="@{/users/{id}(id = *{id})}">User profile</a>
+                <a class="btn btn-outline-dark" th:href="@{/users/{login}(login = *{login})}">User profile</a>
             </td>
             <td>
                 <a class="btn btn-outline-dark" th:href="@{/users/update/{id}(id = *{id})}">Update</a>
@@ -63,7 +63,7 @@
                 </form>
                 <form th:unless="*{enabled}" th:method="PATCH" th:action="@{/users/enabled}">
                     <input class="d-none" name="id" th:value="*{id}">
-                    <input class="d-none" name="enabled" th:value="${false}">
+                    <input class="d-none" name="enabled" th:value="${true}">
                     <input type="submit" class="btn btn-success" value="Unlock">
                 </form>
             </td>

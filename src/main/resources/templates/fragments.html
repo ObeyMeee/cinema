@@ -11,42 +11,39 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/description.css}">
     <link rel="icon" th:href="@{/logo.ico}">
 </head>
 
 <body>
-<div th:fragment="header">
-    <nav class="navbar navbar-dark bg-dark">
+<div class="navbar navbar-dark bg-dark" th:fragment="header">
+    <nav class="inner">
         <div aria-label="Toolbar with button groups" class="btn-toolbar" role="toolbar">
-            <div aria-label="First group" class="btn-group" role="group">
+            <div aria-label="First group" class="logo" role="group">
                 <a th:href="@{/home}">
                     <img alt="Andromeda cinema" class="w-25" src="/logo.png"/>
                 </a>
-                <a class="btn btn-outline-dark" th:href="@{/movies}">
+                <a class="btn btn-outline-dark button" th:href="@{/movies}">
                     Schedule for the current week
                 </a>
             </div>
             <div aria-label="Second group"
-                 class="btn-group" role="group"
+                 class="features" role="group"
                  sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
 
-                <a class="btn btn-outline-dark ma-400" th:href="@{/movies/new}">Add session</a>
-                <a class="btn btn-outline-dark " th:href="@{/movies/unique}">Movies list</a>
-                <a class="btn btn-outline-dark " th:href="@{/users?page=0&size=10}">users</a>
+                <a class="btn btn-outline-dark button" th:href="@{/movies/new}">Add session</a>
+                <a class="btn btn-outline-dark button" th:href="@{/movies/unique}">Movies list</a>
+                <a class="btn btn-outline-dark button" th:href="@{/users?page=0&size=10}">users</a>
             </div>
-            <div aria-label="Third group" class="btn-group" role="group">
-                <a class="btn btn-outline-dark ma-550"
-                   sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:href="@{/users/new}">Sign
-                    up</a>
-                <a class="btn btn-outline-dark ma-1200"
-                   sec:authorize="!hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:href="@{/users/new}">Sign
-                    up</a>
+            <div aria-label="Third group" class="personal" role="group">
+                <a class="btn btn-outline-dark button" th:href="@{/users/new}">Sign up</a>
 
-                <a class="btn btn-outline-dark"
+                <a class="btn btn-outline-dark button"
                    sec:authorize="!isAuthenticated()"
                    th:href="@{/login}">Log in</a>
+
                 <div sec:authorize="isAuthenticated()">
-                    <a class="btn btn-outline-dark" th:href="@{/logout}">Log out</a>
+                    <a class="btn btn-outline-dark button" th:href="@{/logout}">Log out</a>
                     <a th:href="@{/users/{login}(login = ${#authentication.name})}">
                         <i class="fa-solid fa-user"></i>
                     </a>

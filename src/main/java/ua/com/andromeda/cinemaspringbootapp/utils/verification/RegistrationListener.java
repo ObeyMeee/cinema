@@ -1,13 +1,11 @@
-package ua.com.andromeda.cinemaspringbootapp.verification;
+package ua.com.andromeda.cinemaspringbootapp.utils.verification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
-import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailSenderService;
+import ua.com.andromeda.cinemaspringbootapp.utils.EmailSenderService;
 
 import java.util.UUID;
 

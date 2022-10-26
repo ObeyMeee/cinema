@@ -14,8 +14,7 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
-import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailAction;
-import ua.com.andromeda.cinemaspringbootapp.utils.mail.EmailSenderService;
+import ua.com.andromeda.cinemaspringbootapp.utils.EmailSenderService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;

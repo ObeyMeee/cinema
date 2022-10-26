@@ -3,43 +3,41 @@
 <head th:include="fragments :: head-section">
     <title id="pageTitle" th:text="${movies[0].name}">Name</title>
 </head>
-<body>
+<body id="description">
 <div th:insert="fragments :: header"></div>
 
-<video class="video-size" controls th:poster="${movieDetails.media.poster}"
-       th:src="${movieDetails.media.trailer}" src="">
-</video>
+<section class="video-wrap">
+    <iframe class="video-size" th:src="${movieDetails.media.trailer}" allowfullscreen></iframe>
+</section>
 
-<div class="container">
-    <div class="row">
+<section class="container column-2">
+    <div class="row start-time">
         <div th:each="movie : ${movies}">
-            <div class="col-auto">
-                <a class="bg-1 btn btn-primary" th:href="@{/movies/hall/{id}(id = ${movie.id})}">
-                    <h3 th:text="${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">Time of session</h3>
-                </a>
-            </div>
+            <a class="bg-1 btn btn-primary" th:href="@{/movies/hall/{id}(id = ${movie.id})}">
+                <h3 th:text="${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">Time of session</h3>
+            </a>
         </div>
     </div>
-</div>
+</section>
 
-<div about="info">
-    <h3>Description: <span th:text="${movieDetails.description}">Description</span></h3>
-    <h3>Duration: <span th:text="${movieDetails.duration}">Duration</span></h3>
-    <h3>Genres:
+<section class="info">
+    <p><b>Description: </b><span th:text="${movieDetails.description}">Description</span></p>
+    <p><b>Duration:</b> <span th:text="${movieDetails.duration}">Duration</span></p>
+    <p><b>Genres:</b>
         <span th:each="genre : ${movieDetails.genres}">
             <span th:text="${genre.name + ', '}"></span>
         </span>
-    </h3>
-    <h3>Year of production: <span th:text="${movieDetails.productionYear}">Year</span></h3>
-    <h3>Country: <span th:text="${movieDetails.country.name}">Country</span></h3>
+    </p>
+    <p><b>Year of production:</b> <span th:text="${movieDetails.productionYear}">Year</span></p>
+    <p><b>Country:</b> <span th:text="${movieDetails.country.name}">Country</span></p>
 
-    <h3>Director: <span th:text="${movieDetails.director}">Director</span></h3>
-    <h3>Actors:
+    <p><b>Director:</b> <span th:text="${movieDetails.director}">Director</span></p>
+    <p><b>Actors:</b>
         <span th:each="actor : ${movieDetails.actors}">
             <span th:text="${actor.fullName + ', '}"></span>
         </span>
-    </h3>
-</div>
+    </p>
+</section>
 
 <div th:insert="fragments :: script-dependency"></div>
 </body>

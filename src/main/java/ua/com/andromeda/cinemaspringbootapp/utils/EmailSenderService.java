@@ -1,4 +1,4 @@
-package ua.com.andromeda.cinemaspringbootapp.utils.mail;
+package ua.com.andromeda.cinemaspringbootapp.utils;
 
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;

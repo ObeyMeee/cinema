@@ -11,7 +11,7 @@
 
 <div th:replace="fragments :: pagination (endpoint='/movies')"></div>
 
-<table class="table table-striped table-hover">
+<table class="table table-hover table-movies">
     <tr th:each="movie : ${page.content}" th:object="${movie}">
         <td class="column-centered">
             <a th:href="@{/movie-details/{id}(id = *{movieDetails.id})}">
@@ -29,15 +29,15 @@
         <th:block
                 th:with="startTimeFormatted=${#temporals.format(movie.startTime, 'dd MMMM HH:mm')}">
             <td class="column-centered">
-                <a class="btn btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
+                <a class="btn btn-lg btn-primary" th:href="@{/movies/hall/{id}(id = *{id})}">
                     <span th:text="${startTimeFormatted}"></span>
                 </a>
             </td>
             <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                <a class="btn btn-dark" th:href="@{/movies/update/{id}(id = *{id})}">Update</a>
+                <a class="btn btn-lg btn-dark" th:href="@{/movies/update/{id}(id = *{id})}">Update</a>
             </td>
             <td class="column-centered" sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                <button class="btn btn-danger"
+                <button class="btn btn-lg btn-danger"
                         data-bs-target="#confirm"
                         data-bs-toggle="modal"
                         th:data-action="|@{/movies/{id}(id = *{id})}|"
@@ -50,7 +50,6 @@
                 </button>
             </td>
         </th:block>
-
     </tr>
 </table>
 

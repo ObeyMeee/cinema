@@ -1,4 +1,4 @@
-package ua.com.andromeda.cinemaspringbootapp.verification;
+package ua.com.andromeda.cinemaspringbootapp.utils.verification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
