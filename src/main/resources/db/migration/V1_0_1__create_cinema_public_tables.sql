@@ -1,7 +1,5 @@
 create sequence hibernate_sequence;
 
-alter sequence hibernate_sequence owner to postgres;
-
 create table actors
 (
     id        varchar(255) not null
@@ -10,9 +8,6 @@ create table actors
         constraint uk_a2pj813lkadxpcuc09to30r00
             unique
 );
-
-alter table actors
-    owner to postgres;
 
 create table countries
 (
@@ -23,9 +18,6 @@ create table countries
             unique
 );
 
-alter table countries
-    owner to postgres;
-
 create table genres
 (
     id   varchar(255) not null
@@ -35,9 +27,6 @@ create table genres
             unique
 );
 
-alter table genres
-    owner to postgres;
-
 create table media
 (
     id      varchar(255) not null
@@ -45,9 +34,6 @@ create table media
     poster  text,
     trailer text
 );
-
-alter table media
-    owner to postgres;
 
 create table movie_details
 (
@@ -69,9 +55,6 @@ create table movie_details
             references media
 );
 
-alter table movie_details
-    owner to postgres;
-
 create table movie_details_actors
 (
     movie_details_id varchar(255) not null
@@ -82,9 +65,6 @@ create table movie_details_actors
             references actors,
     primary key (movie_details_id, actor_id)
 );
-
-alter table movie_details_actors
-    owner to postgres;
 
 create table movie_details_genres
 (
@@ -97,9 +77,6 @@ create table movie_details_genres
     primary key (movie_details_id, genres_id)
 );
 
-alter table movie_details_genres
-    owner to postgres;
-
 create table roles
 (
     id   varchar(255) not null
@@ -108,9 +85,6 @@ create table roles
         constraint uk_ofx66keruapi6vyqpv6f2or37
             unique
 );
-
-alter table roles
-    owner to postgres;
 
 create table sessions
 (
@@ -122,9 +96,6 @@ create table sessions
         constraint fkm9nl4yfdexdjq1fy6jmmpvi8k
             references movie_details
 );
-
-alter table sessions
-    owner to postgres;
 
 create table users
 (
@@ -139,9 +110,6 @@ create table users
             unique,
     password varchar(255) not null
 );
-
-alter table users
-    owner to postgres;
 
 create table tickets
 (
@@ -160,9 +128,6 @@ create table tickets
             references users
 );
 
-alter table tickets
-    owner to postgres;
-
 create table users_roles
 (
     user_id varchar(255) not null
@@ -174,9 +139,6 @@ create table users_roles
     primary key (user_id, role_id)
 );
 
-alter table users_roles
-    owner to postgres;
-
 create table verification_token
 (
     id          bigint       not null
@@ -187,6 +149,3 @@ create table verification_token
         constraint fk3asw9wnv76uxu3kr1ekq4i1ld
             references users
 );
-
-alter table verification_token
-    owner to postgres;
