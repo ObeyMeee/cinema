@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/CinemaSpringBootApp-0.0.1-SNAPSHOT.jar
+web: java $JAVA_OPTS -jar target/CinemaSpringBootApp-0.0.1-SNAPSHOT.jar --DATABASE_URL="jdbc:postgresql://wpfqherneityud:6c9aea6a5fb9f1702e1bbdb9977a75ff58d551f0e2a311d1de03d87266f24449@ec2-54-246-185-161.eu-west-1.compute.amazonaws.com:5432/d7jk49p7q8p5re" --DATABASE_USERNAME="wpfqherneityud" --DATABASE_PASSWORD=6c9aea6a5fb9f1702e1bbdb9977a75ff58d551f0e2a311d1de03d87266f24449 --EMAIL=andrrromeda88@gmail.com --EMAIL_PASSWORD=zpvfssjoeklutmud
