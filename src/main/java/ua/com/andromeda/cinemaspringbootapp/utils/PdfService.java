@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -24,9 +25,8 @@ public class PdfService {
         document.open();
 //        Path path = Paths.get(getClass().getClassLoader().getResource("static/logo.png").toURI());
         ClassPathResource resource = new ClassPathResource("/static/logo.png");
-        System.out.println("resource = " + resource);
-        Path path = Paths.get(resource.getURI());
-        Image image = Image.getInstance(path.toAbsolutePath().toString());
+        File file = resource.getFile();
+        Image image = Image.getInstance(file.getAbsolutePath());
         image.setAlignment(Element.ALIGN_CENTER);
         document.add(image);
         Font courierBlack25 = FontFactory.getFont(FontFactory.COURIER, 25, BaseColor.BLACK);
