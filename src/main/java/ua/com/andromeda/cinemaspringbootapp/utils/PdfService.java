@@ -2,6 +2,7 @@ package ua.com.andromeda.cinemaspringbootapp.utils;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
@@ -10,22 +11,22 @@ import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
 public class PdfService {
 
-    public void createFile(List<Ticket> tickets) throws IOException, DocumentException, URISyntaxException {
+    public void createFile(List<Ticket> tickets) throws IOException, DocumentException {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream("tickets.pdf"));
         document.open();
 //        Path path = Paths.get(getClass().getClassLoader().getResource("static/logo.png").toURI());
         ClassPathResource resource = new ClassPathResource("/static/logo.png");
-        File file = resource.getFile();
+        InputStream inputStream = resource.getInputStream();
+        File file = new File("logo_from_input_stream.png");
+        FileUtils.copyInputStreamToFile(inputStream, file);
         Image image = Image.getInstance(file.getAbsolutePath());
         image.setAlignment(Element.ALIGN_CENTER);
         document.add(image);
