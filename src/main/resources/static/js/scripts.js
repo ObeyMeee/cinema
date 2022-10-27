@@ -101,11 +101,13 @@ function createSpan(innerText) {
 
 let purchaseButton = document.getElementById("purchaseButton");
 purchaseButton.addEventListener("click", function () {
+    if (purchaseButton.getAttribute("data-user-roles-count") > 1) {
+        alert("Our cats get their tickets for free. Enjoy film :)")
+    }
     purchaseButton.disabled = true
     let form = document.getElementById("ticketsZone");
     form.submit()
 })
-
 let registrationButton = document.getElementById("registration-button");
 registrationButton.addEventListener("click", function () {
     registrationButton.disabled = true

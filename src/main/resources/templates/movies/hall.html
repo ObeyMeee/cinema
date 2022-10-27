@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head th:include="fragments :: head-section">
     <title id="pageTitle">Hall</title>
 </head>
@@ -105,13 +106,18 @@
     </div>
 </div>
 
-
+    <div sec:authorize="isAnonymous()" class="alert alert-primary" role="alert">
+        Only authenticated users can purchase tickets. Please, log in
+    </div>
 <div>
     <div class="container">
         <form id="ticketsZone" th:action="@{/tickets/new}" th:method="POST">
             <input name="sessionId" th:value="${movie.id}" type="hidden">
             <div class="col-auto">
-                <input class="btn btn-primary" id="purchaseButton" type="submit" value="Purchase">
+                    <input sec:authorize="isAuthenticated()"
+                           th:data-user-roles-count="${#authentication.getAuthorities().size()}"
+                           class="btn btn-primary"
+                           id="purchaseButton" type="submit" value="Purchase">
             </div>
         </form>
     </div>

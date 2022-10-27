@@ -55,7 +55,7 @@
 
 <div th:fragment="alert-error">
     <div th:if="${#fields.hasErrors('global')}">
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-warning" role="alert">
             <p th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
         </div>
     </div>
