@@ -2,6 +2,7 @@ package ua.com.andromeda.cinemaspringbootapp.utils;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
@@ -21,7 +22,8 @@ public class PdfService {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream("tickets.pdf"));
         document.open();
-        Path path = Paths.get(getClass().getClassLoader().getResource("static/logo.png").toURI());
+//        Path path = Paths.get(getClass().getClassLoader().getResource("static/logo.png").toURI());
+        Path path = Paths.get(new ClassPathResource("static/logo.png").getURI());
         Image image = Image.getInstance(path.toAbsolutePath().toString());
         image.setAlignment(Element.ALIGN_CENTER);
         document.add(image);
