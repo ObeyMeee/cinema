@@ -130,7 +130,7 @@
 
 .alert-primary {
     text-align: center;
-    margin: 30px 300px;
+    margin-left: 320px;
     width: 300px;
     height: 100px;
 }
@@ -141,4 +141,8 @@ fieldset {
     border: 2px solid white;
     border-radius: 20px;
     background: #211f23;
+}
+
+#seats-zone {
+    margin: 20px;
 }

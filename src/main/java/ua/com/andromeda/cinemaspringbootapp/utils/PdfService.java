@@ -22,7 +22,6 @@ public class PdfService {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream("tickets.pdf"));
         document.open();
-//        Path path = Paths.get(getClass().getClassLoader().getResource("static/logo.png").toURI());
         ClassPathResource resource = new ClassPathResource("/static/logo.png");
         InputStream inputStream = resource.getInputStream();
         File file = new File("logo_from_input_stream.png");

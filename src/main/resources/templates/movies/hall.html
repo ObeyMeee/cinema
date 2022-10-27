@@ -56,13 +56,10 @@
     </div>
 </div>
 
-<br><br>
-
-
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <table>
+            <table id="seats-zone">
                 <tbody>
                 <tr th:each="row, rowStatus : ${#numbers.sequence(1, 6)}">
                     <td th:each="seat : ${#numbers.sequence(1, 6)}">
