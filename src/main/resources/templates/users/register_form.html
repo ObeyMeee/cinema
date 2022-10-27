@@ -40,13 +40,13 @@
                 <br>
             </th:block>
             <th:block sec:authorize="hasAnyRole('ROLE_OWNER', 'ROLE_SUPER_ADMIN')">
-                <input class="form-check-input" id="admin" name="role" type="checkbox" value="ROLE_ADMIN" checked>
+                <input checked class="form-check-input" id="admin" name="role" type="checkbox" value="ROLE_ADMIN">
                 <label class="form-check-label" for="admin">Admin</label>
             </th:block>
         </div>
-        <input class="d-none" name="role"
-               type="checkbox" value="ROLE_CUSTOMER" checked>
-        <button id="registration-button" class="btn btn-success" type="submit">Submit</button>
+        <input checked class="d-none"
+               name="role" type="checkbox" value="ROLE_CUSTOMER">
+        <button class="btn btn-success" id="registration-button" type="submit">Submit</button>
     </div>
 </form>
 

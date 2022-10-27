@@ -23,6 +23,7 @@ public class Ticket {
     private Integer price;
     private Integer row;
     private Integer seat;
+
     @CreationTimestamp
     private LocalDateTime boughtAt;
 
@@ -36,5 +37,4 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
-
 }

@@ -20,14 +20,16 @@ public interface SessionRepository extends JpaRepository<Session, String> {
             "order by production_year desc", nativeQuery = true)
     List<Session> findUniqueSessionsByName();
 
+    List<Session> findAllByMovieDetailsId(String movieDetailsId);
+
     List<Session> findAllByMovieDetailsIdOrderByStartTime(String movieDetailsId);
 
+
     Page<Session> findAllByEnabled(boolean enabled, Pageable pageable);
-    void deleteAllByMovieDetailsId(String movieDetailsId);
 
     @Query(value = "select distinct on (name) sessions.* from sessions where movie_details_id = :movieDetailsId",
             nativeQuery = true)
     Session findDistinctByMovieDetailsId(@Param("movieDetailsId") String movieDetailsId);
 
-    List<Session> findAllByMovieDetailsId(String movieDetailsId);
+    void deleteAllByMovieDetailsId(String movieDetailsId);
 }

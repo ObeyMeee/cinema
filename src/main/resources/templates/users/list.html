@@ -56,15 +56,15 @@
                 <a class="btn btn-outline-dark" th:href="@{/users/update/{id}(id = *{id})}">Update</a>
             </td>
             <td>
-                <form th:if="*{enabled}" th:method="PATCH" th:action="@{/users/enabled}">
+                <form th:action="@{/users/enabled}" th:if="*{enabled}" th:method="PATCH">
                     <input class="d-none" name="id" th:value="*{id}">
                     <input class="d-none" name="enabled" th:value="${false}">
-                    <input type="submit" class="btn btn-danger" value="Block">
+                    <input class="btn btn-danger" type="submit" value="Block">
                 </form>
-                <form th:unless="*{enabled}" th:method="PATCH" th:action="@{/users/enabled}">
+                <form th:action="@{/users/enabled}" th:method="PATCH" th:unless="*{enabled}">
                     <input class="d-none" name="id" th:value="*{id}">
                     <input class="d-none" name="enabled" th:value="${true}">
-                    <input type="submit" class="btn btn-success" value="Unlock">
+                    <input class="btn btn-success" type="submit" value="Unlock">
                 </form>
             </td>
             <td>

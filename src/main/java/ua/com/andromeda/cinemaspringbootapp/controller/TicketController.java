@@ -47,12 +47,21 @@ public class TicketController {
                                   Principal principal) {
 
         String login = principal.getName();
+        List<Ticket> tickets = getTickets(login, sessionId, request);
+        ticketService.saveAll(tickets);
+        emailSenderService.sendTickets(tickets);
+        LOGGER.info("{} bought {}", login, tickets);
+        return "redirect:/home";
+    }
+
+    private List<Ticket> getTickets(String login, String sessionId, HttpServletRequest request) {
         User user = userService.findByLogin(login);
         Session session = sessionService.findById(sessionId);
         String[] rows = request.getParameterValues("row");
         String[] seats = request.getParameterValues("seat");
         String[] prices = request.getParameterValues("price");
         String[] ticketTypes = request.getParameterValues("ticketType");
+
         List<Ticket> tickets = new ArrayList<>();
         for (int i = 0; i < rows.length; i++) {
             Ticket ticket = new Ticket();
@@ -64,9 +73,6 @@ public class TicketController {
             ticket.setSession(session);
             tickets.add(ticket);
         }
-        ticketService.saveAll(tickets);
-        emailSenderService.sendTickets(tickets);
-        LOGGER.info("{} bought {}", login, tickets);
-        return "redirect:/home";
+        return tickets;
     }
 }

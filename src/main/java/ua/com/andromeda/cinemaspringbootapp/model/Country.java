@@ -6,7 +6,6 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,11 +23,4 @@ public class Country {
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<MovieDetails> movieDetails;
-
-    public void add(MovieDetails details) {
-        if (movieDetails == null) {
-            movieDetails = new HashSet<>();
-        }
-        movieDetails.add(details);
-    }
 }

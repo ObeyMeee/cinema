@@ -6,6 +6,7 @@ import ua.com.andromeda.cinemaspringbootapp.model.Actor;
 import ua.com.andromeda.cinemaspringbootapp.repository.ActorRepository;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,5 +32,12 @@ public class ActorMapper {
                 .collect(Collectors.toSet());
         foundedActors.addAll(notFoundedActors);
         return foundedActors;
+    }
+
+    public String mapActorsCollectionToString(Collection<Actor> actors) {
+        return actors.stream()
+                .map(Actor::getFullName)
+                .reduce((actor1, actor2) -> actor1 + ", " + actor2)
+                .orElse("");
     }
 }

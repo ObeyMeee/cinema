@@ -5,125 +5,57 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.andromeda.cinemaspringbootapp.dto.Purchase;
 import ua.com.andromeda.cinemaspringbootapp.model.Role;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
-import ua.com.andromeda.cinemaspringbootapp.model.VerificationToken;
 import ua.com.andromeda.cinemaspringbootapp.service.RoleService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
 import ua.com.andromeda.cinemaspringbootapp.service.UserService;
-import ua.com.andromeda.cinemaspringbootapp.utils.verification.OnRegistrationCompleteEvent;
 import ua.com.andromeda.cinemaspringbootapp.validator.UserValidator;
+import ua.com.andromeda.cinemaspringbootapp.verification.OnRegistrationCompleteEvent;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-    @Value("${APPLICATION_URL}")
-    private String appUrl;
     private final UserService userService;
     private final RoleService roleService;
     private final TicketService ticketService;
     private final UserValidator userValidator;
     private final ApplicationEventPublisher eventPublisher;
-    private final MessageSource messages;
+    @Value("${APPLICATION_URL}")
+    private String appUrl;
 
     @Autowired
     public UserController(UserService userService, RoleService roleService,
                           TicketService ticketService, UserValidator userValidator,
-                          ApplicationEventPublisher eventPublisher, MessageSource messages) {
+                          ApplicationEventPublisher eventPublisher) {
+
         this.userService = userService;
         this.roleService = roleService;
         this.ticketService = ticketService;
         this.userValidator = userValidator;
         this.eventPublisher = eventPublisher;
-        this.messages = messages;
     }
 
     @GetMapping
     public ModelAndView showList(ModelAndView modelAndView, Principal principal) {
-        List<User> users = userService.findAllWhereUsersHaveSameOrLessRoles(principal.getName());
+        List<User> users = userService.findAllWhereUsersHaveSameOrLessRolesCount(principal.getName());
         modelAndView.addObject("users", users);
         modelAndView.setViewName("users/list");
         return modelAndView;
     }
 
-    @GetMapping("/new")
-    public ModelAndView showForm(@ModelAttribute User user, ModelAndView modelAndView) {
-        List<Role> roles = roleService.findAllExceptOwner();
-        modelAndView.addObject("roles", roles);
-        modelAndView.setViewName("users/register_form");
-        return modelAndView;
-    }
-
-    @PostMapping("/new")
-    public String save(@Valid User user, BindingResult bindingResult,
-                       @RequestParam("role") List<String> values, Principal principal) {
-
-        String errorMessage = userValidator.validateRegisteringUser(user);
-        if (!errorMessage.isEmpty()) {
-            bindingResult.addError(new ObjectError("globalError", errorMessage));
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "users/register_form";
-        }
-        Set<Role> roles = roleService.mapStringListToRoles(values);
-        user.setRoles(roles);
-        userService.save(user);
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
-        if (principal == null) {
-            LOGGER.info("{} has been registered", user);
-        } else {
-            LOGGER.info("{} registered {}", principal.getName(), user.getLogin());
-        }
-        return "redirect:/home";
-    }
-
-    @GetMapping("/registrationConfirm")
-    public ModelAndView confirmRegistration(WebRequest request,
-                                            ModelAndView modelAndView,
-                                            @RequestParam("token") String token) {
-
-        Locale locale = request.getLocale();
-
-        VerificationToken verificationToken = userService.getVerificationToken(token);
-        if (verificationToken == null) {
-            String message = messages.getMessage("auth.message.invalidToken", null, locale);
-            modelAndView.addObject("message", message);
-            modelAndView.setViewName("badUser");
-            return modelAndView;
-        }
-
-        User user = verificationToken.getUser();
-        Calendar calendar = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            String message = messages.getMessage("auth.message.expired", null, locale);
-            modelAndView.addObject("message", message);
-            modelAndView.setViewName("badUser");
-            return modelAndView;
-        }
-
-        user.setEnabled(true);
-        userService.update(user);
-        modelAndView.setViewName("redirect:/login");
-        return modelAndView;
-    }
 
     @GetMapping("/{userLogin}")
     @PreAuthorize("@userService.hasAccess(#userLogin, authentication)")
@@ -136,12 +68,38 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping("/new")
+    public ModelAndView showForm(@ModelAttribute User user, ModelAndView modelAndView) {
+        List<Role> roles = roleService.findAllExceptOwner();
+        modelAndView.addObject("roles", roles);
+        modelAndView.setViewName("users/register_form");
+        return modelAndView;
+    }
+
     @GetMapping("/update/{id}")
     public ModelAndView showFormUpdate(@PathVariable String id, ModelAndView modelAndView) {
         User user = userService.findById(id);
         modelAndView.addObject("user", user);
         modelAndView.setViewName("users/update_form");
         return modelAndView;
+    }
+
+    @PostMapping("/new")
+    public String save(@Valid User user, BindingResult bindingResult,
+                       @RequestParam("role") List<String> roles) {
+
+        String errorMessage = userValidator.validateRegisteringUser(user);
+        if (!errorMessage.isEmpty()) {
+            bindingResult.addError(new ObjectError("globalError", errorMessage));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "users/register_form";
+        }
+        userService.save(user, roles);
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
+        LOGGER.info("{} has been registered", user);
+        return "redirect:/home";
     }
 
     @PutMapping("/update")
@@ -153,7 +111,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "users/update_form";
         }
-        userService.update(user);
+
+        userService.save(user);
         LOGGER.info("{} updated user: {}", principal.getName(), user.getLogin());
         return "redirect:/users";
     }

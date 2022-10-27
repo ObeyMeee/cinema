@@ -1,4 +1,4 @@
-package ua.com.andromeda.cinemaspringbootapp.utils.verification;
+package ua.com.andromeda.cinemaspringbootapp.verification;
 
 import lombok.Getter;
 import lombok.Setter;

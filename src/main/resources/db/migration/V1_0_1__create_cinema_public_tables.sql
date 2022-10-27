@@ -1,5 +1,3 @@
-create sequence hibernate_sequence;
-
 create table actors
 (
     id        varchar(255) not null
@@ -90,9 +88,9 @@ create table sessions
 (
     id               varchar(255) not null
         primary key,
+    enabled          boolean      not null,
     name             varchar(255),
     start_time       timestamp,
-    enabled  boolean      not null,
     movie_details_id varchar(255)
         constraint fkm9nl4yfdexdjq1fy6jmmpvi8k
             references movie_details
@@ -109,7 +107,7 @@ create table users
     login    varchar(255) not null
         constraint uk_ow0gan20590jrb00upg3va2fn
             unique,
-    password varchar(255) not null
+    password varchar(255)
 );
 
 create table tickets
@@ -142,10 +140,9 @@ create table users_roles
 
 create table verification_token
 (
-    id          bigint       not null
+    token       varchar(255) not null
         primary key,
     expiry_date timestamp,
-    token       varchar(255),
     user_id     varchar(255) not null
         constraint fk3asw9wnv76uxu3kr1ekq4i1ld
             references users

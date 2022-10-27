@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.andromeda.cinemaspringbootapp.model.Actor;
+import ua.com.andromeda.cinemaspringbootapp.mapper.ActorMapper;
 import ua.com.andromeda.cinemaspringbootapp.model.Genre;
 import ua.com.andromeda.cinemaspringbootapp.model.MovieDetails;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
@@ -25,12 +25,14 @@ public class MovieDetailsController {
     private final SessionService sessionService;
     private final MovieDetailsService movieDetailsService;
     private final GenreService genreService;
+    private final ActorMapper actorMapper;
 
     @Autowired
-    public MovieDetailsController(SessionService sessionService, MovieDetailsService movieDetailsService, GenreService genreService) {
+    public MovieDetailsController(SessionService sessionService, MovieDetailsService movieDetailsService, GenreService genreService, ActorMapper actorMapper) {
         this.sessionService = sessionService;
         this.movieDetailsService = movieDetailsService;
         this.genreService = genreService;
+        this.actorMapper = actorMapper;
     }
 
     @GetMapping("/{id}")
@@ -46,26 +48,24 @@ public class MovieDetailsController {
     @GetMapping("/update/{id}")
     public ModelAndView showUpdateForm(@PathVariable String id, ModelAndView modelAndView) {
         MovieDetails movieDetails = movieDetailsService.getMovieDetailsById(id);
-        String actors = movieDetails.getActors()
-                .stream()
-                .map(Actor::getFullName)
-                .reduce((actor1, actor2) -> actor1 + ", " + actor2)
-                .orElse("");
+        String actorsFullNames = actorMapper.mapActorsCollectionToString(movieDetails.getActors());
         Iterable<Genre> genres = genreService.findAll();
+
         modelAndView.addObject("movieDetails", movieDetails);
         modelAndView.addObject("genres", genres);
-        modelAndView.addObject("actors", actors);
+        modelAndView.addObject("actors", actorsFullNames);
         modelAndView.setViewName("movie-details/update_form");
         return modelAndView;
     }
 
     @PutMapping("/update")
     public String update(MovieDetails movieDetails, BindingResult bindingResult,
-                         Principal principal, @RequestParam("actors") String fullNames) {
+                         Principal principal, @RequestParam("actors") String actorsFullNames) {
+
         if (bindingResult.hasErrors()) {
             return "movie-details/update_form";
         }
-        movieDetailsService.save(movieDetails, fullNames);
+        movieDetailsService.save(movieDetails, actorsFullNames);
         LOGGER.info("{} changed {}", principal.getName(), movieDetails);
         return "redirect:/movies";
     }

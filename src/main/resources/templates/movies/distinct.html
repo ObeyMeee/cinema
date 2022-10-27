@@ -20,15 +20,15 @@
             <a class="btn btn-lg btn-dark" th:href="@{/movie-details/update/{id}(id = *{movieDetails.id})}">Update</a>
         </td>
         <td class="column-centered">
-            <form th:if="*{enabled}" th:method="PATCH" th:action="@{/movies}">
+            <form th:action="@{/movies}" th:if="*{enabled}" th:method="PATCH">
                 <input class="d-none" name="movieDetailsId" th:value="*{movieDetails.id}">
                 <input class="d-none" name="enabled" th:value="${false}">
-                <input type="submit" class="btn btn-lg btn-danger" value="Hide">
+                <input class="btn btn-lg btn-danger" type="submit" value="Hide">
             </form>
-            <form th:unless="*{enabled}" th:method="PATCH" th:action="@{/movies}">
+            <form th:action="@{/movies}" th:method="PATCH" th:unless="*{enabled}">
                 <input class="d-none" name="movieDetailsId" th:value="*{movieDetails.id}">
                 <input class="d-none" name="enabled" th:value="${true}">
-                <input type="submit" class="btn btn-lg btn-success" value="Open">
+                <input class="btn btn-lg btn-success" type="submit" value="Open">
             </form>
         </td>
         <td class="column-centered">

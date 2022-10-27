@@ -64,10 +64,26 @@ public class MovieController {
     public ModelAndView showSession(@PathVariable String id, ModelAndView modelAndView) {
         Session session = sessionService.findById(id);
         List<TicketDTO> tickets = ticketService.findAllBySessionId(id);
+
         modelAndView.addObject("tickets", tickets);
         modelAndView.addObject("movie", session);
-
         modelAndView.setViewName("movies/hall");
+        return modelAndView;
+    }
+
+    @GetMapping("/unique")
+    public ModelAndView showDistinctMovies(ModelAndView modelAndView) {
+        List<Session> sessions = sessionService.findUniqueSessions();
+        modelAndView.addObject("movies", sessions);
+        modelAndView.setViewName("movies/distinct");
+        return modelAndView;
+    }
+
+    @GetMapping("/update/{id}")
+    public ModelAndView showUpdateForm(@PathVariable String id, ModelAndView modelAndView) {
+        Session session = sessionService.findById(id);
+        modelAndView.addObject("movie", session);
+        modelAndView.setViewName("movies/update-session");
         return modelAndView;
     }
 
@@ -75,6 +91,7 @@ public class MovieController {
     public ModelAndView showSessionForm(ModelAndView modelAndView) {
         Iterable<Country> countries = countryService.findAll();
         Iterable<Genre> genres = genreService.findAll();
+
         modelAndView.addObject("genres", genres);
         modelAndView.addObject("countries", countries);
         modelAndView.addObject("movie", new Session());
@@ -97,27 +114,11 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable String id, Principal principal) {
         Session sessionToBeDeleted = sessionService.findById(id);
-        sessionService.deleteById(sessionToBeDeleted);
         String sessionName = sessionToBeDeleted.getName();
         LocalDateTime startTime = sessionToBeDeleted.getStartTime();
+        sessionService.delete(sessionToBeDeleted);
         LOGGER.info("{} deleted session {} at {}", principal.getName(), sessionName, startTime);
         return "redirect:/movies";
-    }
-
-    @GetMapping("/unique")
-    public ModelAndView showDistinctMovies(ModelAndView modelAndView) {
-        List<Session> sessions = sessionService.findUniqueSessions();
-        modelAndView.addObject("movies", sessions);
-        modelAndView.setViewName("movies/distinct");
-        return modelAndView;
-    }
-
-    @GetMapping("/update/{id}")
-    public ModelAndView showUpdateForm(@PathVariable String id, ModelAndView modelAndView) {
-        Session session = sessionService.findById(id);
-        modelAndView.addObject("movie", session);
-        modelAndView.setViewName("movies/update-session");
-        return modelAndView;
     }
 
     @DeleteMapping("/movieDetailsId/{movieDetailsId}")
@@ -149,5 +150,4 @@ public class MovieController {
         sessionService.saveAll(sessions, enabled);
         return "redirect:/movies/unique";
     }
-
 }

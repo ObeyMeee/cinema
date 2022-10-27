@@ -25,19 +25,9 @@ public class TicketService {
     }
 
     public static boolean isPlaceTaken(List<?> tickets, int row, int seat) {
-        boolean anyMatch = false;
-        try {
-            anyMatch = tickets.stream()
-                    .map(TicketDTO.class::cast)
-                    .anyMatch(t -> t.getRow() == row && t.getSeat() == seat);
-        }catch (Exception e) {
-            System.out.println("row = " + row);
-            System.out.println("seat = " + seat);
-            tickets.forEach(t -> System.out.println(t instanceof TicketDTO));
-            System.out.println("tickets = " + tickets);
-            e.printStackTrace();
-        }
-        return anyMatch;
+        return tickets.stream()
+                .map(TicketDTO.class::cast)
+                .anyMatch(t -> t.getRow() == row && t.getSeat() == seat);
     }
 
     @Transactional
@@ -47,12 +37,15 @@ public class TicketService {
 
     public List<TicketDTO> findAllBySessionId(String id) {
         List<Ticket> tickets = ticketRepository.findAllBySessionId(id);
-        return tickets.stream().map(TicketDTO::new).toList();
+        return tickets.stream()
+                .map(TicketDTO::new)
+                .toList();
     }
 
     public List<Purchase> findAllByUserId(String id) {
-
         List<Tuple> ticketsTuple = ticketRepository.findAllTicketsGroupedBySessionAndUser(id);
-        return ticketsTuple.stream().map(tupleMapper::mapTupleToTicketDTO).toList();
+        return ticketsTuple.stream()
+                .map(tupleMapper::mapTupleToTicketDTO)
+                .toList();
     }
 }

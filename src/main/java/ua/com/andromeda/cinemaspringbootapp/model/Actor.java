@@ -1,6 +1,7 @@
 package ua.com.andromeda.cinemaspringbootapp.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Actor {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -25,10 +27,6 @@ public class Actor {
     @ManyToMany(mappedBy = "actors")
     @ToString.Exclude
     private Set<MovieDetails> movieDetails;
-
-    public Actor() {
-
-    }
 
     public Actor(String fullName) {
         this.fullName = fullName;

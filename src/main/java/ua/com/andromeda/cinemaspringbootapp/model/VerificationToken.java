@@ -3,6 +3,7 @@ package ua.com.andromeda.cinemaspringbootapp.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,9 +18,8 @@ public class VerificationToken {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
@@ -35,9 +35,9 @@ public class VerificationToken {
     }
 
     private Date calculateExpiryDate() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
-        cal.add(Calendar.MINUTE, VerificationToken.EXPIRATION);
-        return new Date(cal.getTime().getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
+        calendar.add(Calendar.MINUTE, VerificationToken.EXPIRATION);
+        return new Date(calendar.getTime().getTime());
     }
 }

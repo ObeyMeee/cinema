@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
-import ua.com.andromeda.cinemaspringbootapp.utils.PdfService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -33,17 +32,15 @@ public class EmailSenderService {
         Ticket ticket = tickets.get(0);
         Session session = ticket.getSession();
         User user = ticket.getUser();
-        String content = getContent("emails/tickets_purchase.html");
+        String content = getMessageBody("emails/tickets_purchase.html");
         String date = session.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
-        content = content.replace("Sir", user.getLogin())
-                .replace("dateValue", date)
-                .replace("filmValue", session.getName());
+        content = replaceValues(content, session.getName(), user.getLogin(), date);
         pdfService.createFile(tickets);
         MimeMessage message = getMimeMessageWithAttachment(user, content);
         javaMailSender.send(message);
     }
 
-    private String getContent(String fileName) throws IOException {
+    private String getMessageBody(String fileName) throws IOException {
         BufferedReader reader = getReaderFromResource(fileName);
         StringBuilder sb = new StringBuilder();
         String line = reader.readLine();
@@ -54,9 +51,16 @@ public class EmailSenderService {
         return sb.toString();
     }
 
+    private String replaceValues(String content, String sessionName, String login, String date) {
+        return content.replace("Sir", login)
+                .replace("dateValue", date)
+                .replace("filmValue", sessionName);
+    }
+
     private BufferedReader getReaderFromResource(String fileName) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream resource = classLoader.getResourceAsStream(fileName);
+        assert resource != null;
         return new BufferedReader(new InputStreamReader(resource));
     }
 
@@ -71,8 +75,9 @@ public class EmailSenderService {
 
     @SneakyThrows
     public void sendVerificationEmail(User user, String confirmationUrl) {
-        String content = getContent("emails/verify_email.html");
-        content = content.replace("Sir", user.getLogin()).replace("confirmationUrlValue", confirmationUrl);
+        String content = getMessageBody("emails/verify_email.html");
+        content = content.replace("Sir", user.getLogin())
+                .replace("confirmationUrlValue", confirmationUrl);
         MimeMessage message = getMimeMessage(user.getEmail(), content);
         javaMailSender.send(message);
     }
