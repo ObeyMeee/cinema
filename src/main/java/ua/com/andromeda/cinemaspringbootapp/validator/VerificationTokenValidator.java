@@ -19,6 +19,6 @@ public class VerificationTokenValidator {
         Calendar calendar = Calendar.getInstance();
         long expirationTime = verificationToken.getExpiryDate().getTime();
         long now = calendar.getTime().getTime();
-        return now - expirationTime > 0;
+        return expirationTime - now > 0;
     }
 }

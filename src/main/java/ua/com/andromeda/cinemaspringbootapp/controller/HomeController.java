@@ -42,7 +42,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping("/registration-сonfirm")
+    @GetMapping("/registration-confirm")
     public ModelAndView confirmRegistration(@RequestParam("token") String token, ModelAndView modelAndView) {
 
         VerificationToken verificationToken = tokenService.getVerificationToken(token);

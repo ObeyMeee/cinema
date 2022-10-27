@@ -41,7 +41,7 @@ public class MovieDetails {
     @ToString.Exclude
     private List<Session> sessions;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "movie_details_actors",
             joinColumns = @JoinColumn(name = "movie_details_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
@@ -49,7 +49,7 @@ public class MovieDetails {
     @ToString.Exclude
     private Set<Actor> actors;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "movie_details_genres",
             joinColumns = @JoinColumn(name = "movie_details_id"),
@@ -58,7 +58,7 @@ public class MovieDetails {
     @ToString.Exclude
     private Set<Genre> genres;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "country_id")
     @ToString.Exclude
     private Country country;
