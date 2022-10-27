@@ -21,7 +21,7 @@ public class PdfService {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream("tickets.pdf"));
         document.open();
-        Path path = Paths.get(ClassLoader.getSystemResource("static/logo.png").toURI());
+        Path path = Paths.get(getClass().getClassLoader().getResource("static/logo.png").toURI());
         Image image = Image.getInstance(path.toAbsolutePath().toString());
         image.setAlignment(Element.ALIGN_CENTER);
         document.add(image);

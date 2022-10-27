@@ -36,6 +36,8 @@ public class User {
     @NotBlank(message = "password cannot be empty")
     private String password;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private VerificationToken verificationToken;
     private boolean enabled;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})

@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
-
     private final UserService service;
 
     private final EmailSenderService emailSenderService;
@@ -30,8 +29,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
-        String confirmationUrl = event.getAppUrl() + "http://localhost:8080/users/registrationConfirm?token=" + token;
+        String confirmationUrl = event.getAppUrl() + "/users/registrationConfirm?token=" + token;
         service.createVerificationToken(user, token);
-        emailSenderService.sendVerificationEmail(user,confirmationUrl);
+        emailSenderService.sendVerificationEmail(user, confirmationUrl);
     }
 }

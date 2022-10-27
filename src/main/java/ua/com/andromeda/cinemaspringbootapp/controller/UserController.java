@@ -3,6 +3,7 @@ package ua.com.andromeda.cinemaspringbootapp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,6 @@ import ua.com.andromeda.cinemaspringbootapp.service.UserService;
 import ua.com.andromeda.cinemaspringbootapp.utils.verification.OnRegistrationCompleteEvent;
 import ua.com.andromeda.cinemaspringbootapp.validator.UserValidator;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Calendar;
@@ -34,6 +34,8 @@ import java.util.Set;
 @RequestMapping("/users")
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    @Value("${APPLICATION_URL}")
+    private String appUrl;
     private final UserService userService;
     private final RoleService roleService;
     private final TicketService ticketService;
@@ -71,8 +73,7 @@ public class UserController {
 
     @PostMapping("/new")
     public String save(@Valid User user, BindingResult bindingResult,
-                       Principal principal, HttpServletRequest request,
-                       @RequestParam("role") List<String> values) {
+                       @RequestParam("role") List<String> values, Principal principal) {
 
         String errorMessage = userValidator.validateRegisteringUser(user);
         if (!errorMessage.isEmpty()) {
@@ -85,9 +86,7 @@ public class UserController {
         Set<Role> roles = roleService.mapStringListToRoles(values);
         user.setRoles(roles);
         userService.save(user);
-        String appUrl = request.getContextPath();
-        System.out.println("user = " + user);
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), appUrl));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
         if (principal == null) {
             LOGGER.info("{} has been registered", user);
         } else {
