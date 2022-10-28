@@ -44,12 +44,10 @@ public class DatabaseUtils {
     private void setCountryIfPresentFromDb(MovieDetails movieDetails) {
         Country country = movieDetails.getCountry();
         Optional<Country> optionalCountry = countryRepository.findByName(country.getName());
-        if (optionalCountry.isPresent()) {
-            movieDetails.setCountry(optionalCountry.get());
-        } else {
+        optionalCountry.ifPresentOrElse(movieDetails::setCountry, () -> {
             Country saved = countryRepository.save(country);
             movieDetails.setCountry(saved);
-        }
+        });
     }
 
     private void setMediaIfPresentFromDb(MovieDetails movieDetails) {
