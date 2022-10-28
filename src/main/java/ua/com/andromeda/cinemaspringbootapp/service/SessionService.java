@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ua.com.andromeda.cinemaspringbootapp.model.MovieDetails;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
 import ua.com.andromeda.cinemaspringbootapp.repository.SessionRepository;
@@ -67,8 +66,7 @@ public class SessionService {
 
     @Transactional
     public void save(Session session, String actorsFullNames) {
-        MovieDetails movieDetails = session.getMovieDetails();
-        databaseUtils.setMovieDetails(movieDetails, actorsFullNames);
+        databaseUtils.setSession(session, actorsFullNames);
         sessionRepository.save(session);
     }
 

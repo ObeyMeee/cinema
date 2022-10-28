@@ -3,12 +3,10 @@ package ua.com.andromeda.cinemaspringbootapp.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.andromeda.cinemaspringbootapp.mapper.ActorMapper;
-import ua.com.andromeda.cinemaspringbootapp.model.Actor;
-import ua.com.andromeda.cinemaspringbootapp.model.Country;
-import ua.com.andromeda.cinemaspringbootapp.model.Media;
-import ua.com.andromeda.cinemaspringbootapp.model.MovieDetails;
+import ua.com.andromeda.cinemaspringbootapp.model.*;
 import ua.com.andromeda.cinemaspringbootapp.repository.CountryRepository;
 import ua.com.andromeda.cinemaspringbootapp.repository.MediaRepository;
+import ua.com.andromeda.cinemaspringbootapp.repository.MovieDetailsRepository;
 
 import java.util.Optional;
 import java.util.Set;
@@ -18,19 +16,35 @@ public class DatabaseUtils {
     private final ActorMapper actorMapper;
     private final CountryRepository countryRepository;
     private final MediaRepository mediaRepository;
+    private final MovieDetailsRepository movieDetailsRepository;
 
     @Autowired
-    public DatabaseUtils(ActorMapper actorMapper, CountryRepository countryRepository, MediaRepository mediaRepository) {
+    public DatabaseUtils(ActorMapper actorMapper, CountryRepository countryRepository, MediaRepository mediaRepository, MovieDetailsRepository movieDetailsRepository) {
         this.actorMapper = actorMapper;
         this.countryRepository = countryRepository;
         this.mediaRepository = mediaRepository;
+        this.movieDetailsRepository = movieDetailsRepository;
     }
 
-    public void setMovieDetails(MovieDetails movieDetails, String actorsFullNames) {
+    public void setSession(Session session, String actorsFullNames) {
+        MovieDetails movieDetails = session.getMovieDetails();
+        setCountryIfPresentFromDb(movieDetails);
+        Optional<MovieDetails> optionalMovieDetailsFromDb =
+                movieDetailsRepository.findByDirectorAndProductionYearAndCountry(
+                        movieDetails.getDirector(), movieDetails.getProductionYear(), movieDetails.getCountry());
+        if (optionalMovieDetailsFromDb.isPresent()) {
+            session.setMovieDetails(optionalMovieDetailsFromDb.get());
+            return;
+        }
         Set<Actor> actors = actorMapper.mapFullNamesToActors(actorsFullNames);
         movieDetails.setActors(actors);
-        setCountryIfPresentFromDb(movieDetails);
         setMediaIfPresentFromDb(movieDetails);
+    }
+
+    private void setCountryIfPresentFromDb(MovieDetails movieDetails) {
+        Country country = movieDetails.getCountry();
+        Optional<Country> optionalCountry = countryRepository.findByName(country.getName());
+        optionalCountry.ifPresent(movieDetails::setCountry);
     }
 
     private void setMediaIfPresentFromDb(MovieDetails movieDetails) {
@@ -39,9 +53,10 @@ public class DatabaseUtils {
         optionalMedia.ifPresent(movieDetails::setMedia);
     }
 
-    private void setCountryIfPresentFromDb(MovieDetails movieDetails) {
-        Country country = movieDetails.getCountry();
-        Optional<Country> optionalCountry = countryRepository.findByName(country.getName());
-        optionalCountry.ifPresent(movieDetails::setCountry);
+    public void setMovieDetails(MovieDetails movieDetails, String actorsFullNames) {
+        Set<Actor> actors = actorMapper.mapFullNamesToActors(actorsFullNames);
+        movieDetails.setActors(actors);
+        setCountryIfPresentFromDb(movieDetails);
+        setMediaIfPresentFromDb(movieDetails);
     }
 }
