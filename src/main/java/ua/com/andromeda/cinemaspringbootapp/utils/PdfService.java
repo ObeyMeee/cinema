@@ -22,25 +22,14 @@ public class PdfService {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream("tickets.pdf"));
         document.open();
-        ClassPathResource resource = new ClassPathResource("/static/logo.png");
-        InputStream inputStream = resource.getInputStream();
-        File file = new File("logo_from_input_stream.png");
-        FileUtils.copyInputStreamToFile(inputStream, file);
-        Image image = Image.getInstance(file.getAbsolutePath());
-        image.setAlignment(Element.ALIGN_CENTER);
-        document.add(image);
+        addLogo(document);
         Font courierBlack25 = FontFactory.getFont(FontFactory.COURIER, 25, BaseColor.BLACK);
         Font courierBoldBlack25 = FontFactory.getFont(FontFactory.COURIER_BOLD, 25, BaseColor.BLACK);
-        StringBuilder sb = new StringBuilder();
-        for (Ticket ticket : tickets) {
-            sb.append(ticket.getRow()).append(" row ")
-                    .append(ticket.getSeat()).append(" seat ")
-                    .append(ticket.getType()).append('\n');
-        }
+        String ticketsInfo = getTicketsInfo(tickets);
         Session session = tickets.get(0).getSession();
         String date = session.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
         Chunk sessionInfoChunk = new Chunk(session.getName() + " " + date, courierBoldBlack25);
-        Chunk placesChunk = new Chunk(sb.toString(), courierBlack25);
+        Chunk placesChunk = new Chunk(ticketsInfo, courierBlack25);
         Paragraph headline = new Paragraph(sessionInfoChunk);
         Paragraph places = new Paragraph(placesChunk);
         places.setAlignment(Element.ALIGN_CENTER);
@@ -49,4 +38,30 @@ public class PdfService {
         document.add(places);
         document.close();
     }
+
+    private void addLogo(Document document) throws IOException, DocumentException {
+        File file = getCopyLogoFromResources();
+        Image image = Image.getInstance(file.getAbsolutePath());
+        image.setAlignment(Element.ALIGN_CENTER);
+        document.add(image);
+    }
+
+    private String getTicketsInfo(List<Ticket> tickets) {
+        StringBuilder sb = new StringBuilder();
+        for (Ticket ticket : tickets) {
+            sb.append(ticket.getRow()).append(" row ")
+                    .append(ticket.getSeat()).append(" seat ")
+                    .append(ticket.getType()).append('\n');
+        }
+        return sb.toString();
+    }
+
+    private File getCopyLogoFromResources() throws IOException {
+        ClassPathResource resource = new ClassPathResource("/static/logo.png");
+        InputStream inputStream = resource.getInputStream();
+        File file = new File("logo_from_input_stream.png");
+        FileUtils.copyInputStreamToFile(inputStream, file);
+        return file;
+    }
 }
+

@@ -1,6 +1,5 @@
 let amountSelectedSeats = 0;
 
-
 function selectSeat(button, row, seat, price) {
     let ticketsZone = document.getElementById("ticketsZone")
     let image = button.children.item(0);
@@ -48,11 +47,7 @@ function selectSeat(button, row, seat, price) {
     } else {
         amountSelectedSeats--;
         button.setAttribute("data-status", "active")
-        if (ticketType === "GOOD") {
-            image.setAttribute("src", "/seats/active-good-seat.png")
-        } else {
-            image.setAttribute("src", "/seats/active-lux-seat.png")
-        }
+        setImageDependOnTicketType(ticketType, image);
 
         let ticketsInfoWrapper = document.getElementsByClassName("row ticket-info");
 
@@ -75,6 +70,14 @@ function selectSeat(button, row, seat, price) {
         ticketsZone.style.display = "block"
     }
 
+}
+
+function setImageDependOnTicketType(ticketType, image) {
+    if (ticketType === "GOOD") {
+        image.setAttribute("src", "/seats/active-good-seat.png")
+    } else {
+        image.setAttribute("src", "/seats/active-lux-seat.png")
+    }
 }
 
 function createInput(attributeName, value) {
