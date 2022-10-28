@@ -26,8 +26,9 @@
     <p><b>Description: </b><span th:text="${movieDetails.description}">Description</span></p>
     <p><b>Duration:</b> <span th:text="${movieDetails.duration}">Duration</span></p>
     <p><b>Genres:</b>
-        <span th:each="genre : ${movieDetails.genres}">
-            <span th:text="${genre.name + ', '}"></span>
+        <span th:each="genre, status : ${movieDetails.genres}">
+            <span th:if="${status.last}" th:text="${genre.name}"></span>
+            <span th:unless="${status.last}" th:text="${genre.name + ', '}"></span>
         </span>
     </p>
     <p><b>Year of production:</b> <span th:text="${movieDetails.productionYear}">Year</span></p>
@@ -35,8 +36,9 @@
 
     <p><b>Director:</b> <span th:text="${movieDetails.director}">Director</span></p>
     <p><b>Actors:</b>
-        <span th:each="actor : ${movieDetails.actors}">
-            <span th:text="${actor.fullName + ', '}"></span>
+        <span th:each="actor, status : ${movieDetails.actors}">
+            <span th:if="${status.last}" th:text="${actor.fullName}"></span>
+            <span th:unless="${status.last}" th:text="${actor.fullName} + ', '"></span>
         </span>
     </p>
 </section>

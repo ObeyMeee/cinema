@@ -67,6 +67,6 @@ public class MovieDetailsController {
         }
         movieDetailsService.save(movieDetails, actorsFullNames);
         LOGGER.info("{} changed {}", principal.getName(), movieDetails);
-        return "redirect:/movies";
+        return "redirect:/movies/unique";
     }
 }

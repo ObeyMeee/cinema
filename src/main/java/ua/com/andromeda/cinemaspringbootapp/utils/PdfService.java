@@ -23,19 +23,10 @@ public class PdfService {
         PdfWriter.getInstance(document, new FileOutputStream("tickets.pdf"));
         document.open();
         addLogo(document);
-        Font courierBlack25 = FontFactory.getFont(FontFactory.COURIER, 25, BaseColor.BLACK);
-        Font courierBoldBlack25 = FontFactory.getFont(FontFactory.COURIER_BOLD, 25, BaseColor.BLACK);
-        String ticketsInfo = getTicketsInfo(tickets);
         Session session = tickets.get(0).getSession();
-        String date = session.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
-        Chunk sessionInfoChunk = new Chunk(session.getName() + " " + date, courierBoldBlack25);
-        Chunk placesChunk = new Chunk(ticketsInfo, courierBlack25);
-        Paragraph headline = new Paragraph(sessionInfoChunk);
-        Paragraph places = new Paragraph(placesChunk);
-        places.setAlignment(Element.ALIGN_CENTER);
-        document.add(headline);
+        addHeadline(document, session);
         document.add(Chunk.NEWLINE);
-        document.add(places);
+        addTickets(tickets, document);
         document.close();
     }
 
@@ -44,6 +35,32 @@ public class PdfService {
         Image image = Image.getInstance(file.getAbsolutePath());
         image.setAlignment(Element.ALIGN_CENTER);
         document.add(image);
+    }
+
+    private File getCopyLogoFromResources() throws IOException {
+        ClassPathResource resource = new ClassPathResource("/static/logo.png");
+        InputStream inputStream = resource.getInputStream();
+        File file = new File("logo_from_input_stream.png");
+        FileUtils.copyInputStreamToFile(inputStream, file);
+        return file;
+    }
+
+    private void addHeadline(Document document, Session session) throws DocumentException {
+        Font courierBoldBlack25 = FontFactory.getFont(FontFactory.COURIER_BOLD, 25, BaseColor.BLACK);
+        String date = session.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        Chunk sessionInfoChunk = new Chunk(session.getName() + " " + date, courierBoldBlack25);
+        Paragraph headline = new Paragraph(sessionInfoChunk);
+        document.add(headline);
+    }
+
+
+    private void addTickets(List<Ticket> tickets, Document document) throws DocumentException {
+        String ticketsInfo = getTicketsInfo(tickets);
+        Font courierBlack25 = FontFactory.getFont(FontFactory.COURIER, 25, BaseColor.BLACK);
+        Chunk placesChunk = new Chunk(ticketsInfo, courierBlack25);
+        Paragraph places = new Paragraph(placesChunk);
+        places.setAlignment(Element.ALIGN_CENTER);
+        document.add(places);
     }
 
     private String getTicketsInfo(List<Ticket> tickets) {
@@ -56,12 +73,5 @@ public class PdfService {
         return sb.toString();
     }
 
-    private File getCopyLogoFromResources() throws IOException {
-        ClassPathResource resource = new ClassPathResource("/static/logo.png");
-        InputStream inputStream = resource.getInputStream();
-        File file = new File("logo_from_input_stream.png");
-        FileUtils.copyInputStreamToFile(inputStream, file);
-        return file;
-    }
 }
 

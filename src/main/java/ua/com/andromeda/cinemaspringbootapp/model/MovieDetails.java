@@ -37,11 +37,11 @@ public class MovieDetails {
     @Max(2023)
     private Integer productionYear;
 
-    @OneToMany(mappedBy = "movieDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movieDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @ToString.Exclude
     private List<Session> sessions;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "movie_details_actors",
             joinColumns = @JoinColumn(name = "movie_details_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
@@ -49,7 +49,7 @@ public class MovieDetails {
     @ToString.Exclude
     private Set<Actor> actors;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "movie_details_genres",
             joinColumns = @JoinColumn(name = "movie_details_id"),
@@ -58,7 +58,7 @@ public class MovieDetails {
     @ToString.Exclude
     private Set<Genre> genres;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id")
     @ToString.Exclude
     private Country country;

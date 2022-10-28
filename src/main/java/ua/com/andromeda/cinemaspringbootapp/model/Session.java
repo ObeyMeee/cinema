@@ -32,6 +32,6 @@ public class Session {
     @ToString.Exclude
     private List<Ticket> tickets;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private MovieDetails movieDetails;
 }
