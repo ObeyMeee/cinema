@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
 import ua.com.andromeda.cinemaspringbootapp.model.Ticket;
+import ua.com.andromeda.cinemaspringbootapp.model.TicketType;
 import ua.com.andromeda.cinemaspringbootapp.repository.TicketRepository;
 
 import java.util.ArrayList;
@@ -75,7 +76,16 @@ class TicketServiceTest {
     }
 
     private List<Ticket> getTicketsList() {
-        return List.of(new Ticket(), new Ticket(), new Ticket());
+        List<Ticket> tickets = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            Ticket ticket = new Ticket();
+            ticket.setRow(i);
+            ticket.setSeat(i);
+            ticket.setPrice(100);
+            ticket.setType(TicketType.GOOD);
+            tickets.add(ticket);
+        }
+        return tickets;
     }
 
     private List<TicketDTO> getTicketsDTOList() {
