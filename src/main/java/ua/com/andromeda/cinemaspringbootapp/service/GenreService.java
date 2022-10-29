@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ua.com.andromeda.cinemaspringbootapp.model.Genre;
 import ua.com.andromeda.cinemaspringbootapp.repository.GenreRepository;
 
+import java.util.List;
+
 @Service
 public class GenreService {
     private final GenreRepository genreRepository;
@@ -14,7 +16,7 @@ public class GenreService {
         this.genreRepository = genreRepository;
     }
 
-    public Iterable<Genre> findAll() {
-        return genreRepository.findAll();
+    public List<Genre> findAll() {
+        return (List<Genre>) genreRepository.findAll();
     }
 }

@@ -14,10 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.andromeda.cinemaspringbootapp.dto.TicketDTO;
-import ua.com.andromeda.cinemaspringbootapp.model.Country;
 import ua.com.andromeda.cinemaspringbootapp.model.Genre;
 import ua.com.andromeda.cinemaspringbootapp.model.Session;
-import ua.com.andromeda.cinemaspringbootapp.service.CountryService;
 import ua.com.andromeda.cinemaspringbootapp.service.GenreService;
 import ua.com.andromeda.cinemaspringbootapp.service.SessionService;
 import ua.com.andromeda.cinemaspringbootapp.service.TicketService;
@@ -31,18 +29,12 @@ import java.util.List;
 public class MovieController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MovieController.class);
     private final SessionService sessionService;
-    private final CountryService countryService;
     private final GenreService genreService;
     private final TicketService ticketService;
 
     @Autowired
-    public MovieController(SessionService sessionService,
-                           CountryService countryService,
-                           GenreService genreService,
-                           TicketService ticketService) {
-
+    public MovieController(SessionService sessionService, GenreService genreService, TicketService ticketService) {
         this.sessionService = sessionService;
-        this.countryService = countryService;
         this.genreService = genreService;
         this.ticketService = ticketService;
     }
@@ -89,11 +81,8 @@ public class MovieController {
 
     @GetMapping("/new")
     public ModelAndView showSessionForm(ModelAndView modelAndView) {
-        Iterable<Country> countries = countryService.findAll();
-        Iterable<Genre> genres = genreService.findAll();
-
+        List<Genre> genres = genreService.findAll();
         modelAndView.addObject("genres", genres);
-        modelAndView.addObject("countries", countries);
         modelAndView.addObject("movie", new Session());
         modelAndView.setViewName("movies/add-session-form");
         return modelAndView;

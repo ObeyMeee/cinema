@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Component
 public class TupleMapper {
 
-    public Purchase mapTupleToTicketDTO(Tuple tuple) {
+    public Purchase mapTupleToPurchase(Tuple tuple) {
         String sessionName = tuple.get("session_name", String.class);
         LocalDateTime sessionDate = tuple.get("session_date", Timestamp.class).toLocalDateTime();
         int totalPrice = tuple.get("total_price", BigInteger.class).intValue();

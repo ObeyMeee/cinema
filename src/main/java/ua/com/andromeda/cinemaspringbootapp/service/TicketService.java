@@ -25,6 +25,10 @@ public class TicketService {
     }
 
     public static boolean isPlaceTaken(List<?> tickets, int row, int seat) {
+        if (row <= 0 || seat <= 0) {
+            throw new IllegalArgumentException("Row or seat can't be a negative number");
+        }
+
         return tickets.stream()
                 .map(TicketDTO.class::cast)
                 .anyMatch(t -> t.getRow() == row && t.getSeat() == seat);
@@ -45,7 +49,7 @@ public class TicketService {
     public List<Purchase> findAllByUserId(String id) {
         List<Tuple> ticketsTuple = ticketRepository.findAllTicketsGroupedBySessionAndUser(id);
         return ticketsTuple.stream()
-                .map(tupleMapper::mapTupleToTicketDTO)
+                .map(tupleMapper::mapTupleToPurchase)
                 .toList();
     }
 }

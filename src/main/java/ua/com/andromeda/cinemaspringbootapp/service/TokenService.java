@@ -1,5 +1,6 @@
 package ua.com.andromeda.cinemaspringbootapp.service;
 
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import ua.com.andromeda.cinemaspringbootapp.model.User;
 import ua.com.andromeda.cinemaspringbootapp.model.VerificationToken;
@@ -17,7 +18,7 @@ public class TokenService {
         return tokenRepository.findByToken(verificationToken);
     }
 
-    public void createVerificationToken(User user, String token) {
+    public void createVerificationToken(User user, @NonNull String token) {
         VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
     }

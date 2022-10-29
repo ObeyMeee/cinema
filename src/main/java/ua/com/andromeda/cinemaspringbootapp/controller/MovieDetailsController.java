@@ -49,7 +49,7 @@ public class MovieDetailsController {
     public ModelAndView showUpdateForm(@PathVariable String id, ModelAndView modelAndView) {
         MovieDetails movieDetails = movieDetailsService.getMovieDetailsById(id);
         String actorsFullNames = actorMapper.mapActorsCollectionToString(movieDetails.getActors());
-        Iterable<Genre> genres = genreService.findAll();
+        List<Genre> genres = genreService.findAll();
 
         modelAndView.addObject("movieDetails", movieDetails);
         modelAndView.addObject("genres", genres);
