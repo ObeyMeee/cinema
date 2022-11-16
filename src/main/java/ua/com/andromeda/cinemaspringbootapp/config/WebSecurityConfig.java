@@ -28,7 +28,6 @@ public class WebSecurityConfig {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()

@@ -7,7 +7,6 @@ import ua.com.andromeda.cinemaspringbootapp.model.User;
 
 @Getter
 @Setter
-
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
     private String appUrl;
     private transient User user;
