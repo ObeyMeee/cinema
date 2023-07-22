@@ -20,7 +20,7 @@ This has been an incredibly valuable experience!
 
 ## 🏠 Building the Project:
 
-Run mvn clean install
+Run `mvn clean install`
 
 ## 🚀 Running the Project:
 
